@@ -17,6 +17,7 @@ public:
 	static constexpr auto WINDOW_HEIGHT { 320 };
 
 	void load_rom(const std::string& path);
+
 private:
 	std::array<uint8_t, MEMORY_SIZE> memory;
 };
