@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 				"CHIP8 Emulator",
 				SDL_WINDOWPOS_UNDEFINED,
 				SDL_WINDOWPOS_UNDEFINED,
-				640,
-				320,
+				Chip8CPU::WINDOW_WIDTH,
+				Chip8CPU::WINDOW_HEIGHT,
 				SDL_WINDOW_SHOWN
 		);
 
