@@ -1,5 +1,5 @@
-#include <iostream>
 #include <SDL2/SDL.h>
+#include <iostream>
 
 #include "Chip8CPU.h"
 
@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 				"CHIP8 Emulator",
 				SDL_WINDOWPOS_UNDEFINED,
 				SDL_WINDOWPOS_UNDEFINED,
-				Chip8CPU::WINDOW_WIDTH,
-				Chip8CPU::WINDOW_HEIGHT,
+				Chip8CPU::WINDOW_WIDTH * Chip8CPU::PIXEL_SCALE,
+				Chip8CPU::WINDOW_HEIGHT * Chip8CPU::PIXEL_SCALE,
 				SDL_WINDOW_SHOWN
 		);
 
