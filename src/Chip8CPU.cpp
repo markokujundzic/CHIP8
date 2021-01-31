@@ -12,31 +12,42 @@ void Chip8CPU::load_rom(const std::string& path)
 	std::for_each(
 			std::istreambuf_iterator<char>(file),
 			std::istreambuf_iterator<char>(),
-			[this, index { PROGRAM_START }](const char& c)
+			[this, index { PROGRAM_START }](const uint8_t& c)
 					mutable
 			{
-				if (index > MEMORY_SIZE)
-				{
-					throw std::runtime_error("ROM size exceeds available memory.");
-				}
-				memory[index++] = static_cast<uint8_t>(c);
+				write_mem(c, index++);
 			});
 }
 
-void Chip8CPU::write_mem(const uint8_t& byte, const uint8_t& index)
+inline constexpr bool Chip8CPU::in_bounds(const uint16_t& index) noexcept
 {
-	if (index < 0 || index > MEMORY_SIZE - 1)
+	return index >= 0 && index < MEMORY_SIZE;
+}
+
+void Chip8CPU::write_mem(const uint8_t& data, const uint16_t& index)
+{
+	if (!in_bounds(index))
 	{
 		throw std::runtime_error("Index out of bounds while performing write operation.");
 	}
-	memory[index] = byte;
+	memory[index] = data;
 }
 
-uint8_t Chip8CPU::read_mem(const uint8_t& index)
+constexpr uint8_t Chip8CPU::read_mem(const uint16_t& index) const
 {
-	if (index < 0 || index > MEMORY_SIZE - 1)
+	if (!in_bounds(index))
 	{
 		throw std::runtime_error("Index out of bounds while performing read operation.");
 	}
 	return memory[index];
+}
+
+constexpr void Chip8CPU::configure_delay(const uint16_t& delay) noexcept
+{
+	delay_timer = delay;
+}
+
+constexpr void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
+{
+	delay_timer = sound;
 }

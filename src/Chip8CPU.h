@@ -11,22 +11,37 @@
 class Chip8CPU
 {
 public:
-	static constexpr auto MEMORY_SIZE { 0x1000 };
-	static constexpr auto PROGRAM_START { 0x200 };
+	static constexpr uint16_t MEMORY_SIZE { 0x1000 };
+	static constexpr uint16_t PROGRAM_START { 0x200 };
 
-	static constexpr auto WINDOW_WIDTH { 64 };
-	static constexpr auto WINDOW_HEIGHT { 32 };
+	static constexpr uint8_t WINDOW_WIDTH { 64 };
+	static constexpr uint8_t WINDOW_HEIGHT { 32 };
 
-	static constexpr auto PIXEL_SCALE { 10 };
+	static constexpr uint8_t REGISTER_NUMBER { 16 };
+	static constexpr uint8_t PIXEL_SCALE { 10 };
 
 	void load_rom(const std::string& path);
 
-	void write_mem(const uint8_t& byte, const uint8_t& index);
+	void write_mem(const uint8_t& byte, const uint16_t& index);
 
-	uint8_t read_mem(const uint8_t& index);
+	constexpr void configure_delay(const uint16_t& delay) noexcept;
+
+	constexpr void configure_sound(const uint16_t& sound) noexcept;
+
+	constexpr uint8_t read_mem(const uint16_t& index) const;
 
 private:
+	static constexpr bool in_bounds(const uint16_t& index) noexcept;
+
 	std::array<uint8_t, MEMORY_SIZE> memory;
+	std::array<uint8_t, REGISTER_NUMBER> v;
+
+	uint16_t i;
+	uint16_t pc;
+
+	uint8_t sp;
+	uint8_t delay_timer;
+	uint8_t sound_timer;
 };
 
 #endif
