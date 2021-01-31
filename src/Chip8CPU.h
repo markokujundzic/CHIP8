@@ -18,6 +18,7 @@ public:
 	static constexpr uint8_t WINDOW_HEIGHT { 32 };
 
 	static constexpr uint8_t REGISTER_NUMBER { 16 };
+	static constexpr uint8_t STACK_SIZE { 32 };
 	static constexpr uint8_t PIXEL_SCALE { 10 };
 
 	void load_rom(const std::string& path);
@@ -30,16 +31,26 @@ public:
 
 	constexpr uint8_t read_mem(const uint16_t& index) const;
 
-private:
-	static constexpr bool in_bounds(const uint16_t& index) noexcept;
+	void initialize();
 
-	std::array<uint8_t, MEMORY_SIZE> memory;
+	void push(const uint16_t& data);
+
+	uint16_t pop();
+
+private:
+	static constexpr bool memory_in_bounds(const uint16_t& index) noexcept;
+
+	static constexpr bool push_in_bounds(const uint16_t& index) noexcept;
+
+	static constexpr bool pop_in_bounds(const uint16_t& index) noexcept;
+
+	std::array<uint8_t, MEMORY_SIZE + STACK_SIZE> memory;
 	std::array<uint8_t, REGISTER_NUMBER> v;
 
 	uint16_t i;
 	uint16_t pc;
+	uint16_t sp;
 
-	uint8_t sp;
 	uint8_t delay_timer;
 	uint8_t sound_timer;
 };
