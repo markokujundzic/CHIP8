@@ -1,7 +1,3 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <iostream>
-
 #include "Chip8CPU.h"
 
 int main(int argc, char *argv[])
@@ -15,7 +11,7 @@ int main(int argc, char *argv[])
 	try
 	{
 		Chip8CPU emulator {};
-		emulator.load_rom(argv[1]);
+		emulator.emulate(argv[1]);
 
 		SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -38,16 +34,39 @@ int main(int argc, char *argv[])
 
 			while (SDL_PollEvent(&event))
 			{
-				if (event.type == SDL_QUIT)
+				switch (event.type)
 				{
-					escape = true;
-					break;
+					case SDL_QUIT:
+						escape = true;
+						break;
+					case SDL_KEYUP:
+						if (Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) == -1)
+						{
+							std::cout << "Key not recognized is up." << '\n';
+						} else
+						{
+							std::cout << "Key " << Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym)
+							          << " is up!"
+							          << '\n';
+						}
+						break;
+					case SDL_KEYDOWN:
+						if (Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) == -1)
+						{
+							std::cout << "Key not recognized is down." << '\n';
+						} else
+						{
+							std::cout << "Key " << Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym)
+							          << " is down!"
+							          << '\n';
+						}
+						break;
 				}
 			}
 
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+			SDL_SetRenderDrawColor(renderer, 255, 128, 255, 0);
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;

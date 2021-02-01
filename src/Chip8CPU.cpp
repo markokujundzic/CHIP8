@@ -1,9 +1,9 @@
 #include "Chip8CPU.h"
 
+constexpr std::array<char, Chip8CPU::NUMBER_OF_KEYS> Chip8CPU::keyboard_map;
+
 void Chip8CPU::load_rom(const std::string& path)
 {
-	initialize();
-
 	std::ifstream file(path, std::ios::binary | std::ios::in);
 
 	if (!file.is_open())
@@ -56,12 +56,12 @@ constexpr uint8_t Chip8CPU::read_mem(const uint16_t& index) const
 	return memory[index];
 }
 
-inline constexpr void Chip8CPU::configure_delay(const uint16_t& delay) noexcept
+constexpr inline void Chip8CPU::configure_delay(const uint16_t& delay) noexcept
 {
 	delay_timer = delay;
 }
 
-inline constexpr void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
+constexpr inline void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
 {
 	delay_timer = sound;
 }
@@ -87,13 +87,13 @@ uint16_t Chip8CPU::pop()
 	return h << 8 | l;
 }
 
-void Chip8CPU::initialize()
+void Chip8CPU::initialize() noexcept
 {
 	sp = MEMORY_SIZE;
 	pc = PROGRAM_START;
-	i = 0;
 	delay_timer = 60;
 	sound_timer = 60;
+	i = 0;
 	for (auto& reg : v)
 	{
 		reg = 0;
@@ -102,4 +102,58 @@ void Chip8CPU::initialize()
 	{
 		mem = 0;
 	}
+}
+
+void Chip8CPU::emulate(const std::string& path)
+{
+	initialize();
+	load_rom(path);
+}
+
+int Chip8CPU::get_keyboard_mapping_value(const char& key_hit)
+{
+	int return_value = -1;
+
+	for (int i = 0; i < NUMBER_OF_KEYS; i++)
+	{
+		if (Chip8CPU::keyboard_map[i] == key_hit)
+		{
+			return_value = i;
+			break;
+		}
+	}
+
+	return return_value;
+}
+
+constexpr bool Chip8CPU::keyboard_in_bounds(const int& index) noexcept
+{
+	return index >= 0 && index <= NUMBER_OF_KEYS - 1;
+}
+
+void Chip8CPU::key_press(const int& key)
+{
+	if (!keyboard_in_bounds(key))
+	{
+		throw std::runtime_error("Index out of bounds while reading keyboard array element.");
+	}
+	keyboard[key] = true;
+}
+
+void Chip8CPU::key_release(const int& key)
+{
+	if (!keyboard_in_bounds(key))
+	{
+		throw std::runtime_error("Index out of bounds while reading keyboard array element.");
+	}
+	keyboard[key] = false;
+}
+
+bool Chip8CPU::is_key_pressed(const int& key)
+{
+	if (!keyboard_in_bounds(key))
+	{
+		throw std::runtime_error("Index out of bounds while reading keyboard array element.");
+	}
+	return keyboard[key];
 }
