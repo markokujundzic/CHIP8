@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
 
 		SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
 
+		Uint8 r = 255;
+		Uint8 g = 128;
+		Uint8 b = 255;
+
 		while (!escape)
 		{
 			SDL_Event event;
@@ -56,6 +60,9 @@ int main(int argc, char *argv[])
 							std::cout << "Key not recognized is down." << '\n';
 						} else
 						{
+							r = 100;
+							g = 244;
+							b = 70;
 							std::cout << "Key " << Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym)
 							          << " is down!"
 							          << '\n';
@@ -66,7 +73,7 @@ int main(int argc, char *argv[])
 
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
-			SDL_SetRenderDrawColor(renderer, 255, 128, 255, 0);
+			SDL_SetRenderDrawColor(renderer, r, g, b, 0);
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;

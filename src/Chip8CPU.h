@@ -25,6 +25,9 @@ public:
 	static constexpr uint8_t STACK_SIZE { 32 };
 	static constexpr uint8_t PIXEL_SCALE { 10 };
 	static constexpr uint8_t FONT_SIZE { 80 };
+	static constexpr uint8_t FONT_START { 0 };
+
+	static constexpr int KEY_NOT_FOUND { -1 };
 
 	/* CHIP 8 font map */
 	static constexpr std::array<uint8_t, FONT_SIZE> font_map =
@@ -77,6 +80,15 @@ public:
 
 	bool is_key_pressed(const int& key);
 
+	/* Timers */
+	constexpr void configure_delay(const uint16_t& delay) noexcept;
+
+	constexpr void configure_sound(const uint16_t& sound) noexcept;
+
+	/* Emulator loop */
+	void emulate(const std::string& path);
+
+private:
 	/* Memory */
 	void load_rom(const std::string& path);
 
@@ -84,23 +96,19 @@ public:
 
 	constexpr uint8_t read_mem(const uint16_t& index) const;
 
-	/* Timers */
-	constexpr void configure_delay(const uint16_t& delay) noexcept;
-
-	constexpr void configure_sound(const uint16_t& sound) noexcept;
-
 	/* Initialization */
 	void initialize() noexcept;
 
-	/* Emulator loop */
-	void emulate(const std::string& path);
+	void initialize_hardware() noexcept;
 
 	/* Stack */
 	void push(const uint16_t& data);
 
 	uint16_t pop();
 
-private:
+	/* Font */
+	void load_font() noexcept;
+
 	/* Utility */
 	static constexpr bool memory_in_bounds(const uint16_t& index) noexcept;
 

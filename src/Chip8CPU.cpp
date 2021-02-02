@@ -1,6 +1,7 @@
 #include "Chip8CPU.h"
 
 constexpr std::array<char, Chip8CPU::NUMBER_OF_KEYS> Chip8CPU::keyboard_map;
+constexpr std::array<uint8_t, Chip8CPU::FONT_SIZE> Chip8CPU::font_map;
 
 void Chip8CPU::load_rom(const std::string& path)
 {
@@ -87,7 +88,15 @@ uint16_t Chip8CPU::pop()
 	return h << 8 | l;
 }
 
-void Chip8CPU::initialize() noexcept
+inline void Chip8CPU::load_font() noexcept
+{
+	for (auto i = FONT_START; i < font_map.size(); i++)
+	{
+		memory[i] = font_map[i];
+	}
+}
+
+inline void Chip8CPU::initialize_hardware() noexcept
 {
 	sp = MEMORY_SIZE;
 	pc = PROGRAM_START;
@@ -104,6 +113,12 @@ void Chip8CPU::initialize() noexcept
 	}
 }
 
+void Chip8CPU::initialize() noexcept
+{
+	initialize_hardware();
+	load_font();
+}
+
 void Chip8CPU::emulate(const std::string& path)
 {
 	initialize();
@@ -112,7 +127,7 @@ void Chip8CPU::emulate(const std::string& path)
 
 int Chip8CPU::get_keyboard_mapping_value(const char& key_hit)
 {
-	int return_value = -1;
+	int return_value = KEY_NOT_FOUND;
 
 	for (int i = 0; i < NUMBER_OF_KEYS; i++)
 	{
