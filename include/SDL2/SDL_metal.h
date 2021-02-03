@@ -93,7 +93,7 @@ extern DECLSPEC void *SDLCALL SDL_Metal_GetLayer(SDL_MetalView view);
  *                  may be NULL
  *
  * This may differ from SDL_GetWindowSize() if we're rendering to a high-DPI
- * drawable, i.e. the window was created with SDL_WINDOW_ALLOW_HIGHDPI on a
+ * drawable, I.e. the window was created with SDL_WINDOW_ALLOW_HIGHDPI on a
  * platform with high-DPI support (Apple calls this "Retina"), and not disabled
  * by the \c SDL_HINT_VIDEO_HIGHDPI_DISABLED hint.
  *

@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <Windows.h>
 
 #include <algorithm>
 #include <array>
@@ -121,7 +122,11 @@ public:
 
 	bool is_pixel_set(const uint8_t& x, const uint8_t& y);
 
+	bool draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count) noexcept;
+
 	/* Timers */
+	void timer_tick() noexcept;
+
 	constexpr void configure_delay(const uint16_t& delay) noexcept;
 
 	constexpr void configure_sound(const uint16_t& sound) noexcept;
@@ -165,7 +170,7 @@ private:
 	std::array<uint8_t, MEMORY_SIZE + STACK_SIZE> memory;
 
 	/* Register bank */
-	std::array<uint8_t, REGISTER_NUMBER> v;
+	std::array<uint8_t, REGISTER_NUMBER> V;
 
 	/* Keyboard */
 	std::array<bool, NUMBER_OF_KEYS> keyboard;
@@ -174,13 +179,13 @@ private:
 	std::array<std::array<bool, DISPLAY_WIDTH>, DISPLAY_HEIGHT> display;
 
 	/* PC */
-	uint16_t pc;
+	uint16_t PC;
 
 	/* SP */
-	uint16_t sp;
+	uint16_t SP;
 
 	/* Instruction register */
-	uint16_t i;
+	uint16_t I;
 
 	/* Timers */
 	uint8_t delay_timer;

@@ -69,22 +69,22 @@ constexpr inline void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
 
 void Chip8CPU::push(const uint16_t& data)
 {
-	if (!push_in_bounds(sp))
+	if (!push_in_bounds(SP))
 	{
 		throw std::runtime_error("Stack overflow while performing push operation.");
 	}
-	memory[sp++] = static_cast<uint8_t>(data & 0x00FF);
-	memory[sp++] = static_cast<uint8_t>(data >> 8 & 0x00FF);
+	memory[SP++] = static_cast<uint8_t>(data & 0x00FF);
+	memory[SP++] = static_cast<uint8_t>(data >> 8 & 0x00FF);
 }
 
 uint16_t Chip8CPU::pop()
 {
-	if (!pop_in_bounds(sp))
+	if (!pop_in_bounds(SP))
 	{
 		throw std::runtime_error("Stack underflow while performing pop operation.");
 	}
-	uint8_t h = memory[--sp];
-	uint8_t l = memory[--sp];
+	uint8_t h = memory[--SP];
+	uint8_t l = memory[--SP];
 	return h << 8 | l;
 }
 
@@ -98,13 +98,13 @@ inline void Chip8CPU::load_font() noexcept
 
 void Chip8CPU::initialize_hardware() noexcept
 {
-	sp = MEMORY_SIZE;
-	pc = PROGRAM_START;
-	delay_timer = 60;
-	sound_timer = 60;
-	i = 0;
+	SP = MEMORY_SIZE;
+	PC = PROGRAM_START;
+	delay_timer = 20;
+	sound_timer = 20;
+	I = 0;
 
-	for (auto& reg : v)
+	for (auto& reg : V)
 	{
 		reg = 0;
 	}
@@ -204,4 +204,42 @@ bool Chip8CPU::is_pixel_set(const uint8_t& x, const uint8_t& y)
 		throw std::runtime_error("Pixel out of bounds while reading display screen pixels.");
 	}
 	return display[y][x];
+}
+
+void Chip8CPU::timer_tick() noexcept
+{
+	if (delay_timer)
+	{
+		Sleep(100);
+		delay_timer--;
+	}
+	if (sound_timer)
+	{
+		Beep(15000, 100 * sound_timer);
+		sound_timer = 0;
+	}
+}
+
+bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count) noexcept
+{
+	auto collision { false };
+
+	for (auto ly = 0; ly < count; ly++)
+	{
+		auto data = memory[ly];
+		for (auto lx = 0; lx < 8; lx++)
+		{
+			if (!(data & (0b10000000 >> lx)))
+			{
+				continue;
+			}
+			if (display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_HEIGHT])
+			{
+				collision = true;
+			}
+			display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_HEIGHT] ^= true;
+		}
+	}
+
+	return collision;
 }

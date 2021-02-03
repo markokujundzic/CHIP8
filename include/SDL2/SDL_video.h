@@ -1218,7 +1218,7 @@ extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_GetCurrentContext(void);
  *  \param h        Pointer to variable for storing the height in pixels, may be NULL
  *
  * This may differ from SDL_GetWindowSize() if we're rendering to a high-DPI
- * drawable, i.e. the window was created with SDL_WINDOW_ALLOW_HIGHDPI on a
+ * drawable, I.e. the window was created with SDL_WINDOW_ALLOW_HIGHDPI on a
  * platform with high-DPI support (Apple calls this "Retina"), and not disabled
  * by the SDL_HINT_VIDEO_HIGHDPI_DISABLED hint.
  *

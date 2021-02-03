@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 		Chip8CPU emulator {};
 		emulator.emulate(argv[1]);
 
-		emulator.set_pixel(0, 0);
+		emulator.draw_sprite(0, 0, 10);
 
 		SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
 			}
 
 			SDL_RenderPresent(renderer);
+			// emulator.timer_tick();
 		}
 
 		SDL_DestroyWindow(window);

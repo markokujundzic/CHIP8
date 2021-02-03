@@ -101,8 +101,8 @@ typedef struct SDL_GameControllerButtonBind
  *  To count the number of game controllers in the system for the following:
  *  int nJoysticks = SDL_NumJoysticks();
  *  int nGameControllers = 0;
- *  for (int i = 0; i < nJoysticks; i++) {
- *      if (SDL_IsGameController(i)) {
+ *  for (int I = 0; I < nJoysticks; I++) {
+ *      if (SDL_IsGameController(I)) {
  *          nGameControllers++;
  *      }
  *  }
@@ -128,7 +128,7 @@ typedef struct SDL_GameControllerButtonBind
  *  A community sourced database of controllers is available at https://raw.github.com/gabomdq/SDL_GameControllerDB/master/gamecontrollerdb.txt
  *
  *  If \c freerw is non-zero, the stream will be closed after being read.
- * 
+ *
  * \return number of mappings added, -1 on error
  */
 extern DECLSPEC int SDLCALL SDL_GameControllerAddMappingsFromRW(SDL_RWops * rw, int freerw);
@@ -264,7 +264,7 @@ extern DECLSPEC Uint16 SDLCALL SDL_GameControllerGetProductVersion(SDL_GameContr
 
 /**
  *  Get the serial number of an opened controller, if available.
- * 
+ *
  *  Returns the serial number of the controller, or NULL if it is not available.
  */
 extern DECLSPEC const char * SDLCALL SDL_GameControllerGetSerial(SDL_GameController *gamecontroller);
