@@ -220,24 +220,24 @@ void Chip8CPU::timer_tick() noexcept
 	}
 }
 
-bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count) noexcept
+bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count, const uint8_t& index) noexcept
 {
 	auto collision { false };
 
 	for (auto ly = 0; ly < count; ly++)
 	{
-		auto data = memory[ly];
+		auto data = memory[index + ly];
 		for (auto lx = 0; lx < 8; lx++)
 		{
 			if (!(data & (0b10000000 >> lx)))
 			{
 				continue;
 			}
-			if (display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_HEIGHT])
+			if (display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_WIDTH])
 			{
 				collision = true;
 			}
-			display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_HEIGHT] ^= true;
+			display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_WIDTH] ^= true;
 		}
 	}
 

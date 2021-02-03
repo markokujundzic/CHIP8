@@ -122,7 +122,7 @@ public:
 
 	bool is_pixel_set(const uint8_t& x, const uint8_t& y);
 
-	bool draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count) noexcept;
+	bool draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count, const uint8_t& index) noexcept;
 
 	/* Timers */
 	void timer_tick() noexcept;
