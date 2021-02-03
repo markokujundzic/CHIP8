@@ -3,31 +3,35 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+
 #include <algorithm>
-#include <iostream>
+#include <array>
 #include <cstdint>
 #include <fstream>
-#include <array>
+#include <iostream>
 #include <string>
 
 class Chip8CPU
 {
 public:
-	/* Constants */
-	static constexpr uint16_t MEMORY_SIZE { 0x1000 };
+	/* Memory */
 	static constexpr uint16_t PROGRAM_START { 0x200 };
-
-	static constexpr uint8_t WINDOW_WIDTH { 64 };
-	static constexpr uint8_t WINDOW_HEIGHT { 32 };
-
+	static constexpr uint16_t MEMORY_SIZE { 0x1000 };
 	static constexpr uint8_t REGISTER_NUMBER { 16 };
-	static constexpr uint8_t NUMBER_OF_KEYS { 16 };
 	static constexpr uint8_t STACK_SIZE { 32 };
-	static constexpr uint8_t PIXEL_SCALE { 10 };
+
+	/* Display screen */
+	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
+	static constexpr uint8_t DISPLAY_WIDTH { 64 };
+	static constexpr uint8_t DISPLAY_HEIGHT { 32 };
+
+	/* Keyboard */
+	static constexpr uint8_t NUMBER_OF_KEYS { 16 };
+	static constexpr int KEY_NOT_FOUND { -1 };
+
+	/* Font */
 	static constexpr uint8_t FONT_SIZE { 80 };
 	static constexpr uint8_t FONT_START { 0 };
-
-	static constexpr int KEY_NOT_FOUND { -1 };
 
 	/* CHIP 8 font map */
 	static constexpr std::array<uint8_t, FONT_SIZE> font_map =
@@ -112,6 +116,11 @@ public:
 
 	bool is_key_pressed(const int& key);
 
+	/* Display screen */
+	void set_pixel(const uint8_t& x, const uint8_t& y);
+
+	bool is_pixel_set(const uint8_t& x, const uint8_t& y);
+
 	/* Timers */
 	constexpr void configure_delay(const uint16_t& delay) noexcept;
 
@@ -141,7 +150,7 @@ private:
 	/* Font */
 	void load_font() noexcept;
 
-	/* Utility */
+	/* Bounds checking */
 	static constexpr bool memory_in_bounds(const uint16_t& index) noexcept;
 
 	static constexpr bool push_in_bounds(const uint16_t& index) noexcept;
@@ -149,6 +158,8 @@ private:
 	static constexpr bool pop_in_bounds(const uint16_t& index) noexcept;
 
 	static constexpr bool keyboard_in_bounds(const int& index) noexcept;
+
+	static constexpr bool pixel_in_bounds(const uint8_t& x, const uint8_t& y) noexcept;
 
 	/* RAM memory */
 	std::array<uint8_t, MEMORY_SIZE + STACK_SIZE> memory;
@@ -159,15 +170,21 @@ private:
 	/* Keyboard */
 	std::array<bool, NUMBER_OF_KEYS> keyboard;
 
+	/* Display screen*/
+	std::array<std::array<bool, DISPLAY_WIDTH>, DISPLAY_HEIGHT> display;
+
 	/* PC */
 	uint16_t pc;
+
 	/* SP */
 	uint16_t sp;
+
 	/* Instruction register */
 	uint16_t i;
 
 	/* Timers */
 	uint8_t delay_timer;
+
 	uint8_t sound_timer;
 };
 

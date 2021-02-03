@@ -13,24 +13,22 @@ int main(int argc, char *argv[])
 		Chip8CPU emulator {};
 		emulator.emulate(argv[1]);
 
+		emulator.set_pixel(0, 0);
+
 		SDL_Init(SDL_INIT_EVERYTHING);
 
 		SDL_Window *window = SDL_CreateWindow(
 				"CHIP8 Emulator",
 				SDL_WINDOWPOS_UNDEFINED,
 				SDL_WINDOWPOS_UNDEFINED,
-				Chip8CPU::WINDOW_WIDTH * Chip8CPU::PIXEL_SCALE,
-				Chip8CPU::WINDOW_HEIGHT * Chip8CPU::PIXEL_SCALE,
+				Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE,
+				Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE,
 				SDL_WINDOW_SHOWN
 		);
 
 		auto escape { false };
 
 		SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
-
-		Uint8 r = 255;
-		Uint8 g = 128;
-		Uint8 b = 255;
 
 		while (!escape)
 		{
@@ -60,9 +58,6 @@ int main(int argc, char *argv[])
 							std::cout << "Key not recognized is down." << '\n';
 						} else
 						{
-							r = 100;
-							g = 244;
-							b = 70;
 							std::cout << "Key " << Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym)
 							          << " is down!"
 							          << '\n';
@@ -73,13 +68,24 @@ int main(int argc, char *argv[])
 
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
-			SDL_SetRenderDrawColor(renderer, r, g, b, 0);
-			SDL_Rect r;
-			r.x = 0;
-			r.y = 0;
-			r.w = 40;
-			r.h = 40;
-			SDL_RenderFillRect(renderer, &r);
+			SDL_SetRenderDrawColor(renderer, 250, 250, 250, 0);
+
+			for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
+			{
+				for (auto y = 0; y < Chip8CPU::DISPLAY_HEIGHT; y++)
+				{
+					if (emulator.is_pixel_set(x, y))
+					{
+						SDL_Rect r;
+						r.x = x * Chip8CPU::DISPLAY_PIXEL_SCALE;
+						r.y = y * Chip8CPU::DISPLAY_PIXEL_SCALE;
+						r.w = Chip8CPU::DISPLAY_PIXEL_SCALE;
+						r.h = Chip8CPU::DISPLAY_PIXEL_SCALE;
+						SDL_RenderFillRect(renderer, &r);
+					}
+				}
+			}
+
 			SDL_RenderPresent(renderer);
 		}
 

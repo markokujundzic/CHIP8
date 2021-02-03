@@ -90,26 +90,36 @@ uint16_t Chip8CPU::pop()
 
 inline void Chip8CPU::load_font() noexcept
 {
-	for (auto i = FONT_START; i < font_map.size(); i++)
+	for (uint32_t i = FONT_START; i < font_map.size(); i++)
 	{
 		memory[i] = font_map[i];
 	}
 }
 
-inline void Chip8CPU::initialize_hardware() noexcept
+void Chip8CPU::initialize_hardware() noexcept
 {
 	sp = MEMORY_SIZE;
 	pc = PROGRAM_START;
 	delay_timer = 60;
 	sound_timer = 60;
 	i = 0;
+
 	for (auto& reg : v)
 	{
 		reg = 0;
 	}
+
 	for (auto& mem : memory)
 	{
 		mem = 0;
+	}
+
+	for (auto x = 0; x < DISPLAY_WIDTH; x++)
+	{
+		for (auto y = 0; y < DISPLAY_HEIGHT; y++)
+		{
+			display[y][x] = false;
+		}
 	}
 }
 
@@ -171,4 +181,27 @@ bool Chip8CPU::is_key_pressed(const int& key)
 		throw std::runtime_error("Index out of bounds while reading keyboard array element.");
 	}
 	return keyboard[key];
+}
+
+constexpr bool Chip8CPU::pixel_in_bounds(const uint8_t& x, const uint8_t& y) noexcept
+{
+	return x >= 0 && x <= DISPLAY_WIDTH - 1 && y >= 0 && y <= DISPLAY_HEIGHT - 1;
+}
+
+void Chip8CPU::set_pixel(const uint8_t& x, const uint8_t& y)
+{
+	if (!pixel_in_bounds(x, y))
+	{
+		throw std::runtime_error("Pixel out of bounds while reading display screen pixels.");
+	}
+	display[y][x] = true;
+}
+
+bool Chip8CPU::is_pixel_set(const uint8_t& x, const uint8_t& y)
+{
+	if (!pixel_in_bounds(x, y))
+	{
+		throw std::runtime_error("Pixel out of bounds while reading display screen pixels.");
+	}
+	return display[y][x];
 }
