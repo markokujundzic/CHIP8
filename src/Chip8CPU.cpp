@@ -6,25 +6,6 @@ constexpr std::array<uint8_t, Chip8CPU::FONT_SIZE> Chip8CPU::font_map;
 
 const char *Chip8CPU::WINDOW_NAME { "CHIP8" };
 
-void Chip8CPU::load_rom(const std::string& path)
-{
-	std::ifstream file(path, std::ios::binary | std::ios::in);
-
-	if (!file.is_open())
-	{
-		throw std::runtime_error("Cannot open ROM file for reading.");
-	}
-
-	std::for_each(
-			std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>(),
-			[this, index { PROGRAM_START }](const uint8_t& c)
-					mutable
-			{
-				write_mem(c, index++);
-			});
-}
-
 inline constexpr bool Chip8CPU::memory_in_bounds(const uint16_t& index) noexcept
 {
 	return index >= 0 && index <= MEMORY_SIZE - 1;
@@ -40,6 +21,11 @@ inline constexpr bool Chip8CPU::pop_in_bounds(const uint16_t& index) noexcept
 {
 	return index >= MEMORY_SIZE && index <= MEMORY_SIZE + STACK_SIZE - 1 &&
 	       index - 1 >= MEMORY_SIZE && index - 1 <= MEMORY_SIZE + STACK_SIZE - 1;
+}
+
+constexpr bool Chip8CPU::keyboard_in_bounds(const int& index) noexcept
+{
+	return index >= 0 && index <= NUMBER_OF_KEYS - 1;
 }
 
 void Chip8CPU::write_mem(const uint8_t& data, const uint16_t& index)
@@ -58,6 +44,25 @@ constexpr uint8_t Chip8CPU::read_mem(const uint16_t& index) const
 		throw std::runtime_error("Index out of bounds while performing read operation.");
 	}
 	return memory[index];
+}
+
+void Chip8CPU::load_rom(const std::string& path)
+{
+	std::ifstream file(path, std::ios::binary | std::ios::in);
+
+	if (!file.is_open())
+	{
+		throw std::runtime_error("Cannot open ROM file for reading.");
+	}
+
+	std::for_each(
+			std::istreambuf_iterator<char>(file),
+			std::istreambuf_iterator<char>(),
+			[this, index { PROGRAM_START }](const uint8_t& c)
+					mutable
+			{
+				write_mem(c, index++);
+			});
 }
 
 constexpr inline void Chip8CPU::configure_delay(const uint16_t& delay) noexcept
@@ -99,6 +104,17 @@ inline void Chip8CPU::load_font() noexcept
 	}
 }
 
+inline void Chip8CPU::clear_display_screen() noexcept
+{
+	for (auto x = 0; x < DISPLAY_WIDTH; x++)
+	{
+		for (auto y = 0; y < DISPLAY_HEIGHT; y++)
+		{
+			display[y][x] = false;
+		}
+	}
+}
+
 void Chip8CPU::initialize_hardware() noexcept
 {
 	running = true;
@@ -118,13 +134,7 @@ void Chip8CPU::initialize_hardware() noexcept
 		mem = 0;
 	}
 
-	for (auto x = 0; x < DISPLAY_WIDTH; x++)
-	{
-		for (auto y = 0; y < DISPLAY_HEIGHT; y++)
-		{
-			display[y][x] = false;
-		}
-	}
+	clear_display_screen();
 }
 
 void Chip8CPU::initialize() noexcept
@@ -154,11 +164,6 @@ int Chip8CPU::get_keyboard_mapping_value(const char& key_hit)
 	}
 
 	return return_value;
-}
-
-constexpr bool Chip8CPU::keyboard_in_bounds(const int& index) noexcept
-{
-	return index >= 0 && index <= NUMBER_OF_KEYS - 1;
 }
 
 void Chip8CPU::key_press(const int& key)
@@ -237,8 +242,7 @@ bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& co
 	{
 		for (auto x_offset = 0; x_offset < BITS_IN_BYTE; x_offset++)
 		{
-			//if (memory[index + y_offset] & (MSB_SET >> x_offset))
-			if ((memory[index + y_offset] >> (7 - x_offset % BITS_IN_BYTE)) & 0x1)
+			if (memory[index + y_offset] & (MSB_SET >> x_offset))
 			{
 				if (display[(y + y_offset) % DISPLAY_HEIGHT][(x + x_offset) % DISPLAY_WIDTH])
 				{
@@ -254,7 +258,7 @@ bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& co
 
 inline constexpr uint16_t Chip8CPU::decode() const noexcept
 {
-	return read_mem(PC + 1) << BITS_IN_BYTE | read_mem(PC + 0);
+	return read_mem(PC + 0) << BITS_IN_BYTE | read_mem(PC + 1);
 }
 
 void Chip8CPU::initialize_sdl(SDL_Window **window, SDL_Renderer **renderer)
@@ -279,7 +283,7 @@ void Chip8CPU::render(SDL_Renderer *renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 250, 250, 250, 0);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
 
 	for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
 	{
@@ -329,12 +333,22 @@ void Chip8CPU::sdl_poll_events()
 
 inline constexpr void Chip8CPU::get_next_instruction() noexcept
 {
-	PC = +2;
+	PC += 2;
 }
 
 void Chip8CPU::execute(const uint16_t& op_code)
 {
-
+	switch (op_code)
+	{
+		/* 0x00E0 - CLS -> Clear the display */
+		case 0x00E0:
+			clear_display_screen();
+			break;
+			/* 0x00EE - RET -> Return from a subroutine */
+		case 0x00EE:
+			PC = pop();
+			break;
+	}
 }
 
 void Chip8CPU::run()
@@ -355,8 +369,10 @@ void Chip8CPU::run()
 		sdl_poll_events();
 		render(renderer);
 		execute(decode());
+		printf("%x\n", decode());
 		get_next_instruction();
 	}
 
 	restore_sdl(&window);
 }
+

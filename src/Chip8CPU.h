@@ -174,6 +174,8 @@ private:
 
 	void render(SDL_Renderer *renderer);
 
+	void clear_display_screen() noexcept;
+
 	void invert_pixel(const uint8_t& x, const uint8_t& y) noexcept;
 
 	/* SDL */
@@ -220,7 +222,7 @@ private:
 
 	uint8_t ST;
 
-	/* Emulator state*/
+	/* Emulator state */
 	bool running;
 };
 

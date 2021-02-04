@@ -178,7 +178,7 @@ typedef enum
     SDL_SCANCODE_DOWN = 81,
     SDL_SCANCODE_UP = 82,
 
-    SDL_SCANCODE_NUMLOCKCLEAR = 83, /**< num lock on PC, clear on Mac keyboards
+    SDL_SCANCODE_NUMLOCKCLEAR = 83, /**< num lock on PC, clear_display_screen on Mac keyboards
                                      */
     SDL_SCANCODE_KP_DIVIDE = 84,
     SDL_SCANCODE_KP_MULTIPLY = 85,

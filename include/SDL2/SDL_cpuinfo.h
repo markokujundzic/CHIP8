@@ -234,7 +234,7 @@ extern DECLSPEC size_t SDLCALL SDL_SIMDGetAlignment(void);
  * Note that SDL will only deal with SIMD instruction sets it is aware of;
  *  for example, SDL 2.0.8 knows that SSE wants 16-byte vectors
  *  (SDL_HasSSE()), and AVX2 wants 32 bytes (SDL_HasAVX2()), but doesn't
- *  know that AVX-512 wants 64. To be clear: if you can't decide to use an
+ *  know that AVX-512 wants 64. To be clear_display_screen: if you can't decide to use an
  *  instruction set with an SDL_Has*() function, don't use that instruction
  *  set with memory allocated through here.
  *

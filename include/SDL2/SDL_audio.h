@@ -819,7 +819,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_GetQueuedAudioSize(SDL_AudioDeviceID dev);
  *
  *  This function always succeeds and thus returns void.
  *
- *  \param dev The device ID of which to clear the audio queue.
+ *  \param dev The device ID of which to clear_display_screen the audio queue.
  *
  *  \sa SDL_QueueAudio
  *  \sa SDL_GetQueuedAudioSize
