@@ -12,97 +12,14 @@ int main(int argc, char *argv[])
 	{
 		Chip8CPU emulator {};
 		emulator.emulate(argv[1]);
-
-		emulator.draw_sprite(0, 0, 5, 5);
-		emulator.draw_sprite(10, 0, 5, 15);
-		emulator.draw_sprite(20, 0, 5, 5);
-		emulator.draw_sprite(30, 0, 5, 10);
-
-
-		SDL_Init(SDL_INIT_EVERYTHING);
-
-		SDL_Window *window = SDL_CreateWindow(
-				"CHIP8 Emulator",
-				SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE,
-				Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE,
-				SDL_WINDOW_SHOWN
-		);
-
-		auto escape { false };
-
-		SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
-
-		while (!escape)
-		{
-			SDL_Event event;
-
-			while (SDL_PollEvent(&event))
-			{
-				switch (event.type)
-				{
-					case SDL_QUIT:
-						escape = true;
-						break;
-					case SDL_KEYUP:
-						if (Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) == -1)
-						{
-							std::cout << "Key not recognized is up." << '\n';
-						} else
-						{
-							std::cout << "Key " << Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym)
-							          << " is up!"
-							          << '\n';
-						}
-						break;
-					case SDL_KEYDOWN:
-						if (Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) == -1)
-						{
-							std::cout << "Key not recognized is down." << '\n';
-						} else
-						{
-							std::cout << "Key " << Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym)
-							          << " is down!"
-							          << '\n';
-						}
-						break;
-				}
-			}
-
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-			SDL_RenderClear(renderer);
-			SDL_SetRenderDrawColor(renderer, 250, 250, 250, 0);
-
-			for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
-			{
-				for (auto y = 0; y < Chip8CPU::DISPLAY_HEIGHT; y++)
-				{
-					if (emulator.is_pixel_set(x, y))
-					{
-						SDL_Rect r;
-						r.x = x * Chip8CPU::DISPLAY_PIXEL_SCALE;
-						r.y = y * Chip8CPU::DISPLAY_PIXEL_SCALE;
-						r.w = Chip8CPU::DISPLAY_PIXEL_SCALE;
-						r.h = Chip8CPU::DISPLAY_PIXEL_SCALE;
-						SDL_RenderFillRect(renderer, &r);
-					}
-				}
-			}
-
-			SDL_RenderPresent(renderer);
-			// emulator.timer_tick();
-		}
-
-		SDL_DestroyWindow(window);
 	}
 	catch (const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
-		return -1;
+		return EXIT_FAILURE;
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 
 	/*const char* TITLE = "Hello World SDL2 + TTF";
 	const int WIDTH = 1280, HEIGHT = 720;

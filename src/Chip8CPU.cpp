@@ -1,7 +1,10 @@
 #include "Chip8CPU.h"
 
 constexpr std::array<char, Chip8CPU::NUMBER_OF_KEYS> Chip8CPU::keyboard_map;
+
 constexpr std::array<uint8_t, Chip8CPU::FONT_SIZE> Chip8CPU::font_map;
+
+const char *Chip8CPU::WINDOW_NAME { "CHIP8" };
 
 void Chip8CPU::load_rom(const std::string& path)
 {
@@ -59,12 +62,12 @@ constexpr uint8_t Chip8CPU::read_mem(const uint16_t& index) const
 
 constexpr inline void Chip8CPU::configure_delay(const uint16_t& delay) noexcept
 {
-	delay_timer = delay;
+	DT = delay;
 }
 
 constexpr inline void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
 {
-	delay_timer = sound;
+	DT = sound;
 }
 
 void Chip8CPU::push(const uint16_t& data)
@@ -85,7 +88,7 @@ uint16_t Chip8CPU::pop()
 	}
 	uint8_t h = memory[--SP];
 	uint8_t l = memory[--SP];
-	return h << 8 | l;
+	return h << BITS_IN_BYTE | l;
 }
 
 inline void Chip8CPU::load_font() noexcept
@@ -98,10 +101,11 @@ inline void Chip8CPU::load_font() noexcept
 
 void Chip8CPU::initialize_hardware() noexcept
 {
+	running = true;
 	SP = MEMORY_SIZE;
 	PC = PROGRAM_START;
-	delay_timer = 20;
-	sound_timer = 20;
+	DT = 20;
+	ST = 20;
 	I = 0;
 
 	for (auto& reg : V)
@@ -133,6 +137,7 @@ void Chip8CPU::emulate(const std::string& path)
 {
 	initialize();
 	load_rom(path);
+	run();
 }
 
 int Chip8CPU::get_keyboard_mapping_value(const char& key_hit)
@@ -141,7 +146,7 @@ int Chip8CPU::get_keyboard_mapping_value(const char& key_hit)
 
 	for (int i = 0; i < NUMBER_OF_KEYS; i++)
 	{
-		if (Chip8CPU::keyboard_map[i] == key_hit)
+		if (keyboard_map[i] == key_hit)
 		{
 			return_value = i;
 			break;
@@ -174,7 +179,7 @@ void Chip8CPU::key_release(const int& key)
 	keyboard[key] = false;
 }
 
-bool Chip8CPU::is_key_pressed(const int& key)
+bool Chip8CPU::is_key_pressed(const int& key) const
 {
 	if (!keyboard_in_bounds(key))
 	{
@@ -197,7 +202,7 @@ void Chip8CPU::set_pixel(const uint8_t& x, const uint8_t& y)
 	display[y][x] = true;
 }
 
-bool Chip8CPU::is_pixel_set(const uint8_t& x, const uint8_t& y)
+bool Chip8CPU::is_pixel_set(const uint8_t& x, const uint8_t& y) const
 {
 	if (!pixel_in_bounds(x, y))
 	{
@@ -208,38 +213,150 @@ bool Chip8CPU::is_pixel_set(const uint8_t& x, const uint8_t& y)
 
 void Chip8CPU::timer_tick() noexcept
 {
-	if (delay_timer)
+	if (DT--)
 	{
 		Sleep(100);
-		delay_timer--;
 	}
-	if (sound_timer)
+	if (ST)
 	{
-		Beep(15000, 100 * sound_timer);
-		sound_timer = 0;
+		Beep(15000, 100 * ST);
+		ST = 0;
 	}
+}
+
+inline void Chip8CPU::invert_pixel(const uint8_t& x, const uint8_t& y) noexcept
+{
+	display[y % DISPLAY_HEIGHT][x % DISPLAY_WIDTH] ^= true;
 }
 
 bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count, const uint8_t& index) noexcept
 {
 	auto collision { false };
 
-	for (auto ly = 0; ly < count; ly++)
+	for (auto y_offset = 0; y_offset < count; y_offset++)
 	{
-		auto data = memory[index + ly];
-		for (auto lx = 0; lx < 8; lx++)
+		for (auto x_offset = 0; x_offset < BITS_IN_BYTE; x_offset++)
 		{
-			if (!(data & (0b10000000 >> lx)))
+			//if (memory[index + y_offset] & (MSB_SET >> x_offset))
+			if ((memory[index + y_offset] >> (7 - x_offset % BITS_IN_BYTE)) & 0x1)
 			{
-				continue;
+				if (display[(y + y_offset) % DISPLAY_HEIGHT][(x + x_offset) % DISPLAY_WIDTH])
+				{
+					collision = true;
+				}
+				invert_pixel(x + x_offset, y + y_offset);
 			}
-			if (display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_WIDTH])
-			{
-				collision = true;
-			}
-			display[(y + ly) % DISPLAY_HEIGHT][(x + lx) % DISPLAY_WIDTH] ^= true;
 		}
 	}
 
 	return collision;
+}
+
+inline constexpr uint16_t Chip8CPU::decode() const noexcept
+{
+	return read_mem(PC + 1) << BITS_IN_BYTE | read_mem(PC + 0);
+}
+
+void Chip8CPU::initialize_sdl(SDL_Window **window, SDL_Renderer **renderer)
+{
+	SDL_Init(SDL_INIT_EVERYTHING);
+	*window = SDL_CreateWindow(
+			WINDOW_NAME,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE,
+			Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE,
+			SDL_WINDOW_SHOWN);
+	*renderer = SDL_CreateRenderer(*window, -1, SDL_TEXTUREACCESS_TARGET);
+}
+
+inline void Chip8CPU::restore_sdl(SDL_Window **window)
+{
+	SDL_DestroyWindow(*window);
+}
+
+void Chip8CPU::render(SDL_Renderer *renderer)
+{
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 250, 250, 250, 0);
+
+	for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
+	{
+		for (auto y = 0; y < Chip8CPU::DISPLAY_HEIGHT; y++)
+		{
+			if (is_pixel_set(x, y))
+			{
+				SDL_Rect sdl_rect;
+				sdl_rect.x = x * Chip8CPU::DISPLAY_PIXEL_SCALE;
+				sdl_rect.y = y * Chip8CPU::DISPLAY_PIXEL_SCALE;
+				sdl_rect.w = Chip8CPU::DISPLAY_PIXEL_SCALE;
+				sdl_rect.h = Chip8CPU::DISPLAY_PIXEL_SCALE;
+				SDL_RenderFillRect(renderer, &sdl_rect);
+			}
+		}
+	}
+
+	SDL_RenderPresent(renderer);
+}
+
+void Chip8CPU::sdl_poll_events()
+{
+	SDL_Event event;
+
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+			case SDL_QUIT:
+				running = false;
+				break;
+			case SDL_KEYUP:
+				if (auto key = Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+				{
+					key_release(key);
+				}
+				break;
+			case SDL_KEYDOWN:
+				if (auto key = Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+				{
+					key_press(key);
+				}
+				break;
+		}
+	}
+}
+
+inline constexpr void Chip8CPU::get_next_instruction() noexcept
+{
+	PC = +2;
+}
+
+void Chip8CPU::execute(const uint16_t& op_code)
+{
+
+}
+
+void Chip8CPU::run()
+{
+	draw_sprite(0, 0, 5, 5);
+	draw_sprite(10, 0, 5, 15);
+	draw_sprite(20, 0, 5, 5);
+	draw_sprite(30, 0, 5, 10);
+	draw_sprite(40, 0, 5, 75);
+
+	SDL_Window *window;
+	SDL_Renderer *renderer;
+
+	initialize_sdl(&window, &renderer);
+
+	while (running)
+	{
+		sdl_poll_events();
+		render(renderer);
+		execute(decode());
+		get_next_instruction();
+	}
+
+	restore_sdl(&window);
 }

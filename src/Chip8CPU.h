@@ -25,6 +25,8 @@ public:
 	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
 	static constexpr uint8_t DISPLAY_WIDTH { 64 };
 	static constexpr uint8_t DISPLAY_HEIGHT { 32 };
+	static constexpr uint8_t BITS_IN_BYTE { 8 };
+	static constexpr uint8_t MSB_SET { 0x80 };
 
 	/* Keyboard */
 	static constexpr uint8_t NUMBER_OF_KEYS { 16 };
@@ -33,6 +35,9 @@ public:
 	/* Font */
 	static constexpr uint8_t FONT_SIZE { 80 };
 	static constexpr uint8_t FONT_START { 0 };
+
+	/* Window name */
+	static const char *WINDOW_NAME;
 
 	/* CHIP 8 font map */
 	static constexpr std::array<uint8_t, FONT_SIZE> font_map =
@@ -108,25 +113,7 @@ public:
 					SDLK_f
 			};
 
-	/* Keyboard */
-	static int get_keyboard_mapping_value(const char& key_hit);
-
-	void key_press(const int& key);
-
-	void key_release(const int& key);
-
-	bool is_key_pressed(const int& key);
-
-	/* Display screen */
-	void set_pixel(const uint8_t& x, const uint8_t& y);
-
-	bool is_pixel_set(const uint8_t& x, const uint8_t& y);
-
-	bool draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count, const uint8_t& index) noexcept;
-
 	/* Timers */
-	void timer_tick() noexcept;
-
 	constexpr void configure_delay(const uint16_t& delay) noexcept;
 
 	constexpr void configure_sound(const uint16_t& sound) noexcept;
@@ -135,6 +122,27 @@ public:
 	void emulate(const std::string& path);
 
 private:
+	/* Timers */
+	void timer_tick() noexcept;
+
+	/* Keyboard */
+	static int get_keyboard_mapping_value(const char& key_hit);
+
+	void key_press(const int& key);
+
+	void key_release(const int& key);
+
+	bool is_key_pressed(const int& key) const;
+
+	/* Emulator loop */
+	constexpr uint16_t decode() const noexcept;
+
+	void execute(const uint16_t& op_code);
+
+	constexpr void get_next_instruction() noexcept;
+
+	void run();
+
 	/* Memory */
 	void load_rom(const std::string& path);
 
@@ -154,6 +162,26 @@ private:
 
 	/* Font */
 	void load_font() noexcept;
+
+	/* Display screen */
+	using pixel_matrix = std::array<std::array<bool, DISPLAY_WIDTH>, DISPLAY_HEIGHT>;
+
+	void set_pixel(const uint8_t& x, const uint8_t& y);
+
+	bool is_pixel_set(const uint8_t& x, const uint8_t& y) const;
+
+	bool draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count, const uint8_t& index) noexcept;
+
+	void render(SDL_Renderer *renderer);
+
+	void invert_pixel(const uint8_t& x, const uint8_t& y) noexcept;
+
+	/* SDL */
+	static void initialize_sdl(SDL_Window **window, SDL_Renderer **renderer);
+
+	static void restore_sdl(SDL_Window **window);
+
+	void sdl_poll_events();
 
 	/* Bounds checking */
 	static constexpr bool memory_in_bounds(const uint16_t& index) noexcept;
@@ -176,7 +204,7 @@ private:
 	std::array<bool, NUMBER_OF_KEYS> keyboard;
 
 	/* Display screen*/
-	std::array<std::array<bool, DISPLAY_WIDTH>, DISPLAY_HEIGHT> display;
+	pixel_matrix display;
 
 	/* PC */
 	uint16_t PC;
@@ -188,9 +216,12 @@ private:
 	uint16_t I;
 
 	/* Timers */
-	uint8_t delay_timer;
+	uint8_t DT;
 
-	uint8_t sound_timer;
+	uint8_t ST;
+
+	/* Emulator state*/
+	bool running;
 };
 
 #endif
