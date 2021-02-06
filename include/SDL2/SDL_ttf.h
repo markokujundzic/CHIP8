@@ -172,7 +172,7 @@ extern DECLSPEC int SDLCALL TTF_SizeText(TTF_Font *font, const char *text, int *
 extern DECLSPEC int SDLCALL TTF_SizeUTF8(TTF_Font *font, const char *text, int *w, int *h);
 extern DECLSPEC int SDLCALL TTF_SizeUNICODE(TTF_Font *font, const Uint16 *text, int *w, int *h);
 
-/* Create an 8-bit palettized surface and render the given text at
+/* Create an 8-bit palettized surface and sdl_render the given text at
    fast quality with the given font and color.  The 0 pixel is the
    colorkey, giving a transparent background, and the 1 pixel is set
    to the text color.
@@ -185,7 +185,7 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Solid(TTF_Font *font,
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Solid(TTF_Font *font,
                 const Uint16 *text, SDL_Color fg);
 
-/* Create an 8-bit palettized surface and render the given glyph at
+/* Create an 8-bit palettized surface and sdl_render the given glyph at
    fast quality with the given font and color.  The 0 pixel is the
    colorkey, giving a transparent background, and the 1 pixel is set
    to the text color.  The glyph is rendered without any padding or
@@ -195,7 +195,7 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Solid(TTF_Font *font,
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderGlyph_Solid(TTF_Font *font,
                     Uint16 ch, SDL_Color fg);
 
-/* Create an 8-bit palettized surface and render the given text at
+/* Create an 8-bit palettized surface and sdl_render the given text at
    high quality with the given font and colors.  The 0 pixel is background,
    while other pixels have varying degrees of the foreground color.
    This function returns the new surface, or NULL if there was an error.
@@ -207,7 +207,7 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Shaded(TTF_Font *font,
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Shaded(TTF_Font *font,
                 const Uint16 *text, SDL_Color fg, SDL_Color bg);
 
-/* Create an 8-bit palettized surface and render the given glyph at
+/* Create an 8-bit palettized surface and sdl_render the given glyph at
    high quality with the given font and colors.  The 0 pixel is background,
    while other pixels have varying degrees of the foreground color.
    The glyph is rendered without any padding or centering in the X
@@ -217,7 +217,7 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Shaded(TTF_Font *font,
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderGlyph_Shaded(TTF_Font *font,
                 Uint16 ch, SDL_Color fg, SDL_Color bg);
 
-/* Create a 32-bit ARGB surface and render the given text at high quality,
+/* Create a 32-bit ARGB surface and sdl_render the given text at high quality,
    using alpha blending to dither the font with the given color.
    This function returns the new surface, or NULL if there was an error.
 */
@@ -229,7 +229,7 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Blended(TTF_Font *font,
                 const Uint16 *text, SDL_Color fg);
 
 
-/* Create a 32-bit ARGB surface and render the given text at high quality,
+/* Create a 32-bit ARGB surface and sdl_render the given text at high quality,
    using alpha blending to dither the font with the given color.
    Text is wrapped to multiple lines on line endings and on word boundaries
    if it extends beyond wrapLength in pixels.
@@ -242,7 +242,7 @@ extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUTF8_Blended_Wrapped(TTF_Font *f
 extern DECLSPEC SDL_Surface * SDLCALL TTF_RenderUNICODE_Blended_Wrapped(TTF_Font *font,
                 const Uint16 *text, SDL_Color fg, Uint32 wrapLength);
 
-/* Create a 32-bit ARGB surface and render the given glyph at high quality,
+/* Create a 32-bit ARGB surface and sdl_render the given glyph at high quality,
    using alpha blending to dither the font with the given color.
    The glyph is rendered without any padding or centering in the X
    direction, and aligned normally in the Y direction.

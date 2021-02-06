@@ -65,7 +65,7 @@ extern "C" {
 #define SDL_HINT_FRAMEBUFFER_ACCELERATION   "SDL_FRAMEBUFFER_ACCELERATION"
 
 /**
- *  \brief  A variable specifying which render driver to use.
+ *  \brief  A variable specifying which sdl_render driver to use.
  *
  *  If the application doesn't pick a specific renderer to use, this variable
  *  specifies the name of the preferred renderer.  If the preferred renderer
@@ -85,7 +85,7 @@ extern "C" {
 #define SDL_HINT_RENDER_DRIVER              "SDL_RENDER_DRIVER"
 
 /**
- *  \brief  A variable controlling whether the OpenGL render driver uses shaders if they are available.
+ *  \brief  A variable controlling whether the OpenGL sdl_render driver uses shaders if they are available.
  *
  *  This variable can be set to the following values:
  *    "0"       - Disable shaders
@@ -1036,7 +1036,7 @@ extern "C" {
  *
  * The variable can be set to the following values:
  *   "0"       - SDL_TEXTEDITING events are sent, and it is the application's
- *               responsibility to render the text from these events and
+ *               responsibility to sdl_render the text from these events and
  *               differentiate it somehow from committed text. (default)
  *   "1"       - If supported by the IME then SDL_TEXTEDITING events are not sent,
  *               and text that is being composed will be rendered in its own UI.
@@ -1278,20 +1278,20 @@ extern "C" {
 #define SDL_HINT_AUDIO_CATEGORY   "SDL_AUDIO_CATEGORY"
 
 /**
- *  \brief  A variable controlling whether the 2D render API is compatible or efficient.
+ *  \brief  A variable controlling whether the 2D sdl_render API is compatible or efficient.
  *
  *  This variable can be set to the following values:
  *
  *    "0"     - Don't use batching to make rendering more efficient.
  *    "1"     - Use batching, but might cause problems if app makes its own direct OpenGL calls.
  *
- *  Up to SDL 2.0.9, the render API would draw immediately when requested. Now
+ *  Up to SDL 2.0.9, the sdl_render API would draw immediately when requested. Now
  *  it batches up draw requests and sends them all to the GPU only when forced
- *  to (during SDL_RenderPresent, when changing render targets, by updating a
+ *  to (during SDL_RenderPresent, when changing sdl_render targets, by updating a
  *  texture that the batch needs, etc). This is significantly more efficient,
- *  but it can cause problems for apps that expect to render on top of the
- *  render API's output. As such, SDL will disable batching if a specific
- *  render backend is requested (since this might indicate that the app is
+ *  but it can cause problems for apps that expect to sdl_render on top of the
+ *  sdl_render API's output. As such, SDL will disable batching if a specific
+ *  sdl_render backend is requested (since this might indicate that the app is
  *  planning to use the underlying graphics API directly). This hint can
  *  be used to explicitly request batching in this instance. It is a contract
  *  that you will either never use the underlying graphics API directly, or

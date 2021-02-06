@@ -73,7 +73,7 @@ typedef enum
 } SDL_RendererFlags;
 
 /**
- *  \brief Information on the capabilities of a render driver or context.
+ *  \brief Information on the capabilities of a sdl_render driver or context.
  */
 typedef struct SDL_RendererInfo
 {
@@ -102,7 +102,7 @@ typedef enum
 {
     SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
     SDL_TEXTUREACCESS_STREAMING, /**< Changes frequently, lockable */
-    SDL_TEXTUREACCESS_TARGET     /**< Texture can be used as a render target */
+    SDL_TEXTUREACCESS_TARGET     /**< Texture can be used as a sdl_render target */
 } SDL_TextureAccess;
 
 /**
@@ -144,7 +144,7 @@ typedef struct SDL_Texture SDL_Texture;
  *  \brief Get the number of 2D rendering drivers available for the current
  *         display.
  *
- *  A render driver is a set of code that handles rendering and texture
+ *  A sdl_render driver is a set of code that handles rendering and texture
  *  management on a particular display.  Normally there is only one, but
  *  some drivers may have several available with different capabilities.
  *
@@ -287,7 +287,7 @@ extern DECLSPEC int SDLCALL SDL_QueryTexture(SDL_Texture * texture,
                                              int *w, int *h);
 
 /**
- *  \brief Set an additional color value used in render copy operations.
+ *  \brief Set an additional color value used in sdl_render copy operations.
  *
  *  \param texture The texture to update.
  *  \param r       The red color value multiplied into copy operations.
@@ -304,7 +304,7 @@ extern DECLSPEC int SDLCALL SDL_SetTextureColorMod(SDL_Texture * texture,
 
 
 /**
- *  \brief Get the additional color value used in render copy operations.
+ *  \brief Get the additional color value used in sdl_render copy operations.
  *
  *  \param texture The texture to query.
  *  \param r         A pointer filled in with the current red color value.
@@ -320,7 +320,7 @@ extern DECLSPEC int SDLCALL SDL_GetTextureColorMod(SDL_Texture * texture,
                                                    Uint8 * b);
 
 /**
- *  \brief Set an additional alpha value used in render copy operations.
+ *  \brief Set an additional alpha value used in sdl_render copy operations.
  *
  *  \param texture The texture to update.
  *  \param alpha     The alpha value multiplied into copy operations.
@@ -334,7 +334,7 @@ extern DECLSPEC int SDLCALL SDL_SetTextureAlphaMod(SDL_Texture * texture,
                                                    Uint8 alpha);
 
 /**
- *  \brief Get the additional alpha value used in render copy operations.
+ *  \brief Get the additional alpha value used in sdl_render copy operations.
  *
  *  \param texture The texture to query.
  *  \param alpha     A pointer filled in with the current alpha value.
@@ -498,7 +498,7 @@ extern DECLSPEC int SDLCALL SDL_LockTextureToSurface(SDL_Texture *texture,
 extern DECLSPEC void SDLCALL SDL_UnlockTexture(SDL_Texture * texture);
 
 /**
- * \brief Determines whether a window supports the use of render targets
+ * \brief Determines whether a window supports the use of sdl_render targets
  *
  * \param renderer The renderer that will be checked
  *
@@ -510,7 +510,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_RenderTargetSupported(SDL_Renderer *rendere
  * \brief Set a texture as the current rendering target.
  *
  * \param renderer The renderer.
- * \param texture The targeted texture, which must be created with the SDL_TEXTUREACCESS_TARGET flag, or NULL for the default render target
+ * \param texture The targeted texture, which must be created with the SDL_TEXTUREACCESS_TARGET flag, or NULL for the default sdl_render target
  *
  * \return 0 on success, or -1 on error
  *
@@ -520,9 +520,9 @@ extern DECLSPEC int SDLCALL SDL_SetRenderTarget(SDL_Renderer *renderer,
                                                 SDL_Texture *texture);
 
 /**
- * \brief Get the current render target or NULL for the default render target.
+ * \brief Get the current sdl_render target or NULL for the default render target.
  *
- * \return The current render target
+ * \return The current sdl_render target
  *
  *  \sa SDL_SetRenderTarget()
  */
@@ -1042,7 +1042,7 @@ extern DECLSPEC int SDLCALL SDL_RenderCopyExF(SDL_Renderer * renderer,
  *
  *  \param renderer The renderer from which pixels should be read.
  *  \param rect   A pointer to the rectangle to read, or NULL for the entire
- *                render target.
+ *                sdl_render target.
  *  \param format The desired format of the pixel data, or 0 to use the format
  *                of the rendering target
  *  \param pixels A pointer to be filled in with the pixel data
@@ -1086,12 +1086,12 @@ extern DECLSPEC void SDLCALL SDL_DestroyRenderer(SDL_Renderer * renderer);
  *  you are planning to call into OpenGL/Direct3D/Metal/whatever directly
  *  in addition to using an SDL_Renderer.
  *
- *  This is for a very-specific case: if you are using SDL's render API,
+ *  This is for a very-specific case: if you are using SDL's sdl_render API,
  *  you asked for a specific renderer backend (OpenGL, Direct3D, etc),
  *  you set SDL_HINT_RENDER_BATCHING to "1", and you plan to make
- *  OpenGL/D3D/whatever calls in addition to SDL render API calls. If all of
+ *  OpenGL/D3D/whatever calls in addition to SDL sdl_render API calls. If all of
  *  this applies, you should call SDL_RenderFlush() between calls to SDL's
- *  render API and the low-level API you're using in cooperation.
+ *  sdl_render API and the low-level API you're using in cooperation.
  *
  *  In all other cases, you can ignore this function. This is only here to
  *  get maximum performance out of a specific situation. In all other cases,

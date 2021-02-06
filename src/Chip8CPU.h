@@ -37,7 +37,7 @@ public:
 	static constexpr uint8_t FONT_START { 0 };
 
 	/* Window name */
-	static const char *WINDOW_NAME;
+	static constexpr const char *WINDOW_NAME { "CHIP8" };
 
 	/* CHIP 8 font map */
 	static constexpr std::array<uint8_t, FONT_SIZE> font_map =
@@ -139,7 +139,7 @@ private:
 
 	void execute(const uint16_t& op_code);
 
-	constexpr void get_next_instruction() noexcept;
+	constexpr void fetch() noexcept;
 
 	void run();
 
@@ -172,16 +172,16 @@ private:
 
 	bool draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& count, const uint8_t& index) noexcept;
 
-	void render(SDL_Renderer *renderer);
-
 	void clear_display_screen() noexcept;
 
 	void invert_pixel(const uint8_t& x, const uint8_t& y) noexcept;
 
 	/* SDL */
-	static void initialize_sdl(SDL_Window **window, SDL_Renderer **renderer);
+	static void sdl_initialize(SDL_Window **window, SDL_Renderer **renderer);
 
-	static void restore_sdl(SDL_Window **window);
+	static void sdl_restore(SDL_Window **window);
+
+	void sdl_render(SDL_Renderer *renderer);
 
 	void sdl_poll_events();
 

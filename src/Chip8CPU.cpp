@@ -4,8 +4,6 @@ constexpr std::array<char, Chip8CPU::NUMBER_OF_KEYS> Chip8CPU::keyboard_map;
 
 constexpr std::array<uint8_t, Chip8CPU::FONT_SIZE> Chip8CPU::font_map;
 
-const char *Chip8CPU::WINDOW_NAME { "CHIP8" };
-
 inline constexpr bool Chip8CPU::memory_in_bounds(const uint16_t& index) noexcept
 {
 	return index >= 0 && index <= MEMORY_SIZE - 1;
@@ -82,7 +80,7 @@ void Chip8CPU::push(const uint16_t& data)
 		throw std::runtime_error("Stack overflow while performing push operation.");
 	}
 	memory[SP++] = static_cast<uint8_t>(data & 0x00FF);
-	memory[SP++] = static_cast<uint8_t>(data >> 8 & 0x00FF);
+	memory[SP++] = static_cast<uint8_t>(data >> BITS_IN_BYTE & 0x00FF);
 }
 
 uint16_t Chip8CPU::pop()
@@ -261,7 +259,7 @@ inline constexpr uint16_t Chip8CPU::decode() const noexcept
 	return read_mem(PC + 0) << BITS_IN_BYTE | read_mem(PC + 1);
 }
 
-void Chip8CPU::initialize_sdl(SDL_Window **window, SDL_Renderer **renderer)
+void Chip8CPU::sdl_initialize(SDL_Window **window, SDL_Renderer **renderer)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	*window = SDL_CreateWindow(
@@ -274,12 +272,12 @@ void Chip8CPU::initialize_sdl(SDL_Window **window, SDL_Renderer **renderer)
 	*renderer = SDL_CreateRenderer(*window, -1, SDL_TEXTUREACCESS_TARGET);
 }
 
-inline void Chip8CPU::restore_sdl(SDL_Window **window)
+inline void Chip8CPU::sdl_restore(SDL_Window **window)
 {
 	SDL_DestroyWindow(*window);
 }
 
-void Chip8CPU::render(SDL_Renderer *renderer)
+void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
@@ -331,23 +329,62 @@ void Chip8CPU::sdl_poll_events()
 	}
 }
 
-inline constexpr void Chip8CPU::get_next_instruction() noexcept
+inline constexpr void Chip8CPU::fetch() noexcept
 {
 	PC += 2;
 }
 
 void Chip8CPU::execute(const uint16_t& op_code)
 {
-	switch (op_code)
+	switch (op_code & 0xF000)
 	{
-		/* 0x00E0 - CLS -> Clear the display */
-		case 0x00E0:
-			clear_display_screen();
+		case 0x0000:
+			switch (op_code & 0x00FF)
+			{
+				/* 0x00E0 - CLS -> Clear the display */
+				case 0x00E0:
+					clear_display_screen();
+					fetch();
+					break;
+				/* 0x00EE - RET -> Return from a subroutine */
+				case 0x00EE:
+					PC = pop();
+					break;
+			}
 			break;
-			/* 0x00EE - RET -> Return from a subroutine */
-		case 0x00EE:
-			PC = pop();
+		case 0x1000:
 			break;
+		case 0x2000:
+			break;
+		case 0x3000:
+			break;
+		case 0x4000:
+			break;
+		case 0x5000:
+			break;
+		case 0x6000:
+			break;
+		case 0x7000:
+			break;
+		case 0x8000:
+			break;
+		case 0x9000:
+			break;
+		case 0xA000:
+			break;
+		case 0xB000:
+			break;
+		case 0xC000:
+			break;
+		case 0xD000:
+			break;
+		case 0xE000:
+			break;
+		case 0xF000:
+			break;
+		/* Unrecognized opcode */
+		default:
+			throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(op_code));
 	}
 }
 
@@ -362,17 +399,15 @@ void Chip8CPU::run()
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
-	initialize_sdl(&window, &renderer);
+	sdl_initialize(&window, &renderer);
 
 	while (running)
 	{
 		sdl_poll_events();
-		render(renderer);
+		sdl_render(renderer);
 		execute(decode());
-		printf("%x\n", decode());
-		get_next_instruction();
 	}
 
-	restore_sdl(&window);
+	sdl_restore(&window);
 }
 
