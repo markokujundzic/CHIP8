@@ -406,9 +406,21 @@ void Chip8CPU::execute(const uint16_t& opcode)
 			}
 		}
 			break;
+		/* 0x6xkk - LD Vx, byte -> Puts the value kk into register Vx */
 		case 0x6000:
+		{
+			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
+			uint8_t kk = opcode & 0xFF;
+			V[x] = kk;
+		}
 			break;
+		/* 0x7xkk - ADD Vx, byte -> Adds the value kk to the value of register Vx, then stores the result in Vx */
 		case 0x7000:
+		{
+			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
+			uint8_t kk = opcode & 0xFF;
+			V[x] += kk;
+		}
 			break;
 		case 0x8000:
 			break;
@@ -456,8 +468,3 @@ void Chip8CPU::run()
 
 	sdl_restore(&window);
 }
-
-
-
-
-
