@@ -26,6 +26,7 @@ public:
 	static constexpr uint8_t DISPLAY_WIDTH { 64 };
 	static constexpr uint8_t DISPLAY_HEIGHT { 32 };
 	static constexpr uint8_t BITS_IN_BYTE { 8 };
+	static constexpr uint8_t NIBBLE { 4 };
 	static constexpr uint8_t MSB_SET { 0x80 };
 
 	/* Keyboard */
@@ -137,9 +138,11 @@ private:
 	/* Emulator loop */
 	constexpr uint16_t decode() const noexcept;
 
-	void execute(const uint16_t& op_code);
+	void execute(const uint16_t& opcode);
 
 	constexpr void fetch() noexcept;
+
+	static constexpr uint16_t get_destination_address(const uint16_t& opcode) noexcept;
 
 	void run();
 
@@ -195,6 +198,9 @@ private:
 	static constexpr bool keyboard_in_bounds(const int& index) noexcept;
 
 	static constexpr bool pixel_in_bounds(const uint8_t& x, const uint8_t& y) noexcept;
+
+	/* Comparison */
+	static constexpr bool equal(const uint8_t& x, const uint8_t& y) noexcept;
 
 	/* RAM memory */
 	std::array<uint8_t, MEMORY_SIZE + STACK_SIZE> memory;

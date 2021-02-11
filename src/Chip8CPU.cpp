@@ -281,7 +281,7 @@ void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
 	for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
 	{
@@ -334,33 +334,77 @@ inline constexpr void Chip8CPU::fetch() noexcept
 	PC += 2;
 }
 
-void Chip8CPU::execute(const uint16_t& op_code)
+inline constexpr uint16_t Chip8CPU::get_destination_address(const uint16_t& opcode) noexcept
 {
-	switch (op_code & 0xF000)
+	return opcode & 0xFFF;
+}
+
+inline constexpr bool Chip8CPU::equal(const uint8_t& x, const uint8_t& y) noexcept
+{
+	return x == y;
+}
+
+void Chip8CPU::execute(const uint16_t& opcode)
+{
+	switch (opcode & 0xF000)
 	{
 		case 0x0000:
-			switch (op_code & 0x00FF)
+			switch (opcode & 0x00FF)
 			{
 				/* 0x00E0 - CLS -> Clear the display */
 				case 0x00E0:
 					clear_display_screen();
-					fetch();
 					break;
 				/* 0x00EE - RET -> Return from a subroutine */
 				case 0x00EE:
 					PC = pop();
 					break;
+				/* Unrecognized opcode */
+				default:
+					throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(opcode));
 			}
 			break;
+		/* 0x1nnn - JP addr -> Jump to location nnn */
 		case 0x1000:
+			PC = get_destination_address(opcode);
 			break;
+		/* 0x2nnn - CALL addr -> Call subroutine at nnn */
 		case 0x2000:
+			push(PC);
+			PC = get_destination_address(opcode);
 			break;
+		/* 0x3xkk - SE Vx, byte -> Skip next instruction if Vx == kk */
 		case 0x3000:
+		{
+			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
+			uint8_t kk = opcode & 0xFF;
+			if (equal(V[x], kk))
+			{
+				fetch();
+			}
+		}
 			break;
+		/* 0x4xkk - SNE Vx, byte -> Skip next instruction if Vx != kk */
 		case 0x4000:
+		{
+			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
+			uint8_t kk = opcode & 0xFF;
+			if (!equal(V[x], kk))
+			{
+				fetch();
+			}
+		}
 			break;
+		/* 0x5xy0 - SE Vx, Vy -> Skip next instruction if Vx == Vy */
 		case 0x5000:
+		{
+			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
+			uint8_t y = (opcode >> NIBBLE) & 0xF;
+			if (equal(V[x], V[y]))
+			{
+				fetch();
+			}
+		}
 			break;
 		case 0x6000:
 			break;
@@ -384,7 +428,7 @@ void Chip8CPU::execute(const uint16_t& op_code)
 			break;
 		/* Unrecognized opcode */
 		default:
-			throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(op_code));
+			throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(opcode));
 	}
 }
 
@@ -405,9 +449,15 @@ void Chip8CPU::run()
 	{
 		sdl_poll_events();
 		sdl_render(renderer);
-		execute(decode());
+		auto opcode = decode();
+		fetch();
+		execute(opcode);
 	}
 
 	sdl_restore(&window);
 }
+
+
+
+
 
