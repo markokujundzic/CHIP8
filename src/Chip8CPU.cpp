@@ -406,8 +406,9 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x3xkk - SE Vx, byte -> Skip next instruction if Vx == kk */
 		case 0x3000:
 		{
-			uint8_t x = get_third_nibble(opcode);
-			uint8_t kk = get_first_byte(opcode);
+			auto x = get_third_nibble(opcode);
+			auto kk = get_first_byte(opcode);
+
 			if (equal(V[x], kk))
 			{
 				fetch();
@@ -417,8 +418,9 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x4xkk - SNE Vx, byte -> Skip next instruction if Vx != kk */
 		case 0x4000:
 		{
-			uint8_t x = get_third_nibble(opcode);
-			uint8_t kk = get_first_byte(opcode);
+			auto x = get_third_nibble(opcode);
+			auto kk = get_first_byte(opcode);
+
 			if (!equal(V[x], kk))
 			{
 				fetch();
@@ -428,8 +430,9 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x5xy0 - SE Vx, Vy -> Skip next instruction if Vx == Vy */
 		case 0x5000:
 		{
-			uint8_t x = get_third_nibble(opcode);
-			uint8_t y = get_second_nibble(opcode);
+			auto x = get_third_nibble(opcode);
+			auto y = get_second_nibble(opcode);
+
 			if (equal(V[x], V[y]))
 			{
 				fetch();
@@ -439,20 +442,117 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x6xkk - LD Vx, byte -> Puts the value kk into register Vx */
 		case 0x6000:
 		{
-			uint8_t x = get_third_nibble(opcode);
-			uint8_t kk = get_first_byte(opcode);
+			auto x = get_third_nibble(opcode);
+			auto kk = get_first_byte(opcode);
+
 			V[x] = kk;
 		}
 			break;
 		/* 0x7xkk - ADD Vx, byte -> Adds the value kk to the value of register Vx, then stores the result in Vx */
 		case 0x7000:
 		{
-			uint8_t x = get_third_nibble(opcode);
-			uint8_t kk = get_first_byte(opcode);
+			auto x = get_third_nibble(opcode);
+			auto kk = get_first_byte(opcode);
+
 			V[x] += kk;
 		}
 			break;
 		case 0x8000:
+			switch (opcode & 0xF)
+			{
+				/* 0x8xy0 - LD Vx, Vy -> Stores the value of register Vy in register Vx */
+				case 0x0000:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+
+					V[x] = V[y];
+				}
+					break;
+				/* 0x8xy1 - OR Vx, Vy -> Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx */
+				case 0x0001:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+
+					V[x] |= V[y];
+				}
+					break;
+				/* 0x8xy2 - AND Vx, Vy -> Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx */
+				case 0x0002:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+
+					V[x] &= V[y];
+				}
+					break;
+				/* 0x8xy3 - XOR Vx, Vy -> Performs a bitwise XOR on the values of Vx and Vy, then stores the result in Vx */
+				case 0x0003:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+
+					V[x] ^= V[y];
+				}
+					break;
+				/* 0x8xy4 - ADD Vx, Vy -> The values of Vx and Vy are added together. If the result is greater than 8 bits VF is set to 1 */
+				case 0x0004:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+					auto f = 0xF;
+
+					V[f] = (V[y] > (0xFF - V[x])) ? 1 : 0;
+					V[x] += V[y];
+				}
+					break;
+				/* 0x8xy5 - SUB Vx, Vy -> If Vx > Vy, then VF is set. Then Vy is subtracted from Vx, and the results stored in Vx */
+				case 0x0005:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+					auto f = 0xF;
+
+					V[f] = (V[x] > V[y]) ? 1 : 0;
+					V[x] -= V[y];
+				}
+					break;
+				/* 0x8xy6 - SHR Vx {, Vy} -> If the least-significant bit of Vx is 1, then VF is set. Then Vx is divided by 2 */
+				case 0x0006:
+				{
+					auto x = get_third_nibble(opcode);
+					auto f = 0xF;
+
+					V[f] = (V[x] & LSB_SET) ? 1 : 0;
+					V[x] >>= LSB_SET;
+				}
+					break;
+				/* 0x8xy7 - SUBN Vx, Vy -> If Vy > Vx, then VF is set. Then Vx is subtracted from Vy, and the results stored in Vx */
+				case 0x0007:
+				{
+					auto x = get_third_nibble(opcode);
+					auto y = get_second_nibble(opcode);
+					auto f = 0xF;
+
+					V[f] = (V[y] > V[x]) ? 1 : 0;
+					V[x] = V[y] - V[x];
+				}
+					break;
+				/* 0x8xyE - SHL Vx {, Vy} -> If the most-significant bit of Vx is 1, then VF is set. Then Vx is multiplied by 2 */
+				case 0x000E:
+				{
+					auto x = get_third_nibble(opcode);
+					auto f = 0xF;
+
+					V[f] = (V[x] & MSB_SET) ? 1 : 0;
+					V[x] <<= LSB_SET;
+				}
+					break;
+				/* Unrecognized opcode */
+				default:
+					throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(opcode));
+			}
 			break;
 		case 0x9000:
 			break;

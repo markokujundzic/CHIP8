@@ -24,10 +24,13 @@ public:
 	/* Display screen */
 	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
 	static constexpr uint8_t DISPLAY_WIDTH { 64 };
+
 	static constexpr uint8_t DISPLAY_HEIGHT { 32 };
 	static constexpr uint8_t BITS_IN_BYTE { 8 };
 	static constexpr uint8_t NIBBLE { 4 };
+
 	static constexpr uint8_t MSB_SET { 0x80 };
+	static constexpr uint8_t LSB_SET { 0x1 };
 
 	/* Keyboard */
 	static constexpr uint8_t NUMBER_OF_KEYS { 16 };
