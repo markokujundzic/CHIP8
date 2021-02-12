@@ -144,6 +144,18 @@ private:
 
 	static constexpr uint16_t get_destination_address(const uint16_t& opcode) noexcept;
 
+	static constexpr uint8_t get_first_byte(const uint16_t& opcode) noexcept;
+
+	static constexpr uint8_t get_second_byte(const uint16_t& opcode) noexcept;
+
+	static constexpr uint8_t get_first_nibble(const uint16_t& opcode) noexcept;
+
+	static constexpr uint8_t get_second_nibble(const uint16_t& opcode) noexcept;
+
+	static constexpr uint8_t get_third_nibble(const uint16_t& opcode) noexcept;
+
+	static constexpr uint8_t get_fourth_nibble(const uint16_t& opcode) noexcept;
+
 	void run();
 
 	/* Memory */

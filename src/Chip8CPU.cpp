@@ -344,6 +344,36 @@ inline constexpr bool Chip8CPU::equal(const uint8_t& x, const uint8_t& y) noexce
 	return x == y;
 }
 
+inline constexpr uint8_t Chip8CPU::get_first_byte(const uint16_t& opcode) noexcept
+{
+	return opcode & 0xFF;
+}
+
+inline constexpr uint8_t Chip8CPU::get_second_byte(const uint16_t& opcode) noexcept
+{
+	return (opcode >> BITS_IN_BYTE) & 0xFF;
+}
+
+inline constexpr uint8_t Chip8CPU::get_first_nibble(const uint16_t& opcode) noexcept
+{
+	return opcode & 0xF;
+}
+
+inline constexpr uint8_t Chip8CPU::get_second_nibble(const uint16_t& opcode) noexcept
+{
+	return (opcode >> NIBBLE) & 0xF;
+}
+
+inline constexpr uint8_t Chip8CPU::get_third_nibble(const uint16_t& opcode) noexcept
+{
+	return (opcode >> BITS_IN_BYTE) & 0xF;
+}
+
+inline constexpr uint8_t Chip8CPU::get_fourth_nibble(const uint16_t& opcode) noexcept
+{
+	return (opcode >> (BITS_IN_BYTE + NIBBLE)) & 0xF;
+}
+
 void Chip8CPU::execute(const uint16_t& opcode)
 {
 	switch (opcode & 0xF000)
@@ -376,8 +406,8 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x3xkk - SE Vx, byte -> Skip next instruction if Vx == kk */
 		case 0x3000:
 		{
-			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
-			uint8_t kk = opcode & 0xFF;
+			uint8_t x = get_third_nibble(opcode);
+			uint8_t kk = get_first_byte(opcode);
 			if (equal(V[x], kk))
 			{
 				fetch();
@@ -387,8 +417,8 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x4xkk - SNE Vx, byte -> Skip next instruction if Vx != kk */
 		case 0x4000:
 		{
-			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
-			uint8_t kk = opcode & 0xFF;
+			uint8_t x = get_third_nibble(opcode);
+			uint8_t kk = get_first_byte(opcode);
 			if (!equal(V[x], kk))
 			{
 				fetch();
@@ -398,8 +428,8 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x5xy0 - SE Vx, Vy -> Skip next instruction if Vx == Vy */
 		case 0x5000:
 		{
-			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
-			uint8_t y = (opcode >> NIBBLE) & 0xF;
+			uint8_t x = get_third_nibble(opcode);
+			uint8_t y = get_second_nibble(opcode);
 			if (equal(V[x], V[y]))
 			{
 				fetch();
@@ -409,16 +439,16 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		/* 0x6xkk - LD Vx, byte -> Puts the value kk into register Vx */
 		case 0x6000:
 		{
-			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
-			uint8_t kk = opcode & 0xFF;
+			uint8_t x = get_third_nibble(opcode);
+			uint8_t kk = get_first_byte(opcode);
 			V[x] = kk;
 		}
 			break;
 		/* 0x7xkk - ADD Vx, byte -> Adds the value kk to the value of register Vx, then stores the result in Vx */
 		case 0x7000:
 		{
-			uint8_t x = (opcode >> BITS_IN_BYTE) & 0xF;
-			uint8_t kk = opcode & 0xFF;
+			uint8_t x = get_third_nibble(opcode);
+			uint8_t kk = get_first_byte(opcode);
 			V[x] += kk;
 		}
 			break;
