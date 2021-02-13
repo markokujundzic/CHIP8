@@ -70,7 +70,7 @@ constexpr inline void Chip8CPU::configure_delay(const uint16_t& delay) noexcept
 
 constexpr inline void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
 {
-	DT = sound;
+	ST = sound;
 }
 
 void Chip8CPU::push(const uint16_t& data)
@@ -118,8 +118,8 @@ void Chip8CPU::initialize_hardware() noexcept
 	running = true;
 	SP = MEMORY_SIZE;
 	PC = PROGRAM_START;
-	DT = 20;
-	ST = 20;
+	DT = 0;
+	ST = 0;
 	I = 0;
 
 	for (auto& reg : V)
@@ -148,7 +148,7 @@ void Chip8CPU::emulate(const std::string& path)
 	run();
 }
 
-int Chip8CPU::get_keyboard_mapping_value(const char& key_hit)
+int Chip8CPU::get_keyboard_mapping_value(const char& key_hit) noexcept
 {
 	int return_value = KEY_NOT_FOUND;
 
@@ -218,7 +218,7 @@ void Chip8CPU::timer_tick() noexcept
 {
 	if (DT--)
 	{
-		Sleep(100);
+		Sleep(10);
 	}
 	if (ST)
 	{
@@ -315,19 +315,43 @@ void Chip8CPU::sdl_poll_events()
 				running = false;
 				break;
 			case SDL_KEYUP:
-				if (auto key = Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+				if (auto key = get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
 				{
 					key_release(key);
 				}
 				break;
 			case SDL_KEYDOWN:
-				if (auto key = Chip8CPU::get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+				if (auto key = get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
 				{
 					key_press(key);
 				}
 				break;
 		}
 	}
+}
+
+int Chip8CPU::sdl_wait_for_key_press() noexcept
+{
+	SDL_Event event;
+
+	while (SDL_WaitEvent(&event))
+	{
+		switch (event.type)
+		{
+			case SDL_KEYDOWN:
+			{
+				if (auto key = get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+				{
+					return key;
+				}
+			}
+				break;
+			default:
+				continue;
+		}
+	}
+
+	return KEY_NOT_FOUND;
 }
 
 inline constexpr void Chip8CPU::fetch() noexcept
@@ -603,8 +627,76 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		}
 			break;
 		case 0xE000:
+		{
+			switch (opcode & 0xFF)
+			{
+				/* 0xEx9E - SKP Vx -> Skip next instruction if key with the value of Vx is pressed */
+				case 0x9E:
+				{
+					auto x = get_third_nibble(opcode);
+
+					if (is_key_pressed(V[x]))
+					{
+						fetch();
+					}
+				}
+					break;
+				/* 0xExA1 - SKNP Vx -> Skip next instruction if key with the value of Vx is not pressed */
+				case 0xA1:
+				{
+					auto x = get_third_nibble(opcode);
+
+					if (!is_key_pressed(V[x]))
+					{
+						fetch();
+					}
+				}
+					break;
+				/* Unrecognized opcode */
+				default:
+					throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(opcode));
+			}
+		}
 			break;
 		case 0xF000:
+		{
+			switch (opcode & 0xFF)
+			{
+				/* 0xFx07 - LD Vx, DT -> The value of DT is placed into Vx */
+				case 0x07:
+				{
+					auto x = get_third_nibble(opcode);
+
+					V[x] = DT;
+				}
+					break;
+				/* 0xFx0A - LD Vx, K -> Wait for a key press, store the value of the key in Vx */
+				case 0x0A:
+				{
+					auto x = get_third_nibble(opcode);
+
+					V[x] = sdl_wait_for_key_press();
+				}
+					break;
+				case 0x15:
+					break;
+				case 0x18:
+					break;
+				case 0x1E:
+					break;
+				case 0x29:
+					break;
+				case 0x33:
+					break;
+				case 0x55:
+					break;
+				case 0x65:
+					break;
+				/* Unrecognized opcode */
+				default:
+					throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(opcode));
+			}
+		}
 			break;
 		/* Unrecognized opcode */
 		default:
@@ -614,12 +706,6 @@ void Chip8CPU::execute(const uint16_t& opcode)
 
 void Chip8CPU::run()
 {
-//	draw_sprite(0, 0, 5, 5);
-//	draw_sprite(10, 0, 5, 15);
-//	draw_sprite(20, 0, 5, 5);
-//	draw_sprite(30, 0, 5, 10);
-//	draw_sprite(40, 0, 5, 75);
-
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
@@ -629,6 +715,7 @@ void Chip8CPU::run()
 	{
 		sdl_poll_events();
 		sdl_render(renderer);
+		timer_tick();
 		auto opcode = decode();
 		fetch();
 		execute(opcode);

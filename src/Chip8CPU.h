@@ -131,7 +131,7 @@ private:
 	void timer_tick() noexcept;
 
 	/* Keyboard */
-	static int get_keyboard_mapping_value(const char& key_hit);
+	static int get_keyboard_mapping_value(const char& key_hit) noexcept;
 
 	void key_press(const int& key);
 
@@ -199,6 +199,8 @@ private:
 	static void sdl_initialize(SDL_Window **window, SDL_Renderer **renderer);
 
 	static void sdl_restore(SDL_Window **window);
+
+	static int sdl_wait_for_key_press() noexcept;
 
 	void sdl_render(SDL_Renderer *renderer);
 
