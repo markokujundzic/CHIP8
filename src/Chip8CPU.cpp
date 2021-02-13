@@ -236,11 +236,13 @@ bool Chip8CPU::draw_sprite(const uint8_t& x, const uint8_t& y, const uint8_t& co
 {
 	auto collision { false };
 
+	const auto *sprite = static_cast<const uint8_t *>(&index);
+
 	for (auto y_offset = 0; y_offset < count; y_offset++)
 	{
 		for (auto x_offset = 0; x_offset < BITS_IN_BYTE; x_offset++)
 		{
-			if (memory[index + y_offset] & (MSB_SET >> x_offset))
+			if (sprite[y_offset] & (MSB_SET >> x_offset))
 			{
 				if (display[(y + y_offset) % DISPLAY_HEIGHT][(x + x_offset) % DISPLAY_WIDTH])
 				{
@@ -281,7 +283,7 @@ void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
 
 	for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
 	{
@@ -298,7 +300,6 @@ void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 			}
 		}
 	}
-
 	SDL_RenderPresent(renderer);
 }
 
@@ -590,7 +591,16 @@ void Chip8CPU::execute(const uint16_t& opcode)
 			V[x] = distribution(generator) & kk;
 		}
 			break;
+		/* 0xDxyn - DRW Vx, Vy, nibble -> Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision */
 		case 0xD000:
+		{
+			auto x = get_third_nibble(opcode);
+			auto y = get_second_nibble(opcode);
+			auto n = get_first_nibble(opcode);
+			auto f = 0xF;
+
+			V[f] = draw_sprite(V[x], V[y], n, memory[I]);
+		}
 			break;
 		case 0xE000:
 			break;
@@ -604,11 +614,11 @@ void Chip8CPU::execute(const uint16_t& opcode)
 
 void Chip8CPU::run()
 {
-	draw_sprite(0, 0, 5, 5);
-	draw_sprite(10, 0, 5, 15);
-	draw_sprite(20, 0, 5, 5);
-	draw_sprite(30, 0, 5, 10);
-	draw_sprite(40, 0, 5, 75);
+//	draw_sprite(0, 0, 5, 5);
+//	draw_sprite(10, 0, 5, 15);
+//	draw_sprite(20, 0, 5, 5);
+//	draw_sprite(30, 0, 5, 10);
+//	draw_sprite(40, 0, 5, 75);
 
 	SDL_Window *window;
 	SDL_Renderer *renderer;
