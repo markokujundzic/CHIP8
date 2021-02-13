@@ -554,9 +554,21 @@ void Chip8CPU::execute(const uint16_t& opcode)
 					throw std::runtime_error("Illegal instruction encountered, opcode: 0x" + std::to_string(opcode));
 			}
 			break;
+		/* 0x9xy0 - SNE Vx, Vy -> The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2 */
 		case 0x9000:
+		{
+			auto x = get_third_nibble(opcode);
+			auto y = get_second_nibble(opcode);
+
+			if (!equal(V[x], V[y]))
+			{
+				fetch();
+			}
+		}
 			break;
+		/* 0xAnnn - LD I, addr -> The value of register I is set to nnn */
 		case 0xA000:
+			I = get_destination_address(opcode);
 			break;
 		case 0xB000:
 			break;
