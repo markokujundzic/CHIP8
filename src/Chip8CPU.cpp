@@ -570,9 +570,25 @@ void Chip8CPU::execute(const uint16_t& opcode)
 		case 0xA000:
 			I = get_destination_address(opcode);
 			break;
+		/* 0xBnnn - JP V0, addr -> The program counter is set to nnn plus the value of V0 */
 		case 0xB000:
+		{
+			auto nnn = get_destination_address(opcode);
+			PC = nnn + V[0];
+		}
 			break;
+		/* 0xCxkk - RND Vx, byte -> The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx */
 		case 0xC000:
+		{
+			auto x = get_third_nibble(opcode);
+			auto kk = get_first_byte(opcode);
+
+			std::random_device device;
+			std::mt19937 generator(device());
+			std::uniform_int_distribution<> distribution(0, 255);
+
+			V[x] = distribution(generator) & kk;
+		}
 			break;
 		case 0xD000:
 			break;

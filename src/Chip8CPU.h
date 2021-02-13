@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <random>
 #include <string>
 
 class Chip8CPU
