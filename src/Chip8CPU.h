@@ -24,6 +24,7 @@ public:
 
 	/* Display screen */
 	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
+	static constexpr uint8_t DEFAULT_SPRITE_SIZE { 5 };
 	static constexpr uint8_t DISPLAY_WIDTH { 64 };
 
 	static constexpr uint8_t DISPLAY_HEIGHT { 32 };
@@ -32,6 +33,9 @@ public:
 
 	static constexpr uint8_t MSB_SET { 0x80 };
 	static constexpr uint8_t LSB_SET { 0x1 };
+
+	static constexpr uint8_t HUNDREDS { 100 };
+	static constexpr uint8_t TENS { 10 };
 
 	/* Keyboard */
 	static constexpr uint8_t NUMBER_OF_KEYS { 16 };

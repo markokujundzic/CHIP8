@@ -678,19 +678,69 @@ void Chip8CPU::execute(const uint16_t& opcode)
 					V[x] = sdl_wait_for_key_press();
 				}
 					break;
+				/* 0xFx15 - LD DT, Vx -> DT is set equal to the value of Vx */
 				case 0x15:
+				{
+					auto x = get_third_nibble(opcode);
+
+					DT = V[x];
+				}
 					break;
+				/* 0xFx18 - LD ST, Vx -> ST is set equal to the value of Vx */
 				case 0x18:
+				{
+					auto x = get_third_nibble(opcode);
+
+					ST = V[x];
+				}
 					break;
+				/* 0xFx1E - ADD I, Vx -> The values of I and Vx are added, and the results are stored in I */
 				case 0x1E:
+				{
+					auto x = get_third_nibble(opcode);
+
+					I += V[x];
+				}
 					break;
+				/* 0xFx29 - Fx29 - LD F, Vx -> The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx */
 				case 0x29:
+				{
+					auto x = get_third_nibble(opcode);
+
+					I = V[x] * DEFAULT_SPRITE_SIZE;
+				}
 					break;
+				/* 0xFx33 - Fx29 - LD B, Vx -> Store BCD representation of Vx in memory locations I, I + 1, and I + 2 */
 				case 0x33:
+				{
+					auto x = get_third_nibble(opcode);
+
+					write_mem(V[x] / HUNDREDS, I);
+					write_mem((V[x] / HUNDREDS) % TENS, I + 1);
+					write_mem(V[x] % HUNDREDS, I + 2);
+				}
 					break;
+				/* 0xFx55 - Fx29 - LD [I], Vx -> Store registers V0 through Vx in memory starting at location I */
 				case 0x55:
+				{
+					auto x = get_third_nibble(opcode);
+
+					for (auto i = 0; i <= x; i++)
+					{
+						write_mem(I + i, V[i]);
+					}
+				}
 					break;
+				/* 0xFx55 - Fx29 - LD Vx, [I] -> Read registers V0 through Vx from memory starting at location I */
 				case 0x65:
+				{
+					auto x = get_third_nibble(opcode);
+
+					for (auto i = 0; i <= x; i++)
+					{
+						I = read_mem(I + i);
+					}
+				}
 					break;
 				/* Unrecognized opcode */
 				default:
