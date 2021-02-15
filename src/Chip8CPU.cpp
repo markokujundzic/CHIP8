@@ -213,12 +213,12 @@ void Chip8CPU::timer_tick() noexcept
 {
 	if (DT > 0)
 	{
-		Sleep(10);
+		Sleep(SLEEP_DURATION);
 		DT--;
 	}
 	if (ST > 0)
 	{
-		Beep(15000, 10 * ST);
+		Beep(BEEP_FREQUENCY, BEEP_DURATION * ST);
 		ST = 0;
 	}
 }
@@ -279,7 +279,7 @@ void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
 
 	for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
 	{

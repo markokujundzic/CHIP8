@@ -19,15 +19,17 @@ public:
 	/* Memory */
 	static constexpr uint16_t PROGRAM_START { 0x200 };
 	static constexpr uint16_t MEMORY_SIZE { 0x1000 };
+
 	static constexpr uint8_t REGISTER_NUMBER { 16 };
 	static constexpr uint8_t STACK_SIZE { 16 };
 
 	/* Display screen */
 	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
 	static constexpr uint8_t DEFAULT_SPRITE_SIZE { 5 };
-	static constexpr uint8_t DISPLAY_WIDTH { 64 };
 
+	static constexpr uint8_t DISPLAY_WIDTH { 64 };
 	static constexpr uint8_t DISPLAY_HEIGHT { 32 };
+
 	static constexpr uint8_t BITS_IN_BYTE { 8 };
 	static constexpr uint8_t NIBBLE { 4 };
 
@@ -44,6 +46,11 @@ public:
 	/* Font */
 	static constexpr uint8_t FONT_SIZE { 80 };
 	static constexpr uint8_t FONT_START { 0 };
+
+	/* Timers */
+	static constexpr uint16_t BEEP_FREQUENCY { 15000 };
+	static constexpr uint8_t BEEP_DURATION { 100 };
+	static constexpr uint8_t SLEEP_DURATION { 1 };
 
 	/* Window name */
 	static constexpr const char *WINDOW_NAME { "CHIP8" };
