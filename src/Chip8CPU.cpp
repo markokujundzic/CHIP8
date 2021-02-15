@@ -11,14 +11,12 @@ inline constexpr bool Chip8CPU::memory_in_bounds(const uint16_t& index) noexcept
 
 inline constexpr bool Chip8CPU::push_in_bounds(const uint16_t& index) noexcept
 {
-	return index >= MEMORY_SIZE && index <= MEMORY_SIZE + STACK_SIZE - 1 &&
-	       index + 1 >= MEMORY_SIZE && index + 1 <= MEMORY_SIZE + STACK_SIZE - 1;
+	return index <= STACK_SIZE - 1;
 }
 
 inline constexpr bool Chip8CPU::pop_in_bounds(const uint16_t& index) noexcept
 {
-	return index >= MEMORY_SIZE && index <= MEMORY_SIZE + STACK_SIZE - 1 &&
-	       index - 1 >= MEMORY_SIZE && index - 1 <= MEMORY_SIZE + STACK_SIZE - 1;
+	return index <= STACK_SIZE - 1;
 }
 
 constexpr bool Chip8CPU::keyboard_in_bounds(const int& index) noexcept
@@ -75,12 +73,12 @@ constexpr inline void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
 
 void Chip8CPU::push(const uint16_t& data)
 {
+	SP++;
 	if (!push_in_bounds(SP))
 	{
 		throw std::runtime_error("Stack overflow while performing push operation.");
 	}
-	memory[SP++] = static_cast<uint8_t>(data & 0x00FF);
-	memory[SP++] = static_cast<uint8_t>(data >> BITS_IN_BYTE & 0x00FF);
+	stack[SP] = data;
 }
 
 uint16_t Chip8CPU::pop()
@@ -89,9 +87,9 @@ uint16_t Chip8CPU::pop()
 	{
 		throw std::runtime_error("Stack underflow while performing pop operation.");
 	}
-	uint8_t h = memory[--SP];
-	uint8_t l = memory[--SP];
-	return h << BITS_IN_BYTE | l;
+	uint16_t ret = stack[SP];
+	SP--;
+	return ret;
 }
 
 inline void Chip8CPU::load_font() noexcept
@@ -116,8 +114,8 @@ inline void Chip8CPU::clear_display_screen() noexcept
 void Chip8CPU::initialize_hardware() noexcept
 {
 	running = true;
-	SP = MEMORY_SIZE;
 	PC = PROGRAM_START;
+	SP = 0;
 	DT = 0;
 	ST = 0;
 	I = 0;
@@ -218,12 +216,12 @@ void Chip8CPU::timer_tick() noexcept
 {
 	if (DT > 0)
 	{
-		Sleep(2);
+		Sleep(10);
 		DT--;
 	}
 	if (ST > 0)
 	{
-		Beep(15000, 100 * ST);
+		Beep(15000, 10 * ST);
 		ST = 0;
 	}
 }
@@ -316,16 +314,24 @@ void Chip8CPU::sdl_poll_events()
 				running = false;
 				break;
 			case SDL_KEYUP:
-				if (auto key = get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+			{
+				auto key = get_keyboard_mapping_value(event.key.keysym.sym);
+
+				if (key != KEY_NOT_FOUND)
 				{
 					key_release(key);
 				}
+			}
 				break;
 			case SDL_KEYDOWN:
-				if (auto key = get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+			{
+				auto key = get_keyboard_mapping_value(event.key.keysym.sym);
+
+				if (key != KEY_NOT_FOUND)
 				{
 					key_press(key);
 				}
+			}
 				break;
 		}
 	}
@@ -341,7 +347,9 @@ int Chip8CPU::sdl_wait_for_key_press() noexcept
 		{
 			case SDL_KEYDOWN:
 			{
-				if (auto key = get_keyboard_mapping_value(event.key.keysym.sym) != KEY_NOT_FOUND)
+				auto key = get_keyboard_mapping_value(event.key.keysym.sym);
+
+				if (key != KEY_NOT_FOUND)
 				{
 					return key;
 				}
@@ -624,7 +632,7 @@ void Chip8CPU::execute(const uint16_t& opcode)
 			auto n = get_first_nibble(opcode);
 			auto f = 0xF;
 
-			V[f] = draw_sprite(V[x], V[y], n, memory[I]);
+			V[f] = draw_sprite(V[x], V[y], n, memory[I]) ? 1 : 0;
 		}
 			break;
 		case 0xE000:

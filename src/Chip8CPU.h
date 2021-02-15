@@ -20,7 +20,7 @@ public:
 	static constexpr uint16_t PROGRAM_START { 0x200 };
 	static constexpr uint16_t MEMORY_SIZE { 0x1000 };
 	static constexpr uint8_t REGISTER_NUMBER { 16 };
-	static constexpr uint8_t STACK_SIZE { 32 };
+	static constexpr uint8_t STACK_SIZE { 16 };
 
 	/* Display screen */
 	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
@@ -225,7 +225,10 @@ private:
 	static constexpr bool equal(const uint8_t& x, const uint8_t& y) noexcept;
 
 	/* RAM memory */
-	std::array<uint8_t, MEMORY_SIZE + STACK_SIZE> memory;
+	std::array<uint8_t, MEMORY_SIZE> memory;
+
+	/* Stack */
+	std::array<uint16_t, STACK_SIZE> stack;
 
 	/* Register bank */
 	std::array<uint8_t, REGISTER_NUMBER> V;
@@ -240,7 +243,7 @@ private:
 	uint16_t PC;
 
 	/* SP */
-	uint16_t SP;
+	uint8_t SP;
 
 	/* Instruction register */
 	uint16_t I;
