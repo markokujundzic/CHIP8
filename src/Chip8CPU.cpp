@@ -216,11 +216,12 @@ bool Chip8CPU::is_pixel_set(const uint8_t& x, const uint8_t& y) const
 
 void Chip8CPU::timer_tick() noexcept
 {
-	if (DT--)
+	if (DT > 0)
 	{
-		Sleep(10);
+		Sleep(2);
+		DT--;
 	}
-	if (ST)
+	if (ST > 0)
 	{
 		Beep(15000, 100 * ST);
 		ST = 0;
@@ -716,8 +717,8 @@ void Chip8CPU::execute(const uint16_t& opcode)
 					auto x = get_third_nibble(opcode);
 
 					write_mem(V[x] / HUNDREDS, I);
-					write_mem((V[x] / HUNDREDS) % TENS, I + 1);
-					write_mem(V[x] % HUNDREDS, I + 2);
+					write_mem((V[x] / TENS) % TENS, I + 1);
+					write_mem(V[x] % TENS, I + 2);
 				}
 					break;
 				/* 0xFx55 - Fx29 - LD [I], Vx -> Store registers V0 through Vx in memory starting at location I */
@@ -727,7 +728,7 @@ void Chip8CPU::execute(const uint16_t& opcode)
 
 					for (auto i = 0; i <= x; i++)
 					{
-						write_mem(I + i, V[i]);
+						write_mem(V[i], I + i);
 					}
 				}
 					break;
@@ -738,7 +739,7 @@ void Chip8CPU::execute(const uint16_t& opcode)
 
 					for (auto i = 0; i <= x; i++)
 					{
-						I = read_mem(I + i);
+						V[i] = read_mem(I + i);
 					}
 				}
 					break;
