@@ -73,8 +73,7 @@ constexpr inline void Chip8CPU::configure_sound(const uint16_t& sound) noexcept
 
 void Chip8CPU::push(const uint16_t& data)
 {
-	SP++;
-	if (!push_in_bounds(SP))
+	if (!push_in_bounds(++SP))
 	{
 		throw std::runtime_error("Stack overflow while performing push operation.");
 	}
@@ -87,9 +86,7 @@ uint16_t Chip8CPU::pop()
 	{
 		throw std::runtime_error("Stack underflow while performing pop operation.");
 	}
-	uint16_t ret = stack[SP];
-	SP--;
-	return ret;
+	return stack[SP--];
 }
 
 inline void Chip8CPU::load_font() noexcept
@@ -355,8 +352,6 @@ int Chip8CPU::sdl_wait_for_key_press() noexcept
 				}
 			}
 				break;
-			default:
-				continue;
 		}
 	}
 
