@@ -13,17 +13,39 @@ int main(int argc, char *argv[])
 		/* Names */
 		constexpr const char *WINDOW_TITLE = "CHIP8 Menu";
 		constexpr const char *FONT = "../fonts/Arcade Classic.ttf";
+
 		constexpr const char *NAME = "Marko    Kujundzic    418    2016";
+
 		constexpr const char *TITLE_FIRST_PART = "CHIP  8    ";
 		constexpr const char *TITLE_SECOND_PART = "EMULATOR";
+
 		constexpr const char *COLOR_CHANGE_FIRST_PART = "TO    CHANGE    THE    EMULATOR    COLOR    PRESS    ";
 		constexpr const char *COLOR_CHANGE_SECOND_PART = "R    ";
 		constexpr const char *COLOR_CHANGE_THIRD_PART = "G    ";
 		constexpr const char *COLOR_CHANGE_FOURTH_PART = "Y    ";
 		constexpr const char *COLOR_CHANGE_FIFTH_PART = "B    ";
 
+		constexpr const char *PROCEED_FIRST_PART { "PRESS    " };
+		constexpr const char *PROCEED_SECOND_PART = "ENTER    ";
+		constexpr const char *PROCEED_THIRD_PART = "TO    BEGIN";
+
+		constexpr const char *SELECTED_ROM { "SELECTED    ROM    FILE" };
+
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
+
+		constexpr uint8_t NUMBER_OF_ROMS { 4 };
+
+		/* ROMS */
+		constexpr std::array<const char *, NUMBER_OF_ROMS> roms
+				{
+						"TETRIS",
+						"TICTAC",
+						"INVADERS",
+						"GUESS"
+				};
+
+		int8_t index { 0 };
 
 		SDL_Window *window = SDL_CreateWindow(WINDOW_TITLE,
 		                                      SDL_WINDOWPOS_UNDEFINED,
@@ -37,7 +59,8 @@ int main(int argc, char *argv[])
 		TTF_Init();
 
 		/* Fonts */
-		TTF_Font *font_type_big = TTF_OpenFont(FONT, 50);
+		TTF_Font *font_type_large = TTF_OpenFont(FONT, 50);
+		TTF_Font *font_type_medium = TTF_OpenFont(FONT, 35);
 		TTF_Font *font_type_small = TTF_OpenFont(FONT, 25);
 
 		/* Colors */
@@ -48,7 +71,7 @@ int main(int argc, char *argv[])
 		SDL_Color yellow_color = { 255, 255, 0, 255 };
 
 		/* Name */
-		SDL_Surface *surface_1 = TTF_RenderText_Solid(font_type_big, NAME, white_color);
+		SDL_Surface *surface_1 = TTF_RenderText_Solid(font_type_large, NAME, white_color);
 		SDL_Texture *texture_1 = SDL_CreateTextureFromSurface(renderer, surface_1);
 
 		SDL_Rect r_1;
@@ -60,7 +83,7 @@ int main(int argc, char *argv[])
 		SDL_FreeSurface(surface_1);
 
 		/* Title */
-		SDL_Surface *surface_2 = TTF_RenderText_Solid(font_type_big, TITLE_FIRST_PART, red_color);
+		SDL_Surface *surface_2 = TTF_RenderText_Solid(font_type_large, TITLE_FIRST_PART, red_color);
 		SDL_Texture *texture_2 = SDL_CreateTextureFromSurface(renderer, surface_2);
 
 		SDL_Rect r_2;
@@ -71,7 +94,7 @@ int main(int argc, char *argv[])
 
 		SDL_FreeSurface(surface_2);
 
-		SDL_Surface *surface_3 = TTF_RenderText_Solid(font_type_big, TITLE_SECOND_PART, white_color);
+		SDL_Surface *surface_3 = TTF_RenderText_Solid(font_type_large, TITLE_SECOND_PART, white_color);
 		SDL_Texture *texture_3 = SDL_CreateTextureFromSurface(renderer, surface_3);
 
 		SDL_Rect r_3;
@@ -147,7 +170,62 @@ int main(int argc, char *argv[])
 
 		SDL_FreeSurface(surface_8);
 
-		TTF_Quit();
+		/* Proceed */
+		SDL_Surface *surface_9 = TTF_RenderText_Solid(font_type_small, PROCEED_FIRST_PART, white_color);
+		SDL_Texture *texture_9 = SDL_CreateTextureFromSurface(renderer, surface_9);
+
+		SDL_Rect r_9;
+		r_9.x = 340;
+		r_9.y = 425;
+		r_9.w = surface_9->w;
+		r_9.h = surface_9->h;
+
+		SDL_FreeSurface(surface_9);
+
+		SDL_Surface *surface_10 = TTF_RenderText_Solid(font_type_small, PROCEED_SECOND_PART, red_color);
+		SDL_Texture *texture_10 = SDL_CreateTextureFromSurface(renderer, surface_10);
+
+		SDL_Rect r_10;
+		r_10.x = 420;
+		r_10.y = 425;
+		r_10.w = surface_10->w;
+		r_10.h = surface_10->h;
+
+		SDL_FreeSurface(surface_10);
+
+		SDL_Surface *surface_11 = TTF_RenderText_Solid(font_type_small, PROCEED_THIRD_PART, white_color);
+		SDL_Texture *texture_11 = SDL_CreateTextureFromSurface(renderer, surface_11);
+
+		SDL_Rect r_11;
+		r_11.x = 500;
+		r_11.y = 425;
+		r_11.w = surface_11->w;
+		r_11.h = surface_11->h;
+
+		SDL_FreeSurface(surface_11);
+
+		/* Selected ROM */
+		SDL_Surface *surface_12 = TTF_RenderText_Solid(font_type_medium, SELECTED_ROM, white_color);
+		SDL_Texture *texture_12 = SDL_CreateTextureFromSurface(renderer, surface_12);
+
+		SDL_Rect r_12;
+		r_12.x = 260;
+		r_12.y = 150;
+		r_12.w = surface_12->w;
+		r_12.h = surface_12->h;
+
+		SDL_FreeSurface(surface_12);
+
+		SDL_Surface *surface_13 = TTF_RenderText_Solid(font_type_medium, roms[index], green_color);
+		SDL_Texture *texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+
+		SDL_Rect r_13;
+		r_13.x = 590;
+		r_13.y = 150;
+		r_13.w = surface_13->w;
+		r_13.h = surface_13->h;
+
+		SDL_FreeSurface(surface_13);
 
 		bool running { true };
 
@@ -166,7 +244,32 @@ int main(int argc, char *argv[])
 					{
 						auto& scancode = event.key.keysym.scancode;
 
-						if (scancode == SDL_SCANCODE_R)
+						if (scancode == SDL_SCANCODE_RIGHT)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_13);
+							SDL_RenderPresent(renderer);
+
+							index = (index + 1) % NUMBER_OF_ROMS;
+
+							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[index], green_color);
+							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+						}
+						else if (scancode == SDL_SCANCODE_LEFT)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_13);
+							SDL_RenderPresent(renderer);
+
+							if (--index < 0)
+							{
+								index += NUMBER_OF_ROMS;
+							}
+
+							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[index], green_color);
+							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+						}
+						else if (scancode == SDL_SCANCODE_R)
 						{
 							color.r = 255;
 							color.g = 0;
@@ -204,6 +307,11 @@ int main(int argc, char *argv[])
 							SDL_DestroyTexture(texture_6);
 							SDL_DestroyTexture(texture_7);
 							SDL_DestroyTexture(texture_8);
+							SDL_DestroyTexture(texture_9);
+							SDL_DestroyTexture(texture_10);
+							SDL_DestroyTexture(texture_11);
+							SDL_DestroyTexture(texture_12);
+							SDL_DestroyTexture(texture_13);
 							SDL_DestroyRenderer(renderer);
 							SDL_DestroyWindow(window);
 							SDL_Quit();
@@ -219,22 +327,22 @@ int main(int argc, char *argv[])
 			}
 
 			SDL_RenderCopy(renderer, texture_1, nullptr, &r_1);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_2, nullptr, &r_2);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_3, nullptr, &r_3);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_4, nullptr, &r_4);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_5, nullptr, &r_5);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_6, nullptr, &r_6);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_7, nullptr, &r_7);
-			SDL_RenderPresent(renderer);
 			SDL_RenderCopy(renderer, texture_8, nullptr, &r_8);
+			SDL_RenderCopy(renderer, texture_9, nullptr, &r_9);
+			SDL_RenderCopy(renderer, texture_10, nullptr, &r_10);
+			SDL_RenderCopy(renderer, texture_11, nullptr, &r_11);
+			SDL_RenderCopy(renderer, texture_12, nullptr, &r_12);
+			SDL_RenderCopy(renderer, texture_13, nullptr, &r_13);
 			SDL_RenderPresent(renderer);
 		}
+
+		TTF_Quit();
 
 		SDL_DestroyTexture(texture_1);
 		SDL_DestroyTexture(texture_2);
@@ -244,6 +352,11 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_6);
 		SDL_DestroyTexture(texture_7);
 		SDL_DestroyTexture(texture_8);
+		SDL_DestroyTexture(texture_9);
+		SDL_DestroyTexture(texture_10);
+		SDL_DestroyTexture(texture_11);
+		SDL_DestroyTexture(texture_12);
+		SDL_DestroyTexture(texture_13);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
