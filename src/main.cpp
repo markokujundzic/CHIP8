@@ -24,17 +24,26 @@ int main(int argc, char *argv[])
 		constexpr const char *COLOR_CHANGE_THIRD_PART = "G    ";
 		constexpr const char *COLOR_CHANGE_FOURTH_PART = "Y    ";
 		constexpr const char *COLOR_CHANGE_FIFTH_PART = "B    ";
+		constexpr const char *COLOR_CHANGE_SIXTH_PART = "W    ";
 
 		constexpr const char *PROCEED_FIRST_PART { "PRESS    " };
 		constexpr const char *PROCEED_SECOND_PART = "ENTER    ";
 		constexpr const char *PROCEED_THIRD_PART = "TO    BEGIN";
 
 		constexpr const char *SELECTED_ROM { "SELECTED    ROM    FILE" };
+		constexpr const char *SELECTED_COLOR { "SELECTED    COLOR" };
 
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
 
 		constexpr uint8_t NUMBER_OF_ROMS { 4 };
+		constexpr uint8_t NUMBER_OF_COLORS { 5 };
+
+		static constexpr uint8_t WHITE { 0 };
+		static constexpr uint8_t RED { 1 };
+		static constexpr uint8_t GREEN { 2 };
+		static constexpr uint8_t YELLOW { 3 };
+		static constexpr uint8_t BLUE { 4 };
 
 		/* ROMS */
 		constexpr std::array<const char *, NUMBER_OF_ROMS> roms
@@ -45,7 +54,16 @@ int main(int argc, char *argv[])
 						"GUESS"
 				};
 
-		int8_t index { 0 };
+		constexpr std::array<const char *, NUMBER_OF_COLORS> colors
+				{
+						"WHITE",
+						"RED",
+						"GREEN",
+						"YELLOW",
+						"BLUE"
+				};
+
+		int8_t rom_index { 0 };
 
 		SDL_Window *window = SDL_CreateWindow(WINDOW_TITLE,
 		                                      SDL_WINDOWPOS_UNDEFINED,
@@ -106,7 +124,6 @@ int main(int argc, char *argv[])
 		SDL_FreeSurface(surface_3);
 
 		/* Color change */
-
 		SDL_Surface *surface_4 = TTF_RenderText_Solid(font_type_small, COLOR_CHANGE_FIRST_PART, white_color);
 		SDL_Texture *texture_4 = SDL_CreateTextureFromSurface(renderer, surface_4);
 
@@ -119,7 +136,6 @@ int main(int argc, char *argv[])
 		SDL_FreeSurface(surface_4);
 
 		/* Red */
-
 		SDL_Surface *surface_5 = TTF_RenderText_Solid(font_type_small, COLOR_CHANGE_SECOND_PART, red_color);
 		SDL_Texture *texture_5 = SDL_CreateTextureFromSurface(renderer, surface_5);
 
@@ -132,7 +148,6 @@ int main(int argc, char *argv[])
 		SDL_FreeSurface(surface_5);
 
 		/* Green */
-
 		SDL_Surface *surface_6 = TTF_RenderText_Solid(font_type_small, COLOR_CHANGE_THIRD_PART, green_color);
 		SDL_Texture *texture_6 = SDL_CreateTextureFromSurface(renderer, surface_6);
 
@@ -145,7 +160,6 @@ int main(int argc, char *argv[])
 		SDL_FreeSurface(surface_6);
 
 		/* Yellow */
-
 		SDL_Surface *surface_7 = TTF_RenderText_Solid(font_type_small, COLOR_CHANGE_FOURTH_PART, yellow_color);
 		SDL_Texture *texture_7 = SDL_CreateTextureFromSurface(renderer, surface_7);
 
@@ -158,7 +172,6 @@ int main(int argc, char *argv[])
 		SDL_FreeSurface(surface_7);
 
 		/* Blue */
-
 		SDL_Surface *surface_8 = TTF_RenderText_Solid(font_type_small, COLOR_CHANGE_FIFTH_PART, blue_color);
 		SDL_Texture *texture_8 = SDL_CreateTextureFromSurface(renderer, surface_8);
 
@@ -169,6 +182,18 @@ int main(int argc, char *argv[])
 		r_8.h = surface_8->h;
 
 		SDL_FreeSurface(surface_8);
+
+		/* White */
+		SDL_Surface *surface_16 = TTF_RenderText_Solid(font_type_small, COLOR_CHANGE_SIXTH_PART, white_color);
+		SDL_Texture *texture_16 = SDL_CreateTextureFromSurface(renderer, surface_16);
+
+		SDL_Rect r_16;
+		r_16.x = 785;
+		r_16.y = 455;
+		r_16.w = surface_16->w;
+		r_16.h = surface_16->h;
+
+		SDL_FreeSurface(surface_16);
 
 		/* Proceed */
 		SDL_Surface *surface_9 = TTF_RenderText_Solid(font_type_small, PROCEED_FIRST_PART, white_color);
@@ -216,7 +241,7 @@ int main(int argc, char *argv[])
 
 		SDL_FreeSurface(surface_12);
 
-		SDL_Surface *surface_13 = TTF_RenderText_Solid(font_type_medium, roms[index], green_color);
+		SDL_Surface *surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
 		SDL_Texture *texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 
 		SDL_Rect r_13;
@@ -226,6 +251,31 @@ int main(int argc, char *argv[])
 		r_13.h = surface_13->h;
 
 		SDL_FreeSurface(surface_13);
+
+		/* Selected Color */
+		SDL_Surface *surface_14 = TTF_RenderText_Solid(font_type_medium, SELECTED_COLOR, white_color);
+		SDL_Texture *texture_14 = SDL_CreateTextureFromSurface(renderer, surface_14);
+
+		SDL_Rect r_14;
+		r_14.x = 260;
+		r_14.y = 185;
+		r_14.w = surface_14->w;
+		r_14.h = surface_14->h;
+
+		SDL_FreeSurface(surface_14);
+
+		SDL_Surface *surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
+		SDL_Texture *texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+
+		SDL_Rect r_15;
+		r_15.x = 540;
+		r_15.y = 185;
+		r_15.w = surface_15->w;
+		r_15.h = surface_15->h;
+
+		SDL_FreeSurface(surface_15);
+
+		/* Loop */
 
 		bool running { true };
 
@@ -250,9 +300,9 @@ int main(int argc, char *argv[])
 							SDL_RenderFillRect(renderer, &r_13);
 							SDL_RenderPresent(renderer);
 
-							index = (index + 1) % NUMBER_OF_ROMS;
+							rom_index = (rom_index + 1) % NUMBER_OF_ROMS;
 
-							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[index], green_color);
+							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
 							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 						}
 						else if (scancode == SDL_SCANCODE_LEFT)
@@ -261,40 +311,85 @@ int main(int argc, char *argv[])
 							SDL_RenderFillRect(renderer, &r_13);
 							SDL_RenderPresent(renderer);
 
-							if (--index < 0)
+							if (--rom_index < 0)
 							{
-								index += NUMBER_OF_ROMS;
+								rom_index += NUMBER_OF_ROMS;
 							}
 
-							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[index], green_color);
+							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
 							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 						}
 						else if (scancode == SDL_SCANCODE_R)
 						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
 							color.r = 255;
 							color.g = 0;
 							color.b = 0;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
 						else if (scancode == SDL_SCANCODE_G)
 						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
 							color.r = 0;
 							color.g = 255;
 							color.b = 0;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[GREEN], green_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
 						else if (scancode == SDL_SCANCODE_B)
 						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
 							color.r = 0;
 							color.g = 0;
 							color.b = 255;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[BLUE], blue_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
 						else if (scancode == SDL_SCANCODE_Y)
 						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
 							color.r = 255;
 							color.g = 255;
 							color.b = 0;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[YELLOW], yellow_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+						}
+						else if (scancode == SDL_SCANCODE_W)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							color.r = 255;
+							color.g = 255;
+							color.b = 255;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
 						else if (scancode == SDL_SCANCODE_ESCAPE)
 						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
 							running = false;
 						}
 						else if (scancode == SDL_SCANCODE_RETURN)
@@ -312,6 +407,9 @@ int main(int argc, char *argv[])
 							SDL_DestroyTexture(texture_11);
 							SDL_DestroyTexture(texture_12);
 							SDL_DestroyTexture(texture_13);
+							SDL_DestroyTexture(texture_14);
+							SDL_DestroyTexture(texture_15);
+							SDL_DestroyTexture(texture_16);
 							SDL_DestroyRenderer(renderer);
 							SDL_DestroyWindow(window);
 							SDL_Quit();
@@ -339,6 +437,9 @@ int main(int argc, char *argv[])
 			SDL_RenderCopy(renderer, texture_11, nullptr, &r_11);
 			SDL_RenderCopy(renderer, texture_12, nullptr, &r_12);
 			SDL_RenderCopy(renderer, texture_13, nullptr, &r_13);
+			SDL_RenderCopy(renderer, texture_14, nullptr, &r_14);
+			SDL_RenderCopy(renderer, texture_15, nullptr, &r_15);
+			SDL_RenderCopy(renderer, texture_16, nullptr, &r_16);
 			SDL_RenderPresent(renderer);
 		}
 
@@ -357,6 +458,9 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_11);
 		SDL_DestroyTexture(texture_12);
 		SDL_DestroyTexture(texture_13);
+		SDL_DestroyTexture(texture_14);
+		SDL_DestroyTexture(texture_15);
+		SDL_DestroyTexture(texture_16);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
