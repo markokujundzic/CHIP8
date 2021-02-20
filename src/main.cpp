@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 		constexpr const char *TITLE = "CHIP8 Menu";
 		constexpr const char *FONT = "../fonts/Arcade Classic.ttf";
 		constexpr const char *NAME = "Marko    Kujundzic    418    2016";
-		constexpr const char *emu = "CHIP8    emulator";
+		constexpr const char *emu = "CHIP  8    emulator";
 
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 		TTF_Init();
 
 		TTF_Font *verdanaFont = TTF_OpenFont(FONT, 50);
-		SDL_Color textColor = { 255, 0, 0, 255 };
+		SDL_Color textColor = { 255, 255, 255, 255 };
 		SDL_Surface *textSurface = TTF_RenderText_Solid(verdanaFont, NAME, textColor);
 		SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
@@ -57,6 +57,8 @@ int main(int argc, char *argv[])
 
 		bool running { true };
 
+		RGB color { 255, 255, 255 };
+
 		while (running)
 		{
 			while (SDL_PollEvent(&event))
@@ -70,7 +72,31 @@ int main(int argc, char *argv[])
 					{
 						auto& scancode = event.key.keysym.scancode;
 
-						if (scancode == SDL_SCANCODE_ESCAPE)
+						if (scancode == SDL_SCANCODE_R)
+						{
+							color.r = 255;
+							color.g = 0;
+							color.b = 0;
+						}
+						if (scancode == SDL_SCANCODE_G)
+						{
+							color.r = 0;
+							color.g = 255;
+							color.b = 0;
+						}
+						if (scancode == SDL_SCANCODE_B)
+						{
+							color.r = 0;
+							color.g = 0;
+							color.b = 255;
+						}
+						if (scancode == SDL_SCANCODE_Y)
+						{
+							color.r = 255;
+							color.g = 255;
+							color.b = 0;
+						}
+						else if (scancode == SDL_SCANCODE_ESCAPE)
 						{
 							running = false;
 						}
@@ -83,10 +109,9 @@ int main(int argc, char *argv[])
 							SDL_Quit();
 
 							Chip8CPU emulator {};
-							emulator.emulate(argv[1]);
+							emulator.emulate(argv[1], color);
 
 							running = false;
-							break;
 						}
 					}
 						break;

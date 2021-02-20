@@ -136,11 +136,11 @@ void Chip8CPU::initialize() noexcept
 	load_font();
 }
 
-void Chip8CPU::emulate(const std::string& path)
+void Chip8CPU::emulate(const std::string& path, const RGB& color)
 {
 	initialize();
 	load_rom(path);
-	run();
+	run(color);
 }
 
 int Chip8CPU::get_keyboard_mapping_value(const char& key_hit) noexcept
@@ -275,11 +275,11 @@ inline void Chip8CPU::sdl_restore(SDL_Window **window)
 	SDL_DestroyWindow(*window);
 }
 
-void Chip8CPU::sdl_render(SDL_Renderer *renderer)
+void Chip8CPU::sdl_render(SDL_Renderer *renderer, const RGB& color)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 0);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, 0);
 
 	for (auto x = 0; x < Chip8CPU::DISPLAY_WIDTH; x++)
 	{
@@ -769,7 +769,7 @@ void Chip8CPU::execute(const uint16_t& opcode)
 	}
 }
 
-void Chip8CPU::run()
+void Chip8CPU::run(const RGB& color)
 {
 	bool pause { false };
 
@@ -784,7 +784,7 @@ void Chip8CPU::run()
 
 		if (!pause)
 		{
-			sdl_render(renderer);
+			sdl_render(renderer, color);
 			timer_tick();
 			auto opcode = decode();
 			fetch();
