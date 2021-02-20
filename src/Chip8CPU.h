@@ -50,7 +50,7 @@ public:
 	/* Timers */
 	static constexpr uint16_t BEEP_FREQUENCY { 15000 };
 	static constexpr uint8_t BEEP_DURATION { 100 };
-	static constexpr uint8_t SLEEP_DURATION { 1 };
+	static constexpr uint8_t SLEEP_DURATION { 10 };
 
 	/* Window name */
 	static constexpr const char *WINDOW_NAME { "CHIP8" };
@@ -215,7 +215,7 @@ private:
 
 	void sdl_render(SDL_Renderer *renderer);
 
-	void sdl_poll_events();
+	void sdl_poll_events(bool& pause);
 
 	/* Bounds checking */
 	static constexpr bool memory_in_bounds(const uint16_t& index) noexcept;

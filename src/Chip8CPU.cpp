@@ -299,7 +299,7 @@ void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 	SDL_RenderPresent(renderer);
 }
 
-void Chip8CPU::sdl_poll_events()
+void Chip8CPU::sdl_poll_events(bool& pause)
 {
 	SDL_Event event;
 
@@ -327,6 +327,15 @@ void Chip8CPU::sdl_poll_events()
 				if (key != KEY_NOT_FOUND)
 				{
 					key_press(key);
+				}
+
+				if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+				{
+					pause = !pause;
+				}
+				else if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+				{
+					running = false;
 				}
 			}
 				break;
@@ -765,14 +774,20 @@ void Chip8CPU::run()
 
 	sdl_initialize(&window, &renderer);
 
+	bool pause { false };
+
 	while (running)
 	{
-		sdl_poll_events();
-		sdl_render(renderer);
-		timer_tick();
-		auto opcode = decode();
-		fetch();
-		execute(opcode);
+		sdl_poll_events(pause);
+
+		if (!pause)
+		{
+			sdl_render(renderer);
+			timer_tick();
+			auto opcode = decode();
+			fetch();
+			execute(opcode);
+		}
 	}
 
 	sdl_restore(&window);
