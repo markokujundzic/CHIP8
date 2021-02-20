@@ -8,6 +8,6 @@ set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
-add_executable(CHIP8 src/main.cpp src/Chip8CPU.cpp src/Chip8CPU.h)
+add_executable(CHIP8 src/main.cpp src/Chip8CPU.cpp src/Chip8CPU.h src/Chip8Display.cpp src/Chip8Display.h)
 
 target_link_libraries(CHIP8 -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf)

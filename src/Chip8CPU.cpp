@@ -264,8 +264,8 @@ void Chip8CPU::sdl_initialize(SDL_Window **window, SDL_Renderer **renderer)
 			WINDOW_NAME,
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
-			Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE,
-			Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE,
+			DISPLAY_WIDTH * DISPLAY_PIXEL_SCALE,
+			DISPLAY_HEIGHT * DISPLAY_PIXEL_SCALE,
 			SDL_WINDOW_SHOWN);
 	*renderer = SDL_CreateRenderer(*window, -1, SDL_TEXTUREACCESS_TARGET);
 }
@@ -288,10 +288,10 @@ void Chip8CPU::sdl_render(SDL_Renderer *renderer)
 			if (is_pixel_set(x, y))
 			{
 				SDL_Rect sdl_rect;
-				sdl_rect.x = x * Chip8CPU::DISPLAY_PIXEL_SCALE;
-				sdl_rect.y = y * Chip8CPU::DISPLAY_PIXEL_SCALE;
-				sdl_rect.w = Chip8CPU::DISPLAY_PIXEL_SCALE;
-				sdl_rect.h = Chip8CPU::DISPLAY_PIXEL_SCALE;
+				sdl_rect.x = x * DISPLAY_PIXEL_SCALE;
+				sdl_rect.y = y * DISPLAY_PIXEL_SCALE;
+				sdl_rect.w = DISPLAY_PIXEL_SCALE;
+				sdl_rect.h = DISPLAY_PIXEL_SCALE;
 				SDL_RenderFillRect(renderer, &sdl_rect);
 			}
 		}
@@ -329,11 +329,13 @@ void Chip8CPU::sdl_poll_events(bool& pause)
 					key_press(key);
 				}
 
-				if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+				auto& scancode = event.key.keysym.scancode;
+
+				if (scancode == SDL_SCANCODE_SPACE)
 				{
 					pause = !pause;
 				}
-				else if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+				else if (scancode == SDL_SCANCODE_ESCAPE)
 				{
 					running = false;
 				}
@@ -769,12 +771,12 @@ void Chip8CPU::execute(const uint16_t& opcode)
 
 void Chip8CPU::run()
 {
+	bool pause { false };
+
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
 	sdl_initialize(&window, &renderer);
-
-	bool pause { false };
 
 	while (running)
 	{

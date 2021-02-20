@@ -24,7 +24,7 @@ public:
 	static constexpr uint8_t STACK_SIZE { 16 };
 
 	/* Display screen */
-	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 10 };
+	static constexpr uint8_t DISPLAY_PIXEL_SCALE { 15 };
 	static constexpr uint8_t DEFAULT_SPRITE_SIZE { 5 };
 
 	static constexpr uint8_t DISPLAY_WIDTH { 64 };
