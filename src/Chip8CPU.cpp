@@ -136,7 +136,7 @@ void Chip8CPU::initialize() noexcept
 	load_font();
 }
 
-void Chip8CPU::emulate(const std::string& path, const RGB& color)
+void Chip8CPU::emulate(const std::string& path, const SDL_Color& color)
 {
 	initialize();
 	load_rom(path);
@@ -275,7 +275,7 @@ inline void Chip8CPU::sdl_restore(SDL_Window **window)
 	SDL_DestroyWindow(*window);
 }
 
-void Chip8CPU::sdl_render(SDL_Renderer *renderer, const RGB& color)
+void Chip8CPU::sdl_render(SDL_Renderer *renderer, const SDL_Color& color)
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
@@ -769,7 +769,7 @@ void Chip8CPU::execute(const uint16_t& opcode)
 	}
 }
 
-void Chip8CPU::run(const RGB& color)
+void Chip8CPU::run(const SDL_Color& color)
 {
 	bool pause { false };
 

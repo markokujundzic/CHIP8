@@ -13,11 +13,6 @@
 #include <random>
 #include <string>
 
-struct RGB
-{
-	uint8_t r, g, b;
-};
-
 class Chip8CPU
 {
 public:
@@ -140,7 +135,7 @@ public:
 	constexpr void configure_sound(const uint16_t& sound) noexcept;
 
 	/* Emulator loop */
-	void emulate(const std::string& path, const RGB& color);
+	void emulate(const std::string& path, const SDL_Color& color);
 
 private:
 	/* Timers */
@@ -176,7 +171,7 @@ private:
 
 	static constexpr uint8_t get_fourth_nibble(const uint16_t& opcode) noexcept;
 
-	void run(const RGB& color);
+	void run(const SDL_Color& color);
 
 	/* Memory */
 	void load_rom(const std::string& path);
@@ -218,7 +213,7 @@ private:
 
 	static int sdl_wait_for_key_press() noexcept;
 
-	void sdl_render(SDL_Renderer *renderer, const RGB& color);
+	void sdl_render(SDL_Renderer *renderer, const SDL_Color& color);
 
 	void sdl_poll_events(bool& pause);
 
