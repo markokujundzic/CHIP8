@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
 
-		constexpr uint8_t NUMBER_OF_ROMS { 25 };
+		constexpr uint8_t NUMBER_OF_ROMS { 10 };
 		constexpr uint8_t NUMBER_OF_COLORS { 5 };
 
 		static constexpr uint8_t WHITE { 0 };
@@ -71,28 +71,13 @@ int main(int argc, char *argv[])
 						"TETRIS",
 						"TICTAC",
 						"INVADERS",
-						"GUESS",
-						"15PUZZLE",
 						"BLINKY",
-						"BLITZ",
 						"BRIX",
-						"CONNECT4",
-						"HIDDEN",
-						"KALEID",
-						"MAZE",
-						"MERLIN",
 						"MISSILE",
-						"outlaw.ch8",
-						"petdog.ch8",
 						"PONG",
-						"PONG2",
 						"PUZZLE",
-						"SYZYGY",
-						"TANK",
 						"UFO",
 						"VBRIX",
-						"VERS",
-						"WIPEOFF"
 				};
 
 		/* Colors */
@@ -435,7 +420,7 @@ int main(int argc, char *argv[])
 		/* Loop */
 		bool running { true };
 
-		SDL_Color color { 255, 255, 255, 255 };
+		SDL_Color color { 255, 0, 0, 255 };
 
 		while (running)
 		{

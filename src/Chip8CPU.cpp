@@ -365,6 +365,11 @@ int Chip8CPU::sdl_wait_for_key_press() noexcept
 				break;
 			}
 		}
+		else if (event.type == SDL_QUIT)
+		{
+			running = false;
+			break;
+		}
 	}
 
 	return KEY_NOT_FOUND;

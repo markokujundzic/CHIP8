@@ -50,7 +50,7 @@ public:
 
 	/* Timers */
 	static constexpr uint16_t BEEP_FREQUENCY { 15000 };
-	static constexpr uint8_t BEEP_DURATION { 100 };
+	static constexpr uint8_t BEEP_DURATION { 10 };
 	static constexpr uint8_t SLEEP_DURATION { 10 };
 
 	/* Window name */
