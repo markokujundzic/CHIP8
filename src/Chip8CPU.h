@@ -54,7 +54,7 @@ public:
 	static constexpr uint8_t SLEEP_DURATION { 10 };
 
 	/* Window name */
-	static constexpr const char *WINDOW_NAME { "CHIP8" };
+	static constexpr const char *WINDOW_NAME { "CHIP8 Emulator" };
 
 	/* CHIP 8 font map */
 	static constexpr std::array<uint8_t, FONT_SIZE> font_map =

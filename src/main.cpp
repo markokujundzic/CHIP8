@@ -10,11 +10,17 @@ int main(int argc, char *argv[])
 
 	try
 	{
+		/* TODO: Add display and sound delay for each rom */
+		/* TODO: Move all the code from main to Chip8Menu class */
+		/* TODO: Add new window with controls for all games */
+		/* TODO: Add music to emulator window */
+
 		/* Names */
 		constexpr const char *WINDOW_TITLE { "CHIP8 Menu" };
 		constexpr const char *FONT { "../fonts/Arcade Classic.ttf" };
 
-		constexpr const char *NAME { "Marko    Kujundzic    418    2016" };
+		constexpr const char *NAME_FIRST_PART { "Marko    Kujundzic    " };
+		constexpr const char *NAME_SECOND_PART { "418    2016" };
 
 		constexpr const char *TITLE_FIRST_PART { "CHIP  8    " };
 		constexpr const char *TITLE_SECOND_PART { "EMULATOR" };
@@ -48,7 +54,7 @@ int main(int argc, char *argv[])
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
 
-		constexpr uint8_t NUMBER_OF_ROMS { 10 };
+		constexpr uint8_t NUMBER_OF_ROMS { 11 };
 		constexpr uint8_t NUMBER_OF_COLORS { 5 };
 
 		static constexpr uint8_t WHITE { 0 };
@@ -78,6 +84,7 @@ int main(int argc, char *argv[])
 						"PUZZLE",
 						"UFO",
 						"VBRIX",
+						"SPACERACER"
 				};
 
 		/* Colors */
@@ -117,7 +124,7 @@ int main(int argc, char *argv[])
 		SDL_Color purple_color = { 255, 0, 255, 255 };
 
 		/* Name */
-		SDL_Surface *surface_1 = TTF_RenderText_Solid(font_type_large, NAME, white_color);
+		SDL_Surface *surface_1 = TTF_RenderText_Solid(font_type_large, NAME_FIRST_PART, purple_color);
 		SDL_Texture *texture_1 = SDL_CreateTextureFromSurface(renderer, surface_1);
 
 		SDL_Rect r_1;
@@ -127,6 +134,17 @@ int main(int argc, char *argv[])
 		r_1.h = surface_1->h;
 
 		SDL_FreeSurface(surface_1);
+
+		SDL_Surface *surface_27 = TTF_RenderText_Solid(font_type_large, NAME_SECOND_PART, green_color);
+		SDL_Texture *texture_27 = SDL_CreateTextureFromSurface(renderer, surface_27);
+
+		SDL_Rect r_27;
+		r_27.x = 590;
+		r_27.y = 0;
+		r_27.w = surface_27->w;
+		r_27.h = surface_27->h;
+
+		SDL_FreeSurface(surface_27);
 
 		/* Title */
 		SDL_Surface *surface_2 = TTF_RenderText_Solid(font_type_large, TITLE_FIRST_PART, red_color);
@@ -262,7 +280,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_12 = SDL_CreateTextureFromSurface(renderer, surface_12);
 
 		SDL_Rect r_12;
-		r_12.x = 260;
+		r_12.x = 250;
 		r_12.y = 150;
 		r_12.w = surface_12->w;
 		r_12.h = surface_12->h;
@@ -273,7 +291,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 
 		SDL_Rect r_13;
-		r_13.x = 590;
+		r_13.x = 580;
 		r_13.y = 150;
 		r_13.w = surface_13->w;
 		r_13.h = surface_13->h;
@@ -572,6 +590,7 @@ int main(int argc, char *argv[])
 							SDL_DestroyTexture(texture_24);
 							SDL_DestroyTexture(texture_25);
 							SDL_DestroyTexture(texture_26);
+							SDL_DestroyTexture(texture_27);
 							SDL_DestroyRenderer(renderer);
 							SDL_DestroyWindow(window);
 
@@ -616,6 +635,7 @@ int main(int argc, char *argv[])
 			SDL_RenderCopy(renderer, texture_24, nullptr, &r_24);
 			SDL_RenderCopy(renderer, texture_25, nullptr, &r_25);
 			SDL_RenderCopy(renderer, texture_26, nullptr, &r_26);
+			SDL_RenderCopy(renderer, texture_27, nullptr, &r_27);
 			SDL_RenderPresent(renderer);
 		}
 
@@ -645,6 +665,7 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_24);
 		SDL_DestroyTexture(texture_25);
 		SDL_DestroyTexture(texture_26);
+		SDL_DestroyTexture(texture_27);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 
