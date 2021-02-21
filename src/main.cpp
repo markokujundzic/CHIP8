@@ -38,6 +38,13 @@ int main(int argc, char *argv[])
 		constexpr const char *SELECTED_ROM { "SELECTED    ROM    FILE" };
 		constexpr const char *SELECTED_COLOR { "SELECTED    COLOR" };
 
+		constexpr const char *MUTE_FIRST_PART { "TO    TURN    MUSIC    " };
+		constexpr const char *MUTE_SECOND_PART { "ON    " };
+		constexpr const char *MUTE_THIRD_PART { "OR    " };
+		constexpr const char *MUTE_FOURTH_PART { "OFF    " };
+		constexpr const char *MUTE_FIFTH_PART { "PRESS    " };
+		constexpr const char *MUTE_SIXTH_PART { "S" };
+
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
 
@@ -49,6 +56,14 @@ int main(int argc, char *argv[])
 		static constexpr uint8_t GREEN { 2 };
 		static constexpr uint8_t YELLOW { 3 };
 		static constexpr uint8_t BLUE { 4 };
+
+		/* Music */
+		Mix_Music *gMusic = nullptr;
+
+		SDL_Init(SDL_INIT_AUDIO);
+		Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+		gMusic = Mix_LoadMUS("../audio/song.wav");
 
 		/* ROMS */
 		constexpr std::array<const char *, NUMBER_OF_ROMS> roms
@@ -93,6 +108,8 @@ int main(int argc, char *argv[])
 		SDL_Color green_color = { 0, 255, 0, 255 };
 		SDL_Color blue_color = { 0, 0, 255, 255 };
 		SDL_Color yellow_color = { 255, 255, 0, 255 };
+		SDL_Color grey_color = { 105, 105, 105, 255 };
+		SDL_Color purple_color = { 255, 0, 255, 255 };
 
 		/* Name */
 		SDL_Surface *surface_1 = TTF_RenderText_Solid(font_type_large, NAME, white_color);
@@ -207,7 +224,7 @@ int main(int argc, char *argv[])
 
 		SDL_Rect r_9;
 		r_9.x = 340;
-		r_9.y = 375;
+		r_9.y = 270;
 		r_9.w = surface_9->w;
 		r_9.h = surface_9->h;
 
@@ -218,7 +235,7 @@ int main(int argc, char *argv[])
 
 		SDL_Rect r_10;
 		r_10.x = 420;
-		r_10.y = 375;
+		r_10.y = 270;
 		r_10.w = surface_10->w;
 		r_10.h = surface_10->h;
 
@@ -229,7 +246,7 @@ int main(int argc, char *argv[])
 
 		SDL_Rect r_11;
 		r_11.x = 500;
-		r_11.y = 375;
+		r_11.y = 270;
 		r_11.w = surface_11->w;
 		r_11.h = surface_11->h;
 
@@ -263,7 +280,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_17 = SDL_CreateTextureFromSurface(renderer, surface_17);
 
 		SDL_Rect r_17;
-		r_17.x = 80;
+		r_17.x = 100;
 		r_17.y = 415;
 		r_17.w = surface_17->w;
 		r_17.h = surface_17->h;
@@ -274,7 +291,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_18 = SDL_CreateTextureFromSurface(renderer, surface_18);
 
 		SDL_Rect r_18;
-		r_18.x = 530;
+		r_18.x = 550;
 		r_18.y = 415;
 		r_18.w = surface_18->w;
 		r_18.h = surface_18->h;
@@ -285,7 +302,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_19 = SDL_CreateTextureFromSurface(renderer, surface_19);
 
 		SDL_Rect r_19;
-		r_19.x = 680;
+		r_19.x = 700;
 		r_19.y = 415;
 		r_19.w = surface_19->w;
 		r_19.h = surface_19->h;
@@ -296,7 +313,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_20 = SDL_CreateTextureFromSurface(renderer, surface_20);
 
 		SDL_Rect r_20;
-		r_20.x = 720;
+		r_20.x = 740;
 		r_20.y = 415;
 		r_20.w = surface_20->w;
 		r_20.h = surface_20->h;
@@ -308,26 +325,94 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_14 = SDL_CreateTextureFromSurface(renderer, surface_14);
 
 		SDL_Rect r_14;
-		r_14.x = 260;
+		r_14.x = 300;
 		r_14.y = 185;
 		r_14.w = surface_14->w;
 		r_14.h = surface_14->h;
 
 		SDL_FreeSurface(surface_14);
 
-		SDL_Surface *surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
+		SDL_Surface *surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
 		SDL_Texture *texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 
 		SDL_Rect r_15;
-		r_15.x = 540;
+		r_15.x = 580;
 		r_15.y = 185;
 		r_15.w = surface_15->w;
 		r_15.h = surface_15->h;
 
 		SDL_FreeSurface(surface_15);
 
-		/* Loop */
+		/* Mute music */
+		SDL_Surface *surface_21 = TTF_RenderText_Solid(font_type_small, MUTE_FIRST_PART, white_color);
+		SDL_Texture *texture_21 = SDL_CreateTextureFromSurface(renderer, surface_21);
 
+		SDL_Rect r_21;
+		r_21.x = 280;
+		r_21.y = 375;
+		r_21.w = surface_21->w;
+		r_21.h = surface_21->h;
+
+		SDL_FreeSurface(surface_21);
+
+		SDL_Surface *surface_22 = TTF_RenderText_Solid(font_type_small, MUTE_SECOND_PART, purple_color);
+		SDL_Texture *texture_22 = SDL_CreateTextureFromSurface(renderer, surface_22);
+
+		SDL_Rect r_22;
+		r_22.x = 470;
+		r_22.y = 375;
+		r_22.w = surface_22->w;
+		r_22.h = surface_22->h;
+
+		SDL_FreeSurface(surface_22);
+
+		SDL_Surface *surface_23 = TTF_RenderText_Solid(font_type_small, MUTE_THIRD_PART, white_color);
+		SDL_Texture *texture_23 = SDL_CreateTextureFromSurface(renderer, surface_23);
+
+		SDL_Rect r_23;
+		r_23.x = 510;
+		r_23.y = 375;
+		r_23.w = surface_23->w;
+		r_23.h = surface_23->h;
+
+		SDL_FreeSurface(surface_23);
+
+		SDL_Surface *surface_24 = TTF_RenderText_Solid(font_type_small, MUTE_FOURTH_PART, purple_color);
+		SDL_Texture *texture_24 = SDL_CreateTextureFromSurface(renderer, surface_24);
+
+		SDL_Rect r_24;
+		r_24.x = 550;
+		r_24.y = 375;
+		r_24.w = surface_24->w;
+		r_24.h = surface_24->h;
+
+		SDL_FreeSurface(surface_24);
+
+		SDL_Surface *surface_25 = TTF_RenderText_Solid(font_type_small, MUTE_FIFTH_PART, white_color);
+		SDL_Texture *texture_25 = SDL_CreateTextureFromSurface(renderer, surface_25);
+
+		SDL_Rect r_25;
+		r_25.x = 600;
+		r_25.y = 375;
+		r_25.w = surface_25->w;
+		r_25.h = surface_25->h;
+
+		SDL_FreeSurface(surface_25);
+
+		SDL_Surface *surface_26 = TTF_RenderText_Solid(font_type_small, MUTE_SIXTH_PART, blue_color);
+		SDL_Texture *texture_26 = SDL_CreateTextureFromSurface(renderer, surface_26);
+
+		SDL_Rect r_26;
+		r_26.x = 680;
+		r_26.y = 375;
+		r_26.w = surface_26->w;
+		r_26.h = surface_26->h;
+
+		SDL_FreeSurface(surface_26);
+
+		Mix_PlayMusic(gMusic, -1);
+
+		/* Loop */
 		bool running { true };
 
 		SDL_Color color { 255, 255, 255, 255 };
@@ -452,9 +537,20 @@ int main(int argc, char *argv[])
 
 								running = false;
 							}
+							case SDL_SCANCODE_S:
+								if (Mix_PausedMusic() == 1)
+								{
+									Mix_ResumeMusic();
+								}
+								else
+								{
+									Mix_PauseMusic();
+								}
 								break;
 							case SDL_SCANCODE_RETURN:
 							{
+								TTF_Quit();
+
 								SDL_DestroyTexture(texture_1);
 								SDL_DestroyTexture(texture_2);
 								SDL_DestroyTexture(texture_3);
@@ -475,8 +571,18 @@ int main(int argc, char *argv[])
 								SDL_DestroyTexture(texture_18);
 								SDL_DestroyTexture(texture_19);
 								SDL_DestroyTexture(texture_20);
+								SDL_DestroyTexture(texture_21);
+								SDL_DestroyTexture(texture_22);
+								SDL_DestroyTexture(texture_23);
+								SDL_DestroyTexture(texture_24);
+								SDL_DestroyTexture(texture_25);
+								SDL_DestroyTexture(texture_26);
 								SDL_DestroyRenderer(renderer);
 								SDL_DestroyWindow(window);
+								SDL_Quit();
+
+								Mix_FreeMusic(gMusic);
+								Mix_Quit();
 								SDL_Quit();
 
 								Chip8CPU emulator {};
@@ -514,6 +620,12 @@ int main(int argc, char *argv[])
 			SDL_RenderCopy(renderer, texture_18, nullptr, &r_18);
 			SDL_RenderCopy(renderer, texture_19, nullptr, &r_19);
 			SDL_RenderCopy(renderer, texture_20, nullptr, &r_20);
+			SDL_RenderCopy(renderer, texture_21, nullptr, &r_21);
+			SDL_RenderCopy(renderer, texture_22, nullptr, &r_22);
+			SDL_RenderCopy(renderer, texture_23, nullptr, &r_23);
+			SDL_RenderCopy(renderer, texture_24, nullptr, &r_24);
+			SDL_RenderCopy(renderer, texture_25, nullptr, &r_25);
+			SDL_RenderCopy(renderer, texture_26, nullptr, &r_26);
 			SDL_RenderPresent(renderer);
 		}
 
@@ -539,8 +651,19 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_18);
 		SDL_DestroyTexture(texture_19);
 		SDL_DestroyTexture(texture_20);
+		SDL_DestroyTexture(texture_21);
+		SDL_DestroyTexture(texture_22);
+		SDL_DestroyTexture(texture_23);
+		SDL_DestroyTexture(texture_24);
+		SDL_DestroyTexture(texture_25);
+		SDL_DestroyTexture(texture_26);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
+		SDL_Quit();
+
+		Mix_FreeMusic(gMusic);
+
+		Mix_Quit();
 		SDL_Quit();
 	}
 	catch (const std::exception& e)
