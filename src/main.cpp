@@ -430,170 +430,155 @@ int main(int argc, char *argv[])
 					{
 						auto& scancode = event.key.keysym.scancode;
 
-						switch (scancode)
+						if (scancode == SDL_SCANCODE_RIGHT)
 						{
-							case SDL_SCANCODE_RIGHT:
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_13);
+							SDL_RenderPresent(renderer);
+
+							rom_index = (rom_index + 1) % NUMBER_OF_ROMS;
+
+							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
+							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+						}
+						else if (scancode == SDL_SCANCODE_LEFT)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_13);
+							SDL_RenderPresent(renderer);
+
+							if (--rom_index < 0)
 							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_13);
-								SDL_RenderPresent(renderer);
-
-								rom_index = (rom_index + 1) % NUMBER_OF_ROMS;
-
-								surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
-								texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+								rom_index += NUMBER_OF_ROMS;
 							}
-								break;
-							case SDL_SCANCODE_LEFT:
+
+							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
+							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+						}
+						else if (scancode == SDL_SCANCODE_R)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							color.r = 255;
+							color.g = 0;
+							color.b = 0;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+						}
+						else if (scancode == SDL_SCANCODE_G)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							color.r = 0;
+							color.g = 255;
+							color.b = 0;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[GREEN], green_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+						}
+						else if (scancode == SDL_SCANCODE_B)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							color.r = 0;
+							color.g = 0;
+							color.b = 255;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[BLUE], blue_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+						}
+						else if (scancode == SDL_SCANCODE_Y)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							color.r = 255;
+							color.g = 255;
+							color.b = 0;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[YELLOW], yellow_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+						}
+						else if (scancode == SDL_SCANCODE_W)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							color.r = 255;
+							color.g = 255;
+							color.b = 255;
+
+							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
+							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+						}
+						else if (scancode == SDL_SCANCODE_ESCAPE)
+						{
+							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+							SDL_RenderFillRect(renderer, &r_15);
+							SDL_RenderPresent(renderer);
+
+							running = false;
+						}
+						else if (scancode == SDL_SCANCODE_S)
+						{
+							if (Mix_PausedMusic() == 1)
 							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_13);
-								SDL_RenderPresent(renderer);
-
-								if (--rom_index < 0)
-								{
-									rom_index += NUMBER_OF_ROMS;
-								}
-
-								surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
-								texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+								Mix_ResumeMusic();
 							}
-								break;
-							case SDL_SCANCODE_R:
+							else
 							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_15);
-								SDL_RenderPresent(renderer);
-
-								color.r = 255;
-								color.g = 0;
-								color.b = 0;
-
-								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
-								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+								Mix_PauseMusic();
 							}
-								break;
-							case SDL_SCANCODE_G:
-							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_15);
-								SDL_RenderPresent(renderer);
+						}
+						else if (scancode == SDL_SCANCODE_RETURN)
+						{
+							SDL_DestroyTexture(texture_1);
+							SDL_DestroyTexture(texture_2);
+							SDL_DestroyTexture(texture_3);
+							SDL_DestroyTexture(texture_4);
+							SDL_DestroyTexture(texture_5);
+							SDL_DestroyTexture(texture_6);
+							SDL_DestroyTexture(texture_7);
+							SDL_DestroyTexture(texture_8);
+							SDL_DestroyTexture(texture_9);
+							SDL_DestroyTexture(texture_10);
+							SDL_DestroyTexture(texture_11);
+							SDL_DestroyTexture(texture_12);
+							SDL_DestroyTexture(texture_13);
+							SDL_DestroyTexture(texture_14);
+							SDL_DestroyTexture(texture_15);
+							SDL_DestroyTexture(texture_16);
+							SDL_DestroyTexture(texture_17);
+							SDL_DestroyTexture(texture_18);
+							SDL_DestroyTexture(texture_19);
+							SDL_DestroyTexture(texture_20);
+							SDL_DestroyTexture(texture_21);
+							SDL_DestroyTexture(texture_22);
+							SDL_DestroyTexture(texture_23);
+							SDL_DestroyTexture(texture_24);
+							SDL_DestroyTexture(texture_25);
+							SDL_DestroyTexture(texture_26);
+							SDL_DestroyRenderer(renderer);
+							SDL_DestroyWindow(window);
 
-								color.r = 0;
-								color.g = 255;
-								color.b = 0;
+							Mix_Quit();
+							SDL_Quit();
+							TTF_Quit();
 
-								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[GREEN], green_color);
-								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-							}
-								break;
-							case SDL_SCANCODE_Y:
-							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_15);
-								SDL_RenderPresent(renderer);
+							Chip8CPU emulator {};
+							std::string path = std::string { "../roms/" } + roms[rom_index];
+							emulator.emulate(path, color);
 
-								color.r = 255;
-								color.g = 255;
-								color.b = 0;
-
-								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[YELLOW], yellow_color);
-								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-							}
-								break;
-							case SDL_SCANCODE_B:
-							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_15);
-								SDL_RenderPresent(renderer);
-
-								color.r = 0;
-								color.g = 0;
-								color.b = 255;
-
-								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[BLUE], blue_color);
-								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-							}
-								break;
-							case SDL_SCANCODE_W:
-							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_15);
-								SDL_RenderPresent(renderer);
-
-								color.r = 255;
-								color.g = 255;
-								color.b = 255;
-
-								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
-								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-							}
-								break;
-							case SDL_SCANCODE_ESCAPE:
-							{
-								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-								SDL_RenderFillRect(renderer, &r_15);
-								SDL_RenderPresent(renderer);
-
-								running = false;
-							}
-							case SDL_SCANCODE_S:
-								if (Mix_PausedMusic() == 1)
-								{
-									Mix_ResumeMusic();
-								}
-								else
-								{
-									Mix_PauseMusic();
-								}
-								break;
-							case SDL_SCANCODE_RETURN:
-							{
-								TTF_Quit();
-
-								SDL_DestroyTexture(texture_1);
-								SDL_DestroyTexture(texture_2);
-								SDL_DestroyTexture(texture_3);
-								SDL_DestroyTexture(texture_4);
-								SDL_DestroyTexture(texture_5);
-								SDL_DestroyTexture(texture_6);
-								SDL_DestroyTexture(texture_7);
-								SDL_DestroyTexture(texture_8);
-								SDL_DestroyTexture(texture_9);
-								SDL_DestroyTexture(texture_10);
-								SDL_DestroyTexture(texture_11);
-								SDL_DestroyTexture(texture_12);
-								SDL_DestroyTexture(texture_13);
-								SDL_DestroyTexture(texture_14);
-								SDL_DestroyTexture(texture_15);
-								SDL_DestroyTexture(texture_16);
-								SDL_DestroyTexture(texture_17);
-								SDL_DestroyTexture(texture_18);
-								SDL_DestroyTexture(texture_19);
-								SDL_DestroyTexture(texture_20);
-								SDL_DestroyTexture(texture_21);
-								SDL_DestroyTexture(texture_22);
-								SDL_DestroyTexture(texture_23);
-								SDL_DestroyTexture(texture_24);
-								SDL_DestroyTexture(texture_25);
-								SDL_DestroyTexture(texture_26);
-								SDL_DestroyRenderer(renderer);
-								SDL_DestroyWindow(window);
-								SDL_Quit();
-
-								Mix_FreeMusic(gMusic);
-								Mix_Quit();
-								SDL_Quit();
-
-								Chip8CPU emulator {};
-								std::string path = std::string { "../roms/" } + roms[rom_index];
-								emulator.emulate(path, color);
-
-								running = false;
-							}
-								break;
-							default:
-								break;
+							running = false;
 						}
 					}
 						break;
@@ -629,8 +614,6 @@ int main(int argc, char *argv[])
 			SDL_RenderPresent(renderer);
 		}
 
-		TTF_Quit();
-
 		SDL_DestroyTexture(texture_1);
 		SDL_DestroyTexture(texture_2);
 		SDL_DestroyTexture(texture_3);
@@ -659,12 +642,12 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_26);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
-		SDL_Quit();
 
 		Mix_FreeMusic(gMusic);
 
 		Mix_Quit();
 		SDL_Quit();
+		TTF_Quit();
 	}
 	catch (const std::exception& e)
 	{
