@@ -212,7 +212,7 @@ private:
 
 	static void sdl_restore(SDL_Window **window);
 
-	static int sdl_wait_for_key_press() noexcept;
+	int sdl_wait_for_key_press() noexcept;
 
 	void sdl_render(SDL_Renderer *renderer, const SDL_Color& color);
 

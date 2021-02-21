@@ -351,18 +351,19 @@ int Chip8CPU::sdl_wait_for_key_press() noexcept
 
 	while (SDL_WaitEvent(&event))
 	{
-		switch (event.type)
+		if (event.type == SDL_KEYDOWN)
 		{
-			case SDL_KEYDOWN:
-			{
-				auto key = get_keyboard_mapping_value(event.key.keysym.sym);
+			auto key = get_keyboard_mapping_value(event.key.keysym.sym);
 
-				if (key != KEY_NOT_FOUND)
-				{
-					return key;
-				}
+			if (key != KEY_NOT_FOUND)
+			{
+				return key;
 			}
+			else if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+			{
+				running = false;
 				break;
+			}
 		}
 	}
 
