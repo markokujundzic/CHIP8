@@ -294,130 +294,144 @@ int main(int argc, char *argv[])
 					{
 						auto& scancode = event.key.keysym.scancode;
 
-						if (scancode == SDL_SCANCODE_RIGHT)
+						switch (scancode)
 						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_13);
-							SDL_RenderPresent(renderer);
-
-							rom_index = (rom_index + 1) % NUMBER_OF_ROMS;
-
-							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
-							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
-						}
-						else if (scancode == SDL_SCANCODE_LEFT)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_13);
-							SDL_RenderPresent(renderer);
-
-							if (--rom_index < 0)
+							case SDL_SCANCODE_RIGHT:
 							{
-								rom_index += NUMBER_OF_ROMS;
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_13);
+								SDL_RenderPresent(renderer);
+
+								rom_index = (rom_index + 1) % NUMBER_OF_ROMS;
+
+								surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
+								texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 							}
+								break;
+							case SDL_SCANCODE_LEFT:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_13);
+								SDL_RenderPresent(renderer);
 
-							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
-							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
-						}
-						else if (scancode == SDL_SCANCODE_R)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_15);
-							SDL_RenderPresent(renderer);
+								if (--rom_index < 0)
+								{
+									rom_index += NUMBER_OF_ROMS;
+								}
 
-							color.r = 255;
-							color.g = 0;
-							color.b = 0;
+								surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
+								texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
+							}
+								break;
+							case SDL_SCANCODE_R:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_15);
+								SDL_RenderPresent(renderer);
 
-							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
-							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-						}
-						else if (scancode == SDL_SCANCODE_G)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_15);
-							SDL_RenderPresent(renderer);
+								color.r = 255;
+								color.g = 0;
+								color.b = 0;
 
-							color.r = 0;
-							color.g = 255;
-							color.b = 0;
+								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
+								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+							}
+								break;
+							case SDL_SCANCODE_G:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_15);
+								SDL_RenderPresent(renderer);
 
-							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[GREEN], green_color);
-							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-						}
-						else if (scancode == SDL_SCANCODE_B)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_15);
-							SDL_RenderPresent(renderer);
+								color.r = 0;
+								color.g = 255;
+								color.b = 0;
 
-							color.r = 0;
-							color.g = 0;
-							color.b = 255;
+								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[GREEN], green_color);
+								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+							}
+								break;
+							case SDL_SCANCODE_Y:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_15);
+								SDL_RenderPresent(renderer);
 
-							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[BLUE], blue_color);
-							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-						}
-						else if (scancode == SDL_SCANCODE_Y)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_15);
-							SDL_RenderPresent(renderer);
+								color.r = 255;
+								color.g = 255;
+								color.b = 0;
 
-							color.r = 255;
-							color.g = 255;
-							color.b = 0;
+								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[YELLOW], yellow_color);
+								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+							}
+								break;
+							case SDL_SCANCODE_B:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_15);
+								SDL_RenderPresent(renderer);
 
-							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[YELLOW], yellow_color);
-							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-						}
-						else if (scancode == SDL_SCANCODE_W)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_15);
-							SDL_RenderPresent(renderer);
+								color.r = 0;
+								color.g = 0;
+								color.b = 255;
 
-							color.r = 255;
-							color.g = 255;
-							color.b = 255;
+								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[BLUE], blue_color);
+								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+							}
+								break;
+							case SDL_SCANCODE_W:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_15);
+								SDL_RenderPresent(renderer);
 
-							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
-							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
-						}
-						else if (scancode == SDL_SCANCODE_ESCAPE)
-						{
-							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-							SDL_RenderFillRect(renderer, &r_15);
-							SDL_RenderPresent(renderer);
+								color.r = 255;
+								color.g = 255;
+								color.b = 255;
 
-							running = false;
-						}
-						else if (scancode == SDL_SCANCODE_RETURN)
-						{
-							SDL_DestroyTexture(texture_1);
-							SDL_DestroyTexture(texture_2);
-							SDL_DestroyTexture(texture_3);
-							SDL_DestroyTexture(texture_4);
-							SDL_DestroyTexture(texture_5);
-							SDL_DestroyTexture(texture_6);
-							SDL_DestroyTexture(texture_7);
-							SDL_DestroyTexture(texture_8);
-							SDL_DestroyTexture(texture_9);
-							SDL_DestroyTexture(texture_10);
-							SDL_DestroyTexture(texture_11);
-							SDL_DestroyTexture(texture_12);
-							SDL_DestroyTexture(texture_13);
-							SDL_DestroyTexture(texture_14);
-							SDL_DestroyTexture(texture_15);
-							SDL_DestroyTexture(texture_16);
-							SDL_DestroyRenderer(renderer);
-							SDL_DestroyWindow(window);
-							SDL_Quit();
+								surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
+								texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
+							}
+								break;
+							case SDL_SCANCODE_ESCAPE:
+							{
+								SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+								SDL_RenderFillRect(renderer, &r_15);
+								SDL_RenderPresent(renderer);
 
-							Chip8CPU emulator {};
-							emulator.emulate(argv[1], color);
+								running = false;
+							}
+								break;
+							case SDL_SCANCODE_RETURN:
+							{
+								SDL_DestroyTexture(texture_1);
+								SDL_DestroyTexture(texture_2);
+								SDL_DestroyTexture(texture_3);
+								SDL_DestroyTexture(texture_4);
+								SDL_DestroyTexture(texture_5);
+								SDL_DestroyTexture(texture_6);
+								SDL_DestroyTexture(texture_7);
+								SDL_DestroyTexture(texture_8);
+								SDL_DestroyTexture(texture_9);
+								SDL_DestroyTexture(texture_10);
+								SDL_DestroyTexture(texture_11);
+								SDL_DestroyTexture(texture_12);
+								SDL_DestroyTexture(texture_13);
+								SDL_DestroyTexture(texture_14);
+								SDL_DestroyTexture(texture_15);
+								SDL_DestroyTexture(texture_16);
+								SDL_DestroyRenderer(renderer);
+								SDL_DestroyWindow(window);
+								SDL_Quit();
 
-							running = false;
+								Chip8CPU emulator {};
+								emulator.emulate(argv[1], color);
+
+								running = false;
+							}
+								break;
+							default:
+								break;
 						}
 					}
 						break;
