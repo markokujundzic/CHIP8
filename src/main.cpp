@@ -11,24 +11,29 @@ int main(int argc, char *argv[])
 	try
 	{
 		/* Names */
-		constexpr const char *WINDOW_TITLE = "CHIP8 Menu";
-		constexpr const char *FONT = "../fonts/Arcade Classic.ttf";
+		constexpr const char *WINDOW_TITLE { "CHIP8 Menu" };
+		constexpr const char *FONT { "../fonts/Arcade Classic.ttf" };
 
-		constexpr const char *NAME = "Marko    Kujundzic    418    2016";
+		constexpr const char *NAME { "Marko    Kujundzic    418    2016" };
 
-		constexpr const char *TITLE_FIRST_PART = "CHIP  8    ";
-		constexpr const char *TITLE_SECOND_PART = "EMULATOR";
+		constexpr const char *TITLE_FIRST_PART { "CHIP  8    " };
+		constexpr const char *TITLE_SECOND_PART { "EMULATOR" };
 
-		constexpr const char *COLOR_CHANGE_FIRST_PART = "TO    CHANGE    THE    EMULATOR    COLOR    PRESS    ";
-		constexpr const char *COLOR_CHANGE_SECOND_PART = "R    ";
-		constexpr const char *COLOR_CHANGE_THIRD_PART = "G    ";
-		constexpr const char *COLOR_CHANGE_FOURTH_PART = "Y    ";
-		constexpr const char *COLOR_CHANGE_FIFTH_PART = "B    ";
-		constexpr const char *COLOR_CHANGE_SIXTH_PART = "W    ";
+		constexpr const char *COLOR_CHANGE_FIRST_PART { "TO    CHANGE    THE    EMULATOR    COLOR    PRESS    " };
+		constexpr const char *COLOR_CHANGE_SECOND_PART { "R    " };
+		constexpr const char *COLOR_CHANGE_THIRD_PART { "G    " };
+		constexpr const char *COLOR_CHANGE_FOURTH_PART { "Y    " };
+		constexpr const char *COLOR_CHANGE_FIFTH_PART { "B    " };
+		constexpr const char *COLOR_CHANGE_SIXTH_PART { "W    " };
+
+		constexpr const char *ROM_CHANGE_FIRST_PART { "TO    CHANGE    THE    EMULATOR    ROM    PRESS    " };
+		constexpr const char *ROM_CHANGE_SECOND_PART { "LEFT    ARROW    " };
+		constexpr const char *ROM_CHANGE_THIRD_PART { "OR    " };
+		constexpr const char *ROM_CHANGE_FOURTH_PART { "RIGHT ARROW" };
 
 		constexpr const char *PROCEED_FIRST_PART { "PRESS    " };
-		constexpr const char *PROCEED_SECOND_PART = "ENTER    ";
-		constexpr const char *PROCEED_THIRD_PART = "TO    BEGIN";
+		constexpr const char *PROCEED_SECOND_PART { "ENTER    " };
+		constexpr const char *PROCEED_THIRD_PART { "TO    BEGIN" };
 
 		constexpr const char *SELECTED_ROM { "SELECTED    ROM    FILE" };
 		constexpr const char *SELECTED_COLOR { "SELECTED    COLOR" };
@@ -54,6 +59,7 @@ int main(int argc, char *argv[])
 						"GUESS"
 				};
 
+		/* Colors */
 		constexpr std::array<const char *, NUMBER_OF_COLORS> colors
 				{
 						"WHITE",
@@ -201,7 +207,7 @@ int main(int argc, char *argv[])
 
 		SDL_Rect r_9;
 		r_9.x = 340;
-		r_9.y = 425;
+		r_9.y = 375;
 		r_9.w = surface_9->w;
 		r_9.h = surface_9->h;
 
@@ -212,7 +218,7 @@ int main(int argc, char *argv[])
 
 		SDL_Rect r_10;
 		r_10.x = 420;
-		r_10.y = 425;
+		r_10.y = 375;
 		r_10.w = surface_10->w;
 		r_10.h = surface_10->h;
 
@@ -223,7 +229,7 @@ int main(int argc, char *argv[])
 
 		SDL_Rect r_11;
 		r_11.x = 500;
-		r_11.y = 425;
+		r_11.y = 375;
 		r_11.w = surface_11->w;
 		r_11.h = surface_11->h;
 
@@ -251,6 +257,51 @@ int main(int argc, char *argv[])
 		r_13.h = surface_13->h;
 
 		SDL_FreeSurface(surface_13);
+
+		/* Change ROM */
+		SDL_Surface *surface_17 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_FIRST_PART, white_color);
+		SDL_Texture *texture_17 = SDL_CreateTextureFromSurface(renderer, surface_17);
+
+		SDL_Rect r_17;
+		r_17.x = 80;
+		r_17.y = 415;
+		r_17.w = surface_17->w;
+		r_17.h = surface_17->h;
+
+		SDL_FreeSurface(surface_17);
+
+		SDL_Surface *surface_18 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_SECOND_PART, yellow_color);
+		SDL_Texture *texture_18 = SDL_CreateTextureFromSurface(renderer, surface_18);
+
+		SDL_Rect r_18;
+		r_18.x = 530;
+		r_18.y = 415;
+		r_18.w = surface_18->w;
+		r_18.h = surface_18->h;
+
+		SDL_FreeSurface(surface_18);
+
+		SDL_Surface *surface_19 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_THIRD_PART, white_color);
+		SDL_Texture *texture_19 = SDL_CreateTextureFromSurface(renderer, surface_19);
+
+		SDL_Rect r_19;
+		r_19.x = 680;
+		r_19.y = 415;
+		r_19.w = surface_19->w;
+		r_19.h = surface_19->h;
+
+		SDL_FreeSurface(surface_19);
+
+		SDL_Surface *surface_20 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_FOURTH_PART, yellow_color);
+		SDL_Texture *texture_20 = SDL_CreateTextureFromSurface(renderer, surface_20);
+
+		SDL_Rect r_20;
+		r_20.x = 720;
+		r_20.y = 415;
+		r_20.w = surface_20->w;
+		r_20.h = surface_20->h;
+
+		SDL_FreeSurface(surface_20);
 
 		/* Selected Color */
 		SDL_Surface *surface_14 = TTF_RenderText_Solid(font_type_medium, SELECTED_COLOR, white_color);
@@ -420,12 +471,17 @@ int main(int argc, char *argv[])
 								SDL_DestroyTexture(texture_14);
 								SDL_DestroyTexture(texture_15);
 								SDL_DestroyTexture(texture_16);
+								SDL_DestroyTexture(texture_17);
+								SDL_DestroyTexture(texture_18);
+								SDL_DestroyTexture(texture_19);
+								SDL_DestroyTexture(texture_20);
 								SDL_DestroyRenderer(renderer);
 								SDL_DestroyWindow(window);
 								SDL_Quit();
 
 								Chip8CPU emulator {};
-								emulator.emulate(argv[1], color);
+								std::string path = std::string { "../roms/" } + roms[rom_index];
+								emulator.emulate(path, color);
 
 								running = false;
 							}
@@ -454,6 +510,10 @@ int main(int argc, char *argv[])
 			SDL_RenderCopy(renderer, texture_14, nullptr, &r_14);
 			SDL_RenderCopy(renderer, texture_15, nullptr, &r_15);
 			SDL_RenderCopy(renderer, texture_16, nullptr, &r_16);
+			SDL_RenderCopy(renderer, texture_17, nullptr, &r_17);
+			SDL_RenderCopy(renderer, texture_18, nullptr, &r_18);
+			SDL_RenderCopy(renderer, texture_19, nullptr, &r_19);
+			SDL_RenderCopy(renderer, texture_20, nullptr, &r_20);
 			SDL_RenderPresent(renderer);
 		}
 
@@ -475,6 +535,10 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_14);
 		SDL_DestroyTexture(texture_15);
 		SDL_DestroyTexture(texture_16);
+		SDL_DestroyTexture(texture_17);
+		SDL_DestroyTexture(texture_18);
+		SDL_DestroyTexture(texture_19);
+		SDL_DestroyTexture(texture_20);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 		SDL_Quit();
