@@ -562,6 +562,51 @@ int main(int argc, char *argv[])
 						}
 						else if (scancode == SDL_SCANCODE_I)
 						{
+							SDL_Init(SDL_INIT_EVERYTHING);
+
+							SDL_Window *new_window = SDL_CreateWindow(
+									"Chip 8 How to play",
+									SDL_WINDOWPOS_UNDEFINED,
+									SDL_WINDOWPOS_UNDEFINED,
+									Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE,
+									Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE,
+									SDL_WINDOW_INPUT_FOCUS);
+							SDL_Renderer *new_renderer = SDL_CreateRenderer(new_window, -1, SDL_TEXTUREACCESS_TARGET);
+
+							SDL_Event new_event;
+
+							SDL_RenderPresent(new_renderer);
+
+							bool new_running {true};
+
+							while (new_running)
+							{
+								while (SDL_PollEvent(&new_event))
+								{
+									switch (new_event.type)
+									{
+										case SDL_QUIT:
+											new_running = false;
+											break;
+										case SDL_KEYDOWN:
+										{
+											auto& new_scancode = new_event.key.keysym.scancode;
+
+											if (new_scancode == SDL_SCANCODE_Q)
+											{
+												new_running = false;
+												break;
+											}
+										}
+										break;
+									}
+								}
+								SDL_RenderPresent(new_renderer);
+							}
+
+							SDL_DestroyRenderer(new_renderer);
+							SDL_DestroyWindow(new_window);
+
 
 						}
 						else if (scancode == SDL_SCANCODE_RETURN)
