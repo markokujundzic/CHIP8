@@ -50,8 +50,6 @@ public:
 
 	/* Timers */
 	static constexpr uint16_t BEEP_FREQUENCY { 15000 };
-	static constexpr uint8_t BEEP_DURATION { 10 };
-	static constexpr uint8_t SLEEP_DURATION { 10 };
 
 	/* Window name */
 	static constexpr const char *WINDOW_NAME { "CHIP8 Emulator" };
@@ -136,7 +134,7 @@ public:
 	constexpr void configure_sound(const uint16_t& sound) noexcept;
 
 	/* Emulator loop */
-	void emulate(const std::string& path, const SDL_Color& color);
+	void emulate(const std::string& path, const SDL_Color& color, uint8_t beep_duration, uint8_t sleep_duration);
 
 private:
 	/* Timers */
@@ -182,9 +180,9 @@ private:
 	constexpr uint8_t read_mem(const uint16_t& index) const;
 
 	/* Initialization */
-	void initialize() noexcept;
+	void initialize(uint8_t beep_duration, uint8_t sleep_duration) noexcept;
 
-	void initialize_hardware() noexcept;
+	void initialize_hardware(uint8_t beep, uint8_t sleep) noexcept;
 
 	/* Stack */
 	void push(const uint16_t& data);
@@ -260,6 +258,10 @@ private:
 	uint8_t DT;
 
 	uint8_t ST;
+
+	uint8_t beep_duration;
+
+	uint8_t sleep_duration;
 
 	/* Emulator state */
 	bool running;

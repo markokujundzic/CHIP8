@@ -108,7 +108,7 @@ inline void Chip8CPU::clear_display_screen() noexcept
 	}
 }
 
-void Chip8CPU::initialize_hardware() noexcept
+void Chip8CPU::initialize_hardware(uint8_t beep, uint8_t sleep) noexcept
 {
 	running = true;
 	PC = PROGRAM_START;
@@ -116,6 +116,9 @@ void Chip8CPU::initialize_hardware() noexcept
 	DT = 0;
 	ST = 0;
 	I = 0;
+
+	beep_duration = beep;
+	sleep_duration = sleep;
 
 	for (auto& reg : V)
 	{
@@ -130,15 +133,15 @@ void Chip8CPU::initialize_hardware() noexcept
 	clear_display_screen();
 }
 
-void Chip8CPU::initialize() noexcept
+void Chip8CPU::initialize(uint8_t beep_duration, uint8_t sleep_duration) noexcept
 {
-	initialize_hardware();
+	initialize_hardware(beep_duration, sleep_duration);
 	load_font();
 }
 
-void Chip8CPU::emulate(const std::string& path, const SDL_Color& color)
+void Chip8CPU::emulate(const std::string& path, const SDL_Color& color, uint8_t beep_duration, uint8_t sleep_duration)
 {
-	initialize();
+	initialize(beep_duration, sleep_duration);
 	load_rom(path);
 	run(color);
 }
@@ -213,12 +216,12 @@ void Chip8CPU::timer_tick() noexcept
 {
 	if (DT > 0)
 	{
-		Sleep(SLEEP_DURATION);
+		Sleep(sleep_duration);
 		DT--;
 	}
 	if (ST > 0)
 	{
-		Beep(BEEP_FREQUENCY, BEEP_DURATION * ST);
+		Beep(BEEP_FREQUENCY, beep_duration * ST);
 		ST = 0;
 	}
 }

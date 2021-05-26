@@ -10,10 +10,8 @@ int main(int argc, char *argv[])
 
 	try
 	{
-		/* TODO: Add display and sound delay for each rom */
 		/* TODO: Move all the code from main to Chip8Menu class */
 		/* TODO: Add new window with controls for all games */
-		/* TODO: Add music to emulator window */
 
 		/* Names */
 		constexpr const char *WINDOW_TITLE { "CHIP8 Menu" };
@@ -562,6 +560,10 @@ int main(int argc, char *argv[])
 								Mix_PauseMusic();
 							}
 						}
+						else if (scancode == SDL_SCANCODE_I)
+						{
+
+						}
 						else if (scancode == SDL_SCANCODE_RETURN)
 						{
 							SDL_DestroyTexture(texture_1);
@@ -600,7 +602,19 @@ int main(int argc, char *argv[])
 
 							Chip8CPU emulator {};
 							std::string path = std::string { "../roms/" } + roms[rom_index];
-							emulator.emulate(path, color);
+
+							uint8_t beep = 10;
+							uint8_t sleep = 10;
+
+							if (strcmp(roms[rom_index], "INVADERS") == 0 ||
+							    strcmp(roms[rom_index], "BLINKY") == 0 ||
+							    strcmp(roms[rom_index], "VBRIX") == 0 ||
+							    strcmp(roms[rom_index], "SPACERACER") == 0)
+							{
+								sleep = 1;
+							}
+
+							emulator.emulate(path, color, beep, sleep);
 
 							running = false;
 						}
