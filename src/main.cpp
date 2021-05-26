@@ -49,6 +49,8 @@ int main(int argc, char *argv[]) {
 		constexpr const char *HOW_TO_PLAY_FIRST_PART { "TO    SEE    HOW    TO    PLAY    EACH    ROM    PRESS    " };
 		constexpr const char *HOW_TO_PLAY_SECOND_PART {"I"};
 
+		constexpr const char *HOW_TO_PLAY {"HOW    TO    PLAY"};
+
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
 
@@ -581,7 +583,17 @@ int main(int argc, char *argv[]) {
 
 							SDL_Event new_event;
 
-							SDL_RenderPresent(new_renderer);
+							/* Title */
+							SDL_Surface *surface_30 = TTF_RenderText_Solid(font_type_large, HOW_TO_PLAY, purple_color);
+							SDL_Texture *texture_30 = SDL_CreateTextureFromSurface(new_renderer, surface_30);
+
+							SDL_Rect r_30;
+							r_30.x = 350;
+							r_30.y = 0;
+							r_30.w = surface_30->w;
+							r_30.h = surface_30->h;
+
+							SDL_FreeSurface(surface_30);
 
 							bool new_running { true };
 
@@ -602,9 +614,11 @@ int main(int argc, char *argv[]) {
 											break;
 									}
 								}
+								SDL_RenderCopy(new_renderer, texture_30, nullptr, &r_30);
 								SDL_RenderPresent(new_renderer);
 							}
 
+							SDL_DestroyTexture(texture_30);
 							SDL_DestroyRenderer(new_renderer);
 							SDL_DestroyWindow(new_window);
 						}
