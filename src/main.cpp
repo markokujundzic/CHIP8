@@ -795,6 +795,44 @@ int main(int argc, char *argv[]) {
 
 							SDL_FreeSurface(surface_46);
 
+							/* Puzzle */
+							constexpr const char *PUZZLE_FIRST = "PRESS    2    AND    8    TO    MOVE    UP    AND    DOWN";
+
+							SDL_Surface *surface_47 = TTF_RenderText_Solid(font_type_small, roms[7], yellow_color);
+							SDL_Texture *texture_47 = SDL_CreateTextureFromSurface(new_renderer, surface_47);
+
+							SDL_Rect r_47;
+							r_47.x = 100;
+							r_47.y = 285;
+							r_47.w = surface_47->w;
+							r_47.h = surface_47->h;
+
+							SDL_FreeSurface(surface_47);
+
+							SDL_Surface *surface_48 = TTF_RenderText_Solid(font_type_small, PUZZLE_FIRST, white_color);
+							SDL_Texture *texture_48 = SDL_CreateTextureFromSurface(new_renderer, surface_48);
+
+							SDL_Rect r_48;
+							r_48.x = 250;
+							r_48.y = 285;
+							r_48.w = surface_48->w;
+							r_48.h = surface_48->h;
+
+							SDL_FreeSurface(surface_48);
+
+							constexpr const char *PUZZLE_SECOND = "PRESS    6    AND    4    TO    MOVE    LEFT    AND    RIGHT";
+
+							SDL_Surface *surface_49 = TTF_RenderText_Solid(font_type_small, PUZZLE_SECOND, white_color);
+							SDL_Texture *texture_49 = SDL_CreateTextureFromSurface(new_renderer, surface_49);
+
+							SDL_Rect r_49;
+							r_49.x = 250;
+							r_49.y = 310;
+							r_49.w = surface_49->w;
+							r_49.h = surface_49->h;
+
+							SDL_FreeSurface(surface_49);
+
 							bool new_running { true };
 
 							while (new_running) {
@@ -831,6 +869,9 @@ int main(int argc, char *argv[]) {
 								SDL_RenderCopy(new_renderer, texture_44, nullptr, &r_44);
 								SDL_RenderCopy(new_renderer, texture_45, nullptr, &r_45);
 								SDL_RenderCopy(new_renderer, texture_46, nullptr, &r_46);
+								SDL_RenderCopy(new_renderer, texture_47, nullptr, &r_47);
+								SDL_RenderCopy(new_renderer, texture_48, nullptr, &r_48);
+								SDL_RenderCopy(new_renderer, texture_49, nullptr, &r_49);
 								SDL_RenderPresent(new_renderer);
 							}
 
@@ -851,6 +892,9 @@ int main(int argc, char *argv[]) {
 							SDL_DestroyTexture(texture_44);
 							SDL_DestroyTexture(texture_45);
 							SDL_DestroyTexture(texture_46);
+							SDL_DestroyTexture(texture_47);
+							SDL_DestroyTexture(texture_48);
+							SDL_DestroyTexture(texture_49);
 							SDL_DestroyRenderer(new_renderer);
 							SDL_DestroyWindow(new_window);
 						}
