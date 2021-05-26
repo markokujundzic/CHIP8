@@ -1,15 +1,12 @@
 #include "Chip8CPU.h"
 
-int main(int argc, char *argv[])
-{
-	if (argc < 2)
-	{
+int main(int argc, char *argv[]) {
+	if (argc < 2) {
 		std::cerr << "Insufficient number of arguments supplied." << '\n';
 		return EXIT_FAILURE;
 	}
 
-	try
-	{
+	try {
 		/* TODO: Move all the code from main to Chip8Menu class */
 		/* TODO: Add new window with controls for all games */
 
@@ -48,6 +45,9 @@ int main(int argc, char *argv[])
 		constexpr const char *MUTE_FOURTH_PART { "OFF    " };
 		constexpr const char *MUTE_FIFTH_PART { "PRESS    " };
 		constexpr const char *MUTE_SIXTH_PART { "S" };
+
+		constexpr const char *HOW_TO_PLAY_FIRST_PART { "TO    SEE    HOW    TO    PLAY    EACH    ROM    PRESS    " };
+		constexpr const char *HOW_TO_PLAY_SECOND_PART {"I"};
 
 		constexpr int WIDTH = Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE;
 		constexpr int HEIGHT = Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE;
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_12 = SDL_CreateTextureFromSurface(renderer, surface_12);
 
 		SDL_Rect r_12;
-		r_12.x = 250;
+		r_12.x = 255;
 		r_12.y = 150;
 		r_12.w = surface_12->w;
 		r_12.h = surface_12->h;
@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 
 		SDL_Rect r_13;
-		r_13.x = 580;
+		r_13.x = 585;
 		r_13.y = 150;
 		r_13.w = surface_13->w;
 		r_13.h = surface_13->h;
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_14 = SDL_CreateTextureFromSurface(renderer, surface_14);
 
 		SDL_Rect r_14;
-		r_14.x = 300;
+		r_14.x = 310;
 		r_14.y = 185;
 		r_14.w = surface_14->w;
 		r_14.h = surface_14->h;
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
 		SDL_Texture *texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 
 		SDL_Rect r_15;
-		r_15.x = 580;
+		r_15.x = 590;
 		r_15.y = 185;
 		r_15.w = surface_15->w;
 		r_15.h = surface_15->h;
@@ -431,6 +431,29 @@ int main(int argc, char *argv[])
 
 		SDL_FreeSurface(surface_26);
 
+		/* How to play */
+		SDL_Surface *surface_28 = TTF_RenderText_Solid(font_type_small, HOW_TO_PLAY_FIRST_PART, white_color);
+		SDL_Texture *texture_28 = SDL_CreateTextureFromSurface(renderer, surface_28);
+
+		SDL_Rect r_28;
+		r_28.x = 250;
+		r_28.y = 340;
+		r_28.w = surface_28->w;
+		r_28.h = surface_28->h;
+
+		SDL_FreeSurface(surface_28);
+
+		SDL_Surface *surface_29 = TTF_RenderText_Solid(font_type_small, HOW_TO_PLAY_SECOND_PART, green_color);
+		SDL_Texture *texture_29 = SDL_CreateTextureFromSurface(renderer, surface_29);
+
+		SDL_Rect r_29;
+		r_29.x = 710;
+		r_29.y = 340;
+		r_29.w = surface_29->w;
+		r_29.h = surface_29->h;
+
+		SDL_FreeSurface(surface_29);
+
 		Mix_PlayMusic(gMusic, -1);
 
 		/* Loop */
@@ -438,21 +461,16 @@ int main(int argc, char *argv[])
 
 		SDL_Color color { 255, 0, 0, 255 };
 
-		while (running)
-		{
-			while (SDL_PollEvent(&event))
-			{
-				switch (event.type)
-				{
+		while (running) {
+			while (SDL_PollEvent(&event)) {
+				switch (event.type) {
 					case SDL_QUIT:
 						running = false;
 						break;
-					case SDL_KEYDOWN:
-					{
+					case SDL_KEYDOWN: {
 						auto& scancode = event.key.keysym.scancode;
 
-						if (scancode == SDL_SCANCODE_RIGHT)
-						{
+						if (scancode == SDL_SCANCODE_RIGHT) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_13);
 							SDL_RenderPresent(renderer);
@@ -462,22 +480,19 @@ int main(int argc, char *argv[])
 							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
 							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 						}
-						else if (scancode == SDL_SCANCODE_LEFT)
-						{
+						else if (scancode == SDL_SCANCODE_LEFT) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_13);
 							SDL_RenderPresent(renderer);
 
-							if (--rom_index < 0)
-							{
+							if (--rom_index < 0) {
 								rom_index += NUMBER_OF_ROMS;
 							}
 
 							surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
 							texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 						}
-						else if (scancode == SDL_SCANCODE_R)
-						{
+						else if (scancode == SDL_SCANCODE_R) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_15);
 							SDL_RenderPresent(renderer);
@@ -489,8 +504,7 @@ int main(int argc, char *argv[])
 							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
 							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
-						else if (scancode == SDL_SCANCODE_G)
-						{
+						else if (scancode == SDL_SCANCODE_G) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_15);
 							SDL_RenderPresent(renderer);
@@ -502,8 +516,7 @@ int main(int argc, char *argv[])
 							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[GREEN], green_color);
 							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
-						else if (scancode == SDL_SCANCODE_B)
-						{
+						else if (scancode == SDL_SCANCODE_B) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_15);
 							SDL_RenderPresent(renderer);
@@ -515,8 +528,7 @@ int main(int argc, char *argv[])
 							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[BLUE], blue_color);
 							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
-						else if (scancode == SDL_SCANCODE_Y)
-						{
+						else if (scancode == SDL_SCANCODE_Y) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_15);
 							SDL_RenderPresent(renderer);
@@ -528,8 +540,7 @@ int main(int argc, char *argv[])
 							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[YELLOW], yellow_color);
 							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
-						else if (scancode == SDL_SCANCODE_W)
-						{
+						else if (scancode == SDL_SCANCODE_W) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_15);
 							SDL_RenderPresent(renderer);
@@ -541,27 +552,22 @@ int main(int argc, char *argv[])
 							surface_15 = TTF_RenderText_Solid(font_type_medium, colors[WHITE], white_color);
 							texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 						}
-						else if (scancode == SDL_SCANCODE_ESCAPE)
-						{
+						else if (scancode == SDL_SCANCODE_ESCAPE) {
 							SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 							SDL_RenderFillRect(renderer, &r_15);
 							SDL_RenderPresent(renderer);
 
 							running = false;
 						}
-						else if (scancode == SDL_SCANCODE_S)
-						{
-							if (Mix_PausedMusic() == 1)
-							{
+						else if (scancode == SDL_SCANCODE_S) {
+							if (Mix_PausedMusic() == 1) {
 								Mix_ResumeMusic();
 							}
-							else
-							{
+							else {
 								Mix_PauseMusic();
 							}
 						}
-						else if (scancode == SDL_SCANCODE_I)
-						{
+						else if (scancode == SDL_SCANCODE_I) {
 							SDL_Init(SDL_INIT_EVERYTHING);
 
 							SDL_Window *new_window = SDL_CreateWindow(
@@ -577,28 +583,23 @@ int main(int argc, char *argv[])
 
 							SDL_RenderPresent(new_renderer);
 
-							bool new_running {true};
+							bool new_running { true };
 
-							while (new_running)
-							{
-								while (SDL_PollEvent(&new_event))
-								{
-									switch (new_event.type)
-									{
+							while (new_running) {
+								while (SDL_PollEvent(&new_event)) {
+									switch (new_event.type) {
 										case SDL_QUIT:
 											new_running = false;
 											break;
-										case SDL_KEYDOWN:
-										{
+										case SDL_KEYDOWN: {
 											auto& new_scancode = new_event.key.keysym.scancode;
 
-											if (new_scancode == SDL_SCANCODE_Q)
-											{
+											if (new_scancode == SDL_SCANCODE_Q) {
 												new_running = false;
 												break;
 											}
 										}
-										break;
+											break;
 									}
 								}
 								SDL_RenderPresent(new_renderer);
@@ -606,11 +607,8 @@ int main(int argc, char *argv[])
 
 							SDL_DestroyRenderer(new_renderer);
 							SDL_DestroyWindow(new_window);
-
-
 						}
-						else if (scancode == SDL_SCANCODE_RETURN)
-						{
+						else if (scancode == SDL_SCANCODE_RETURN) {
 							SDL_DestroyTexture(texture_1);
 							SDL_DestroyTexture(texture_2);
 							SDL_DestroyTexture(texture_3);
@@ -638,6 +636,8 @@ int main(int argc, char *argv[])
 							SDL_DestroyTexture(texture_25);
 							SDL_DestroyTexture(texture_26);
 							SDL_DestroyTexture(texture_27);
+							SDL_DestroyTexture(texture_28);
+							SDL_DestroyTexture(texture_29);
 							SDL_DestroyRenderer(renderer);
 							SDL_DestroyWindow(window);
 
@@ -654,8 +654,7 @@ int main(int argc, char *argv[])
 							if (strcmp(roms[rom_index], "INVADERS") == 0 ||
 							    strcmp(roms[rom_index], "BLINKY") == 0 ||
 							    strcmp(roms[rom_index], "VBRIX") == 0 ||
-							    strcmp(roms[rom_index], "SPACERACER") == 0)
-							{
+							    strcmp(roms[rom_index], "SPACERACER") == 0) {
 								sleep = 1;
 							}
 
@@ -695,6 +694,8 @@ int main(int argc, char *argv[])
 			SDL_RenderCopy(renderer, texture_25, nullptr, &r_25);
 			SDL_RenderCopy(renderer, texture_26, nullptr, &r_26);
 			SDL_RenderCopy(renderer, texture_27, nullptr, &r_27);
+			SDL_RenderCopy(renderer, texture_28, nullptr, &r_28);
+			SDL_RenderCopy(renderer, texture_29, nullptr, &r_29);
 			SDL_RenderPresent(renderer);
 		}
 
@@ -725,6 +726,8 @@ int main(int argc, char *argv[])
 		SDL_DestroyTexture(texture_25);
 		SDL_DestroyTexture(texture_26);
 		SDL_DestroyTexture(texture_27);
+		SDL_DestroyTexture(texture_28);
+		SDL_DestroyTexture(texture_29);
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(window);
 
@@ -734,8 +737,7 @@ int main(int argc, char *argv[])
 		SDL_Quit();
 		TTF_Quit();
 	}
-	catch (const std::exception& e)
-	{
+	catch (const std::exception& e) {
 		std::cerr << e.what() << '\n';
 		return EXIT_FAILURE;
 	}

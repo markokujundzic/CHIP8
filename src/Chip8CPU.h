@@ -14,8 +14,7 @@
 #include <random>
 #include <string>
 
-class Chip8CPU
-{
+class Chip8CPU {
 public:
 	/* Memory */
 	static constexpr uint16_t PROGRAM_START { 0x200 };
@@ -55,8 +54,7 @@ public:
 	static constexpr const char *WINDOW_NAME { "CHIP8 Emulator" };
 
 	/* CHIP 8 font map */
-	static constexpr std::array<uint8_t, FONT_SIZE> font_map =
-			{
+	static constexpr std::array<uint8_t, FONT_SIZE> font_map = {
 					/* 0 */
 					0xF0, 0x90, 0x90, 0x90, 0xF0,
 					/* 1 */
@@ -92,8 +90,7 @@ public:
 			};
 
 	/* SDL Keyboard map */
-	static constexpr std::array<char, NUMBER_OF_KEYS> keyboard_map =
-			{
+	static constexpr std::array<char, NUMBER_OF_KEYS> keyboard_map = {
 					/* Key 0 pressed */
 					SDLK_0,
 					/* Key 1 pressed */
