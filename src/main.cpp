@@ -703,10 +703,97 @@ int main(int argc, char *argv[]) {
 							SDL_Rect r_39;
 							r_39.x = 250;
 							r_39.y = 160;
-							r_39.w = surface_38->w;
-							r_39.h = surface_38->h;
+							r_39.w = surface_39->w;
+							r_39.h = surface_39->h;
 
 							SDL_FreeSurface(surface_39);
+
+							/* Brix */
+							constexpr const char *BRIX = "PRESS    4    AND    6    TO    MOVE";
+
+							SDL_Surface *surface_40 = TTF_RenderText_Solid(font_type_small, roms[4], purple_color);
+							SDL_Texture *texture_40 = SDL_CreateTextureFromSurface(new_renderer, surface_40);
+
+							SDL_Rect r_40;
+							r_40.x = 100;
+							r_40.y = 185;
+							r_40.w = surface_40->w;
+							r_40.h = surface_40->h;
+
+							SDL_FreeSurface(surface_40);
+
+							SDL_Surface *surface_41 = TTF_RenderText_Solid(font_type_small, BRIX, white_color);
+							SDL_Texture *texture_41 = SDL_CreateTextureFromSurface(new_renderer, surface_41);
+
+							SDL_Rect r_41;
+							r_41.x = 250;
+							r_41.y = 185;
+							r_41.w = surface_41->w;
+							r_41.h = surface_41->h;
+
+							SDL_FreeSurface(surface_41);
+
+							/* Missile */
+							constexpr const char *MISSILE = "PRESS    8    TO    SHOOT";
+
+							SDL_Surface *surface_42 = TTF_RenderText_Solid(font_type_small, roms[5], red_color);
+							SDL_Texture *texture_42 = SDL_CreateTextureFromSurface(new_renderer, surface_42);
+
+							SDL_Rect r_42;
+							r_42.x = 100;
+							r_42.y = 210;
+							r_42.w = surface_42->w;
+							r_42.h = surface_42->h;
+
+							SDL_FreeSurface(surface_42);
+
+							SDL_Surface *surface_43 = TTF_RenderText_Solid(font_type_small, MISSILE, white_color);
+							SDL_Texture *texture_43 = SDL_CreateTextureFromSurface(new_renderer, surface_43);
+
+							SDL_Rect r_43;
+							r_43.x = 250;
+							r_43.y = 210;
+							r_43.w = surface_43->w;
+							r_43.h = surface_43->h;
+
+							SDL_FreeSurface(surface_43);
+
+							/* Pong */
+							constexpr const char *PONG_FIRST = "PRESS    1    AND    4    TO    MOVE    LEFT    PLAYER    LEFT    AND    RIGHT";
+							constexpr const char *PONG_SECOND = "PRESS    C    AND    D    TO    MOVE    RIGHT    PLAYER    LEFT    AND    RIGHT";
+
+							SDL_Surface *surface_44 = TTF_RenderText_Solid(font_type_small, roms[6], blue_color);
+							SDL_Texture *texture_44 = SDL_CreateTextureFromSurface(new_renderer, surface_44);
+
+							SDL_Rect r_44;
+							r_44.x = 100;
+							r_44.y = 235;
+							r_44.w = surface_44->w;
+							r_44.h = surface_44->h;
+
+							SDL_FreeSurface(surface_44);
+
+							SDL_Surface *surface_45 = TTF_RenderText_Solid(font_type_small, PONG_FIRST, white_color);
+							SDL_Texture *texture_45 = SDL_CreateTextureFromSurface(new_renderer, surface_45);
+
+							SDL_Rect r_45;
+							r_45.x = 250;
+							r_45.y = 235;
+							r_45.w = surface_45->w;
+							r_45.h = surface_45->h;
+
+							SDL_FreeSurface(surface_45);
+
+							SDL_Surface *surface_46 = TTF_RenderText_Solid(font_type_small, PONG_SECOND, white_color);
+							SDL_Texture *texture_46 = SDL_CreateTextureFromSurface(new_renderer, surface_46);
+
+							SDL_Rect r_46;
+							r_46.x = 250;
+							r_46.y = 260;
+							r_46.w = surface_46->w;
+							r_46.h = surface_46->h;
+
+							SDL_FreeSurface(surface_46);
 
 							bool new_running { true };
 
@@ -737,6 +824,13 @@ int main(int argc, char *argv[]) {
 								SDL_RenderCopy(new_renderer, texture_37, nullptr, &r_37);
 								SDL_RenderCopy(new_renderer, texture_38, nullptr, &r_38);
 								SDL_RenderCopy(new_renderer, texture_39, nullptr, &r_39);
+								SDL_RenderCopy(new_renderer, texture_40, nullptr, &r_40);
+								SDL_RenderCopy(new_renderer, texture_41, nullptr, &r_41);
+								SDL_RenderCopy(new_renderer, texture_42, nullptr, &r_42);
+								SDL_RenderCopy(new_renderer, texture_43, nullptr, &r_43);
+								SDL_RenderCopy(new_renderer, texture_44, nullptr, &r_44);
+								SDL_RenderCopy(new_renderer, texture_45, nullptr, &r_45);
+								SDL_RenderCopy(new_renderer, texture_46, nullptr, &r_46);
 								SDL_RenderPresent(new_renderer);
 							}
 
@@ -750,6 +844,13 @@ int main(int argc, char *argv[]) {
 							SDL_DestroyTexture(texture_37);
 							SDL_DestroyTexture(texture_38);
 							SDL_DestroyTexture(texture_39);
+							SDL_DestroyTexture(texture_40);
+							SDL_DestroyTexture(texture_41);
+							SDL_DestroyTexture(texture_42);
+							SDL_DestroyTexture(texture_43);
+							SDL_DestroyTexture(texture_44);
+							SDL_DestroyTexture(texture_45);
+							SDL_DestroyTexture(texture_46);
 							SDL_DestroyRenderer(new_renderer);
 							SDL_DestroyWindow(new_window);
 						}
