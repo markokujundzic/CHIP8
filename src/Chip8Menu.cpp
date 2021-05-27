@@ -111,11 +111,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_6 = SDL_CreateTextureFromSurface(renderer, surface_6);
 
 	SDL_Rect r_6;
-	r_6.x = 695;
-	r_6.y = 455;
-	r_6.w = surface_6->w;
-	r_6.h = surface_6->h;
-
+	sdl_rect_init(r_6, 695, 455, surface_6);
 	SDL_FreeSurface(surface_6);
 
 	/* Yellow */
@@ -123,11 +119,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_7 = SDL_CreateTextureFromSurface(renderer, surface_7);
 
 	SDL_Rect r_7;
-	r_7.x = 725;
-	r_7.y = 455;
-	r_7.w = surface_7->w;
-	r_7.h = surface_7->h;
-
+	sdl_rect_init(r_7, 735, 455, surface_7);
 	SDL_FreeSurface(surface_7);
 
 	/* Blue */
@@ -135,11 +127,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_8 = SDL_CreateTextureFromSurface(renderer, surface_8);
 
 	SDL_Rect r_8;
-	r_8.x = 755;
-	r_8.y = 455;
-	r_8.w = surface_8->w;
-	r_8.h = surface_8->h;
-
+	sdl_rect_init(r_8, 755, 455, surface_8);
 	SDL_FreeSurface(surface_8);
 
 	/* White */
@@ -147,11 +135,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_16 = SDL_CreateTextureFromSurface(renderer, surface_16);
 
 	SDL_Rect r_16;
-	r_16.x = 785;
-	r_16.y = 455;
-	r_16.w = surface_16->w;
-	r_16.h = surface_16->h;
-
+	sdl_rect_init(r_16, 785, 455, surface_16);
 	SDL_FreeSurface(surface_16);
 
 	/* Proceed */
@@ -159,33 +143,21 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_9 = SDL_CreateTextureFromSurface(renderer, surface_9);
 
 	SDL_Rect r_9;
-	r_9.x = 340;
-	r_9.y = 270;
-	r_9.w = surface_9->w;
-	r_9.h = surface_9->h;
-
+	sdl_rect_init(r_9, 340, 270, surface_9);
 	SDL_FreeSurface(surface_9);
 
 	SDL_Surface *surface_10 = TTF_RenderText_Solid(font_type_small, PROCEED_SECOND_PART, red_color);
 	SDL_Texture *texture_10 = SDL_CreateTextureFromSurface(renderer, surface_10);
 
 	SDL_Rect r_10;
-	r_10.x = 420;
-	r_10.y = 270;
-	r_10.w = surface_10->w;
-	r_10.h = surface_10->h;
-
+	sdl_rect_init(r_10, 420, 270, surface_10);
 	SDL_FreeSurface(surface_10);
 
 	SDL_Surface *surface_11 = TTF_RenderText_Solid(font_type_small, PROCEED_THIRD_PART, white_color);
 	SDL_Texture *texture_11 = SDL_CreateTextureFromSurface(renderer, surface_11);
 
 	SDL_Rect r_11;
-	r_11.x = 500;
-	r_11.y = 270;
-	r_11.w = surface_11->w;
-	r_11.h = surface_11->h;
-
+	sdl_rect_init(r_11, 500, 270, surface_11);
 	SDL_FreeSurface(surface_11);
 
 	/* Selected ROM */
@@ -193,22 +165,14 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_12 = SDL_CreateTextureFromSurface(renderer, surface_12);
 
 	SDL_Rect r_12;
-	r_12.x = 255;
-	r_12.y = 150;
-	r_12.w = surface_12->w;
-	r_12.h = surface_12->h;
-
+	sdl_rect_init(r_12, 255, 150, surface_12);
 	SDL_FreeSurface(surface_12);
 
 	SDL_Surface *surface_13 = TTF_RenderText_Solid(font_type_medium, roms[rom_index], green_color);
 	SDL_Texture *texture_13 = SDL_CreateTextureFromSurface(renderer, surface_13);
 
 	SDL_Rect r_13;
-	r_13.x = 585;
-	r_13.y = 150;
-	r_13.w = surface_13->w;
-	r_13.h = surface_13->h;
-
+	sdl_rect_init(r_13, 585, 150, surface_13);
 	SDL_FreeSurface(surface_13);
 
 	/* Change ROM */
@@ -216,44 +180,28 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_17 = SDL_CreateTextureFromSurface(renderer, surface_17);
 
 	SDL_Rect r_17;
-	r_17.x = 100;
-	r_17.y = 415;
-	r_17.w = surface_17->w;
-	r_17.h = surface_17->h;
-
+	sdl_rect_init(r_17, 100, 415, surface_17);
 	SDL_FreeSurface(surface_17);
 
 	SDL_Surface *surface_18 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_SECOND_PART, yellow_color);
 	SDL_Texture *texture_18 = SDL_CreateTextureFromSurface(renderer, surface_18);
 
 	SDL_Rect r_18;
-	r_18.x = 550;
-	r_18.y = 415;
-	r_18.w = surface_18->w;
-	r_18.h = surface_18->h;
-
+	sdl_rect_init(r_18, 550, 415, surface_18);
 	SDL_FreeSurface(surface_18);
 
 	SDL_Surface *surface_19 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_THIRD_PART, white_color);
 	SDL_Texture *texture_19 = SDL_CreateTextureFromSurface(renderer, surface_19);
 
 	SDL_Rect r_19;
-	r_19.x = 700;
-	r_19.y = 415;
-	r_19.w = surface_19->w;
-	r_19.h = surface_19->h;
-
+	sdl_rect_init(r_19, 700, 415, surface_19);
 	SDL_FreeSurface(surface_19);
 
 	SDL_Surface *surface_20 = TTF_RenderText_Solid(font_type_small, ROM_CHANGE_FOURTH_PART, yellow_color);
 	SDL_Texture *texture_20 = SDL_CreateTextureFromSurface(renderer, surface_20);
 
 	SDL_Rect r_20;
-	r_20.x = 740;
-	r_20.y = 415;
-	r_20.w = surface_20->w;
-	r_20.h = surface_20->h;
-
+	sdl_rect_init(r_20, 740, 415, surface_20);
 	SDL_FreeSurface(surface_20);
 
 	/* Selected Color */
@@ -261,22 +209,14 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_14 = SDL_CreateTextureFromSurface(renderer, surface_14);
 
 	SDL_Rect r_14;
-	r_14.x = 310;
-	r_14.y = 185;
-	r_14.w = surface_14->w;
-	r_14.h = surface_14->h;
-
+	sdl_rect_init(r_14, 310, 185, surface_14);
 	SDL_FreeSurface(surface_14);
 
 	SDL_Surface *surface_15 = TTF_RenderText_Solid(font_type_medium, colors[RED], red_color);
 	SDL_Texture *texture_15 = SDL_CreateTextureFromSurface(renderer, surface_15);
 
 	SDL_Rect r_15;
-	r_15.x = 590;
-	r_15.y = 185;
-	r_15.w = surface_15->w;
-	r_15.h = surface_15->h;
-
+	sdl_rect_init(r_15, 590, 185, surface_15);
 	SDL_FreeSurface(surface_15);
 
 	/* Mute music */
@@ -284,66 +224,42 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_21 = SDL_CreateTextureFromSurface(renderer, surface_21);
 
 	SDL_Rect r_21;
-	r_21.x = 280;
-	r_21.y = 375;
-	r_21.w = surface_21->w;
-	r_21.h = surface_21->h;
-
+	sdl_rect_init(r_21, 280, 375, surface_21);
 	SDL_FreeSurface(surface_21);
 
 	SDL_Surface *surface_22 = TTF_RenderText_Solid(font_type_small, MUTE_SECOND_PART, purple_color);
 	SDL_Texture *texture_22 = SDL_CreateTextureFromSurface(renderer, surface_22);
 
 	SDL_Rect r_22;
-	r_22.x = 470;
-	r_22.y = 375;
-	r_22.w = surface_22->w;
-	r_22.h = surface_22->h;
-
+	sdl_rect_init(r_22, 470, 375, surface_22);
 	SDL_FreeSurface(surface_22);
 
 	SDL_Surface *surface_23 = TTF_RenderText_Solid(font_type_small, MUTE_THIRD_PART, white_color);
 	SDL_Texture *texture_23 = SDL_CreateTextureFromSurface(renderer, surface_23);
 
 	SDL_Rect r_23;
-	r_23.x = 510;
-	r_23.y = 375;
-	r_23.w = surface_23->w;
-	r_23.h = surface_23->h;
-
+	sdl_rect_init(r_23, 510, 375, surface_23);
 	SDL_FreeSurface(surface_23);
 
 	SDL_Surface *surface_24 = TTF_RenderText_Solid(font_type_small, MUTE_FOURTH_PART, purple_color);
 	SDL_Texture *texture_24 = SDL_CreateTextureFromSurface(renderer, surface_24);
 
 	SDL_Rect r_24;
-	r_24.x = 550;
-	r_24.y = 375;
-	r_24.w = surface_24->w;
-	r_24.h = surface_24->h;
-
+	sdl_rect_init(r_24, 550, 375, surface_24);
 	SDL_FreeSurface(surface_24);
 
 	SDL_Surface *surface_25 = TTF_RenderText_Solid(font_type_small, MUTE_FIFTH_PART, white_color);
 	SDL_Texture *texture_25 = SDL_CreateTextureFromSurface(renderer, surface_25);
 
 	SDL_Rect r_25;
-	r_25.x = 600;
-	r_25.y = 375;
-	r_25.w = surface_25->w;
-	r_25.h = surface_25->h;
-
+	sdl_rect_init(r_25, 600, 375, surface_25);
 	SDL_FreeSurface(surface_25);
 
 	SDL_Surface *surface_26 = TTF_RenderText_Solid(font_type_small, MUTE_SIXTH_PART, blue_color);
 	SDL_Texture *texture_26 = SDL_CreateTextureFromSurface(renderer, surface_26);
 
 	SDL_Rect r_26;
-	r_26.x = 680;
-	r_26.y = 375;
-	r_26.w = surface_26->w;
-	r_26.h = surface_26->h;
-
+	sdl_rect_init(r_26, 680, 375, surface_26);
 	SDL_FreeSurface(surface_26);
 
 	/* How to play */
@@ -351,22 +267,14 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_28 = SDL_CreateTextureFromSurface(renderer, surface_28);
 
 	SDL_Rect r_28;
-	r_28.x = 250;
-	r_28.y = 340;
-	r_28.w = surface_28->w;
-	r_28.h = surface_28->h;
-
+	sdl_rect_init(r_28, 250, 340, surface_28);
 	SDL_FreeSurface(surface_28);
 
 	SDL_Surface *surface_29 = TTF_RenderText_Solid(font_type_small, HOW_TO_PLAY_SECOND_PART, green_color);
 	SDL_Texture *texture_29 = SDL_CreateTextureFromSurface(renderer, surface_29);
 
 	SDL_Rect r_29;
-	r_29.x = 710;
-	r_29.y = 340;
-	r_29.w = surface_29->w;
-	r_29.h = surface_29->h;
-
+	sdl_rect_init(r_29, 710, 340, surface_29);
 	SDL_FreeSurface(surface_29);
 
 	Mix_PlayMusic(music, -1);
