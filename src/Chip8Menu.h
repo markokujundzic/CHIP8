@@ -62,6 +62,7 @@ private:
 	static constexpr uint8_t YELLOW { 3 };
 	static constexpr uint8_t BLUE { 4 };
 
+	static constexpr const char *TETRIS = "PRESS    5    AND    6    TO    MOVE    PRESS    4    TO    ROTATE";
 	static constexpr const char *TICTAC = "PRESS    1    TO    9    TO    FILL    THE    BOXES";
 	static constexpr const char *INVADERS = "PRESS    4    AND    6    TO    MOVE    PRESS    5    TO    SHOOT";
 	static constexpr const char *BLINKY_FIRST = "PRESS    3    AND    6    TO    MOVE    UP    AND    DOWN";
@@ -101,6 +102,17 @@ private:
 					"YELLOW",
 					"BLUE"
 			};
+
+	/* SDL */
+	static void sdl_initialize(SDL_Window **window, SDL_Renderer **renderer, const char *title_name);
+
+	static void sdl_restore(SDL_Window **window, SDL_Renderer **renderer);
+
+	/* Initialization */
+	void initialize_music();
+
+	/* Music */
+	Mix_Music *music { nullptr };
 };
 
 #endif

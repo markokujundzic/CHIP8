@@ -221,8 +221,9 @@ void Chip8CPU::sdl_initialize(SDL_Window **window, SDL_Renderer **renderer) {
 	*renderer = SDL_CreateRenderer(*window, -1, SDL_TEXTUREACCESS_TARGET);
 }
 
-inline void Chip8CPU::sdl_restore(SDL_Window **window) {
+inline void Chip8CPU::sdl_restore(SDL_Window **window, SDL_Renderer **renderer) {
 	SDL_DestroyWindow(*window);
+	SDL_DestroyRenderer(*renderer);
 }
 
 void Chip8CPU::sdl_render(SDL_Renderer *renderer, const SDL_Color& color) {
@@ -672,5 +673,5 @@ void Chip8CPU::run(const SDL_Color& color) {
 		}
 	}
 
-	sdl_restore(&window);
+	sdl_restore(&window, &renderer);
 }

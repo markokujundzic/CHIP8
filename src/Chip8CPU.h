@@ -205,7 +205,7 @@ private:
 	/* SDL */
 	static void sdl_initialize(SDL_Window **window, SDL_Renderer **renderer);
 
-	static void sdl_restore(SDL_Window **window);
+	static void sdl_restore(SDL_Window **window, SDL_Renderer **renderer);
 
 	int sdl_wait_for_key_press() noexcept;
 

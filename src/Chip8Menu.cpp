@@ -3,24 +3,39 @@
 constexpr std::array<const char *, CHIP8Menu::NUMBER_OF_ROMS> CHIP8Menu::roms;
 constexpr std::array<const char *, CHIP8Menu::NUMBER_OF_COLORS> CHIP8Menu::colors;
 
-void CHIP8Menu::render_menu() {
-	/* Music */
-	Mix_Music *gMusic = nullptr;
-
-	SDL_Init(SDL_INIT_AUDIO);
+void CHIP8Menu::initialize_music() {
+	SDL_Init(SDL_INIT_EVERYTHING);
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
-	gMusic = Mix_LoadMUS("../audio/song.wav");
+	music = Mix_LoadMUS("../audio/song.wav");
+}
+
+void CHIP8Menu::sdl_initialize(SDL_Window **window, SDL_Renderer **renderer, const char *title_name) {
+	*window = SDL_CreateWindow(
+			title_name,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			WIDTH,
+			HEIGHT,
+			SDL_WINDOW_SHOWN);
+	*renderer = SDL_CreateRenderer(*window, -1, 0);
+}
+
+void CHIP8Menu::sdl_restore(SDL_Window **window, SDL_Renderer **renderer) {
+	SDL_DestroyWindow(*window);
+	SDL_DestroyRenderer(*renderer);
+}
+
+void CHIP8Menu::render_menu() {
+	initialize_music();
 
 	int8_t rom_index { 0 };
 
-	SDL_Window *window = SDL_CreateWindow(WINDOW_TITLE,
-	                                      SDL_WINDOWPOS_UNDEFINED,
-	                                      SDL_WINDOWPOS_UNDEFINED,
-	                                      WIDTH,
-	                                      HEIGHT,
-	                                      SDL_WINDOW_SHOWN);
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+	SDL_Window *window;
+	SDL_Renderer *renderer;
+
+	sdl_initialize(&window, &renderer, WINDOW_TITLE);
+
 	SDL_Event event;
 
 	TTF_Init();
@@ -371,7 +386,7 @@ void CHIP8Menu::render_menu() {
 
 	SDL_FreeSurface(surface_29);
 
-	Mix_PlayMusic(gMusic, -1);
+	Mix_PlayMusic(music, -1);
 
 	/* Loop */
 	bool running { true };
@@ -487,14 +502,10 @@ void CHIP8Menu::render_menu() {
 					else if (scancode == SDL_SCANCODE_I) {
 						SDL_Init(SDL_INIT_EVERYTHING);
 
-						SDL_Window *new_window = SDL_CreateWindow(
-								"Chip 8 How to play",
-								SDL_WINDOWPOS_UNDEFINED,
-								SDL_WINDOWPOS_UNDEFINED,
-								Chip8CPU::DISPLAY_WIDTH * Chip8CPU::DISPLAY_PIXEL_SCALE,
-								Chip8CPU::DISPLAY_HEIGHT * Chip8CPU::DISPLAY_PIXEL_SCALE,
-								SDL_WINDOW_INPUT_FOCUS);
-						SDL_Renderer *new_renderer = SDL_CreateRenderer(new_window, -1, SDL_TEXTUREACCESS_TARGET);
+						SDL_Window *new_window;
+						SDL_Renderer *new_renderer;
+
+						sdl_initialize(&new_window, &new_renderer, "Chip 8 How to play");
 
 						SDL_Event new_event;
 
@@ -511,8 +522,6 @@ void CHIP8Menu::render_menu() {
 						SDL_FreeSurface(surface_30);
 
 						/* Tetris */
-						static constexpr const char *TETRIS = "PRESS    4    AND    6    TO    MOVE    PRESS    5    TO    ROTATE";
-
 						SDL_Surface *surface_31 = TTF_RenderText_Solid(font_type_small, roms[0], red_color);
 						SDL_Texture *texture_31 = SDL_CreateTextureFromSurface(new_renderer, surface_31);
 
@@ -872,8 +881,8 @@ void CHIP8Menu::render_menu() {
 						SDL_DestroyTexture(texture_53);
 						SDL_DestroyTexture(texture_54);
 						SDL_DestroyTexture(texture_55);
-						SDL_DestroyRenderer(new_renderer);
-						SDL_DestroyWindow(new_window);
+
+						sdl_restore(&new_window, &new_renderer);
 					}
 					else if (scancode == SDL_SCANCODE_RETURN) {
 						SDL_DestroyTexture(texture_1);
@@ -905,8 +914,8 @@ void CHIP8Menu::render_menu() {
 						SDL_DestroyTexture(texture_27);
 						SDL_DestroyTexture(texture_28);
 						SDL_DestroyTexture(texture_29);
-						SDL_DestroyRenderer(renderer);
-						SDL_DestroyWindow(window);
+
+						sdl_restore(&window, &renderer);
 
 						Mix_Quit();
 						SDL_Quit();
@@ -995,12 +1004,13 @@ void CHIP8Menu::render_menu() {
 	SDL_DestroyTexture(texture_27);
 	SDL_DestroyTexture(texture_28);
 	SDL_DestroyTexture(texture_29);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
 
-	Mix_FreeMusic(gMusic);
+	Mix_FreeMusic(music);
 
 	Mix_Quit();
 	SDL_Quit();
 	TTF_Quit();
+
+	sdl_restore(&window, &renderer);
 }
+
