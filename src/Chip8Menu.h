@@ -6,9 +6,9 @@
 class CHIP8Menu {
 public:
 	void render_menu();
-
-	static constexpr uint8_t NUMBER_OF_ROMS { 11 };
 private:
+	static constexpr uint8_t NUMBER_OF_ROMS { 11 };
+
 	/* Names */
 	static constexpr const char *WINDOW_TITLE { "CHIP8 Menu" };
 	static constexpr const char *FONT { "../fonts/Arcade Classic.ttf" };
@@ -107,6 +107,8 @@ private:
 	static void sdl_initialize(SDL_Window **window, SDL_Renderer **renderer, const char *title_name);
 
 	static void sdl_restore(SDL_Window **window, SDL_Renderer **renderer);
+
+	static void sdl_rect_init(SDL_Rect& rect, int x, int y, const SDL_Surface *surface);
 
 	/* Initialization */
 	void initialize_music();

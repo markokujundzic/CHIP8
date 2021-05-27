@@ -26,6 +26,13 @@ void CHIP8Menu::sdl_restore(SDL_Window **window, SDL_Renderer **renderer) {
 	SDL_DestroyRenderer(*renderer);
 }
 
+void CHIP8Menu::sdl_rect_init(SDL_Rect& rect, int x, int y, const SDL_Surface *surface) {
+	rect.x = x;
+	rect.y = y;
+	rect.w = surface->w;
+	rect.h = surface->h;
+}
+
 void CHIP8Menu::render_menu() {
 	initialize_music();
 
@@ -58,22 +65,14 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_1 = SDL_CreateTextureFromSurface(renderer, surface_1);
 
 	SDL_Rect r_1;
-	r_1.x = 160;
-	r_1.y = 0;
-	r_1.w = surface_1->w;
-	r_1.h = surface_1->h;
-
+	sdl_rect_init(r_1, 160, 0, surface_1);
 	SDL_FreeSurface(surface_1);
 
 	SDL_Surface *surface_27 = TTF_RenderText_Solid(font_type_large, NAME_SECOND_PART, green_color);
 	SDL_Texture *texture_27 = SDL_CreateTextureFromSurface(renderer, surface_27);
 
 	SDL_Rect r_27;
-	r_27.x = 590;
-	r_27.y = 0;
-	r_27.w = surface_27->w;
-	r_27.h = surface_27->h;
-
+	sdl_rect_init(r_27, 590, 0, surface_27);
 	SDL_FreeSurface(surface_27);
 
 	/* Title */
@@ -81,22 +80,14 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_2 = SDL_CreateTextureFromSurface(renderer, surface_2);
 
 	SDL_Rect r_2;
-	r_2.x = 290;
-	r_2.y = 50;
-	r_2.w = surface_2->w;
-	r_2.h = surface_2->h;
-
+	sdl_rect_init(r_2, 290, 50, surface_2);
 	SDL_FreeSurface(surface_2);
 
 	SDL_Surface *surface_3 = TTF_RenderText_Solid(font_type_large, TITLE_SECOND_PART, white_color);
 	SDL_Texture *texture_3 = SDL_CreateTextureFromSurface(renderer, surface_3);
 
 	SDL_Rect r_3;
-	r_3.x = 460;
-	r_3.y = 50;
-	r_3.w = surface_3->w;
-	r_3.h = surface_3->h;
-
+	sdl_rect_init(r_3, 460, 50, surface_3);
 	SDL_FreeSurface(surface_3);
 
 	/* Color change */
@@ -104,11 +95,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_4 = SDL_CreateTextureFromSurface(renderer, surface_4);
 
 	SDL_Rect r_4;
-	r_4.x = 190;
-	r_4.y = 455;
-	r_4.w = surface_4->w;
-	r_4.h = surface_4->h;
-
+	sdl_rect_init(r_4, 190, 455, surface_4);
 	SDL_FreeSurface(surface_4);
 
 	/* Red */
@@ -116,11 +103,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_5 = SDL_CreateTextureFromSurface(renderer, surface_5);
 
 	SDL_Rect r_5;
-	r_5.x = 670;
-	r_5.y = 455;
-	r_5.w = surface_5->w;
-	r_5.h = surface_5->h;
-
+	sdl_rect_init(r_5, 670, 455, surface_5);
 	SDL_FreeSurface(surface_5);
 
 	/* Green */
@@ -1013,4 +996,3 @@ void CHIP8Menu::render_menu() {
 
 	sdl_restore(&window, &renderer);
 }
-
