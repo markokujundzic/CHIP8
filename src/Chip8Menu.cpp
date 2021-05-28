@@ -1,6 +1,7 @@
 #include "Chip8Menu.h"
 
 constexpr std::array<const char *, CHIP8Menu::NUMBER_OF_ROMS> CHIP8Menu::roms;
+
 constexpr std::array<const char *, CHIP8Menu::NUMBER_OF_COLORS> CHIP8Menu::colors;
 
 void CHIP8Menu::initialize_music() {
@@ -569,22 +570,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_52 = SDL_CreateTextureFromSurface(new_renderer, surface_52);
 
 						SDL_Rect r_52;
-						r_52.x = 100;
-						r_52.y = 360;
-						r_52.w = surface_52->w;
-						r_52.h = surface_52->h;
-
+						sdl_rect_init(r_52, 100, 360, surface_52);
 						SDL_FreeSurface(surface_52);
 
 						SDL_Surface *surface_53 = TTF_RenderText_Solid(font_type_small, VBRIX, white_color);
 						SDL_Texture *texture_53 = SDL_CreateTextureFromSurface(new_renderer, surface_53);
 
 						SDL_Rect r_53;
-						r_53.x = 250;
-						r_53.y = 360;
-						r_53.w = surface_53->w;
-						r_53.h = surface_53->h;
-
+						sdl_rect_init(r_53, 250, 360, surface_53);
 						SDL_FreeSurface(surface_53);
 
 						/* SPACERACER */
@@ -592,22 +585,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_54 = SDL_CreateTextureFromSurface(new_renderer, surface_54);
 
 						SDL_Rect r_54;
-						r_54.x = 100;
-						r_54.y = 385;
-						r_54.w = surface_54->w;
-						r_54.h = surface_54->h;
-
+						sdl_rect_init(r_54, 100, 385, surface_54);
 						SDL_FreeSurface(surface_54);
 
 						SDL_Surface *surface_55 = TTF_RenderText_Solid(font_type_small, SPACERACER, white_color);
 						SDL_Texture *texture_55 = SDL_CreateTextureFromSurface(new_renderer, surface_55);
 
 						SDL_Rect r_55;
-						r_55.x = 250;
-						r_55.y = 385;
-						r_55.w = surface_55->w;
-						r_55.h = surface_55->h;
-
+						sdl_rect_init(r_55, 250, 385, surface_55);
 						SDL_FreeSurface(surface_55);
 
 						bool new_running { true };
