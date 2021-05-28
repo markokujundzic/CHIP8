@@ -396,7 +396,7 @@ void CHIP8Menu::render_menu() {
 						SDL_Window *new_window;
 						SDL_Renderer *new_renderer;
 
-						sdl_initialize(&new_window, &new_renderer, "Chip 8 How to play");
+						sdl_initialize(&new_window, &new_renderer, CHIP8_HOW_TO_PLAY);
 
 						SDL_Event new_event;
 
@@ -405,11 +405,7 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_30 = SDL_CreateTextureFromSurface(new_renderer, surface_30);
 
 						SDL_Rect r_30;
-						r_30.x = 350;
-						r_30.y = 0;
-						r_30.w = surface_30->w;
-						r_30.h = surface_30->h;
-
+						sdl_rect_init(r_30, 350, 0, surface_30);
 						SDL_FreeSurface(surface_30);
 
 						/* Tetris */
@@ -417,22 +413,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_31 = SDL_CreateTextureFromSurface(new_renderer, surface_31);
 
 						SDL_Rect r_31;
-						r_31.x = 100;
-						r_31.y = 60;
-						r_31.w = surface_31->w;
-						r_31.h = surface_31->h;
-
+						sdl_rect_init(r_31, 100, 60, surface_31);
 						SDL_FreeSurface(surface_31);
 
 						SDL_Surface *surface_32 = TTF_RenderText_Solid(font_type_small, TETRIS, white_color);
 						SDL_Texture *texture_32 = SDL_CreateTextureFromSurface(new_renderer, surface_32);
 
 						SDL_Rect r_32;
-						r_32.x = 250;
-						r_32.y = 60;
-						r_32.w = surface_32->w;
-						r_32.h = surface_32->h;
-
+						sdl_rect_init(r_32, 250, 60, surface_32);
 						SDL_FreeSurface(surface_32);
 
 						/* TicTac */
@@ -440,22 +428,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_33 = SDL_CreateTextureFromSurface(new_renderer, surface_33);
 
 						SDL_Rect r_33;
-						r_33.x = 100;
-						r_33.y = 85;
-						r_33.w = surface_33->w;
-						r_33.h = surface_33->h;
-
+						sdl_rect_init(r_33, 100, 85, surface_33);
 						SDL_FreeSurface(surface_33);
 
 						SDL_Surface *surface_34 = TTF_RenderText_Solid(font_type_small, TICTAC, white_color);
 						SDL_Texture *texture_34 = SDL_CreateTextureFromSurface(new_renderer, surface_34);
 
 						SDL_Rect r_34;
-						r_34.x = 250;
-						r_34.y = 85;
-						r_34.w = surface_34->w;
-						r_34.h = surface_34->h;
-
+						sdl_rect_init(r_34, 250, 85, surface_34);
 						SDL_FreeSurface(surface_34);
 
 						/* Invaders */
@@ -463,22 +443,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_35 = SDL_CreateTextureFromSurface(new_renderer, surface_35);
 
 						SDL_Rect r_35;
-						r_35.x = 100;
-						r_35.y = 110;
-						r_35.w = surface_35->w;
-						r_35.h = surface_35->h;
-
+						sdl_rect_init(r_35, 100, 110, surface_35);
 						SDL_FreeSurface(surface_35);
 
 						SDL_Surface *surface_36 = TTF_RenderText_Solid(font_type_small, INVADERS, white_color);
 						SDL_Texture *texture_36 = SDL_CreateTextureFromSurface(new_renderer, surface_36);
 
 						SDL_Rect r_36;
-						r_36.x = 250;
-						r_36.y = 110;
-						r_36.w = surface_36->w;
-						r_36.h = surface_36->h;
-
+						sdl_rect_init(r_36, 250, 110, surface_36);
 						SDL_FreeSurface(surface_36);
 
 						/* Blinky */
@@ -486,33 +458,21 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_37 = SDL_CreateTextureFromSurface(new_renderer, surface_37);
 
 						SDL_Rect r_37;
-						r_37.x = 100;
-						r_37.y = 135;
-						r_37.w = surface_37->w;
-						r_37.h = surface_37->h;
-
+						sdl_rect_init(r_37, 100, 135, surface_37);
 						SDL_FreeSurface(surface_37);
 
 						SDL_Surface *surface_38 = TTF_RenderText_Solid(font_type_small, BLINKY_FIRST, white_color);
 						SDL_Texture *texture_38 = SDL_CreateTextureFromSurface(new_renderer, surface_38);
 
 						SDL_Rect r_38;
-						r_38.x = 250;
-						r_38.y = 135;
-						r_38.w = surface_38->w;
-						r_38.h = surface_38->h;
-
+						sdl_rect_init(r_38, 250, 135, surface_38);
 						SDL_FreeSurface(surface_38);
 
 						SDL_Surface *surface_39 = TTF_RenderText_Solid(font_type_small, BLINKY_SECOND, white_color);
 						SDL_Texture *texture_39 = SDL_CreateTextureFromSurface(new_renderer, surface_39);
 
 						SDL_Rect r_39;
-						r_39.x = 250;
-						r_39.y = 160;
-						r_39.w = surface_39->w;
-						r_39.h = surface_39->h;
-
+						sdl_rect_init(r_39, 250, 160, surface_39);
 						SDL_FreeSurface(surface_39);
 
 						/* Brix */
@@ -520,22 +480,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_40 = SDL_CreateTextureFromSurface(new_renderer, surface_40);
 
 						SDL_Rect r_40;
-						r_40.x = 100;
-						r_40.y = 185;
-						r_40.w = surface_40->w;
-						r_40.h = surface_40->h;
-
+						sdl_rect_init(r_40, 100, 185, surface_40);
 						SDL_FreeSurface(surface_40);
 
 						SDL_Surface *surface_41 = TTF_RenderText_Solid(font_type_small, BRIX, white_color);
 						SDL_Texture *texture_41 = SDL_CreateTextureFromSurface(new_renderer, surface_41);
 
 						SDL_Rect r_41;
-						r_41.x = 250;
-						r_41.y = 185;
-						r_41.w = surface_41->w;
-						r_41.h = surface_41->h;
-
+						sdl_rect_init(r_41, 250, 185, surface_41);
 						SDL_FreeSurface(surface_41);
 
 						/* Missile */
@@ -543,22 +495,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_42 = SDL_CreateTextureFromSurface(new_renderer, surface_42);
 
 						SDL_Rect r_42;
-						r_42.x = 100;
-						r_42.y = 210;
-						r_42.w = surface_42->w;
-						r_42.h = surface_42->h;
-
+						sdl_rect_init(r_42, 100, 210, surface_42);
 						SDL_FreeSurface(surface_42);
 
 						SDL_Surface *surface_43 = TTF_RenderText_Solid(font_type_small, MISSILE, white_color);
 						SDL_Texture *texture_43 = SDL_CreateTextureFromSurface(new_renderer, surface_43);
 
 						SDL_Rect r_43;
-						r_43.x = 250;
-						r_43.y = 210;
-						r_43.w = surface_43->w;
-						r_43.h = surface_43->h;
-
+						sdl_rect_init(r_43, 250, 210, surface_43);
 						SDL_FreeSurface(surface_43);
 
 						/* Pong */
@@ -566,33 +510,21 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_44 = SDL_CreateTextureFromSurface(new_renderer, surface_44);
 
 						SDL_Rect r_44;
-						r_44.x = 100;
-						r_44.y = 235;
-						r_44.w = surface_44->w;
-						r_44.h = surface_44->h;
-
+						sdl_rect_init(r_44, 100, 235, surface_44);
 						SDL_FreeSurface(surface_44);
 
 						SDL_Surface *surface_45 = TTF_RenderText_Solid(font_type_small, PONG_FIRST, white_color);
 						SDL_Texture *texture_45 = SDL_CreateTextureFromSurface(new_renderer, surface_45);
 
 						SDL_Rect r_45;
-						r_45.x = 250;
-						r_45.y = 235;
-						r_45.w = surface_45->w;
-						r_45.h = surface_45->h;
-
+						sdl_rect_init(r_45, 250, 235, surface_45);
 						SDL_FreeSurface(surface_45);
 
 						SDL_Surface *surface_46 = TTF_RenderText_Solid(font_type_small, PONG_SECOND, white_color);
 						SDL_Texture *texture_46 = SDL_CreateTextureFromSurface(new_renderer, surface_46);
 
 						SDL_Rect r_46;
-						r_46.x = 250;
-						r_46.y = 260;
-						r_46.w = surface_46->w;
-						r_46.h = surface_46->h;
-
+						sdl_rect_init(r_46, 250, 260, surface_46);
 						SDL_FreeSurface(surface_46);
 
 						/* Puzzle */
@@ -600,33 +532,21 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_47 = SDL_CreateTextureFromSurface(new_renderer, surface_47);
 
 						SDL_Rect r_47;
-						r_47.x = 100;
-						r_47.y = 285;
-						r_47.w = surface_47->w;
-						r_47.h = surface_47->h;
-
+						sdl_rect_init(r_47, 100, 285, surface_47);
 						SDL_FreeSurface(surface_47);
 
 						SDL_Surface *surface_48 = TTF_RenderText_Solid(font_type_small, PUZZLE_FIRST, white_color);
 						SDL_Texture *texture_48 = SDL_CreateTextureFromSurface(new_renderer, surface_48);
 
 						SDL_Rect r_48;
-						r_48.x = 250;
-						r_48.y = 285;
-						r_48.w = surface_48->w;
-						r_48.h = surface_48->h;
-
+						sdl_rect_init(r_48, 250, 285, surface_48);
 						SDL_FreeSurface(surface_48);
 
 						SDL_Surface *surface_49 = TTF_RenderText_Solid(font_type_small, PUZZLE_SECOND, white_color);
 						SDL_Texture *texture_49 = SDL_CreateTextureFromSurface(new_renderer, surface_49);
 
 						SDL_Rect r_49;
-						r_49.x = 250;
-						r_49.y = 310;
-						r_49.w = surface_49->w;
-						r_49.h = surface_49->h;
-
+						sdl_rect_init(r_49, 250, 310, surface_49);
 						SDL_FreeSurface(surface_49);
 
 						/* UFO */
@@ -634,22 +554,14 @@ void CHIP8Menu::render_menu() {
 						SDL_Texture *texture_50 = SDL_CreateTextureFromSurface(new_renderer, surface_50);
 
 						SDL_Rect r_50;
-						r_50.x = 100;
-						r_50.y = 335;
-						r_50.w = surface_50->w;
-						r_50.h = surface_50->h;
-
+						sdl_rect_init(r_50, 100, 335, surface_50);
 						SDL_FreeSurface(surface_50);
 
 						SDL_Surface *surface_51 = TTF_RenderText_Solid(font_type_small, UFO, white_color);
 						SDL_Texture *texture_51 = SDL_CreateTextureFromSurface(new_renderer, surface_51);
 
 						SDL_Rect r_51;
-						r_51.x = 250;
-						r_51.y = 335;
-						r_51.w = surface_51->w;
-						r_51.h = surface_51->h;
-
+						sdl_rect_init(r_51, 250, 335, surface_51);
 						SDL_FreeSurface(surface_51);
 
 						/* VBRIX */

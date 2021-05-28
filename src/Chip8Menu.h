@@ -6,6 +6,7 @@
 class CHIP8Menu {
 public:
 	void render_menu();
+
 private:
 	static constexpr uint8_t NUMBER_OF_ROMS { 11 };
 
@@ -61,6 +62,8 @@ private:
 	static constexpr uint8_t GREEN { 2 };
 	static constexpr uint8_t YELLOW { 3 };
 	static constexpr uint8_t BLUE { 4 };
+
+	static constexpr const char *CHIP8_HOW_TO_PLAY { "Chip 8 How to play" };
 
 	static constexpr const char *TETRIS = "PRESS    5    AND    6    TO    MOVE    PRESS    4    TO    ROTATE";
 	static constexpr const char *TICTAC = "PRESS    1    TO    9    TO    FILL    THE    BOXES";
