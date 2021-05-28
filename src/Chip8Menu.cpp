@@ -120,7 +120,7 @@ void CHIP8Menu::render_menu() {
 	SDL_Texture *texture_7 = SDL_CreateTextureFromSurface(renderer, surface_7);
 
 	SDL_Rect r_7;
-	sdl_rect_init(r_7, 735, 455, surface_7);
+	sdl_rect_init(r_7, 725, 455, surface_7);
 	SDL_FreeSurface(surface_7);
 
 	/* Blue */
