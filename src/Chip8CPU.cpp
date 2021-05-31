@@ -108,13 +108,13 @@ void Chip8CPU::initialize_hardware(uint8_t beep, uint8_t sleep) noexcept {
 	clear_display_screen();
 }
 
-void Chip8CPU::initialize(uint8_t beep_duration, uint8_t sleep_duration) noexcept {
-	initialize_hardware(beep_duration, sleep_duration);
+void Chip8CPU::initialize(uint8_t beep, uint8_t sleep) noexcept {
+	initialize_hardware(beep, sleep);
 	load_font();
 }
 
-void Chip8CPU::emulate(const std::string& path, const SDL_Color& color, uint8_t beep_duration, uint8_t sleep_duration) {
-	initialize(beep_duration, sleep_duration);
+void Chip8CPU::emulate(const std::string& path, const SDL_Color& color, uint8_t beep, uint8_t sleep) {
+	initialize(beep, sleep);
 	load_rom(path);
 	run(color);
 }
